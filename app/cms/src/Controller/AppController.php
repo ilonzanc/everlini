@@ -72,4 +72,9 @@ class AppController extends Controller
         // continues to work. Also enable the read only actions.
         $this->Auth->allow(['display', 'view', 'index']);
     }
+
+    public function beforeRender(Event $event) 
+    {    
+        $this->set('Auth', $this->Auth);
+    }
 }

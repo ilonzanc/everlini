@@ -4,26 +4,15 @@
  * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Roles'), ['controller' => 'Roles', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Role'), ['controller' => 'Roles', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Profiles'), ['controller' => 'Profiles', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Profile'), ['controller' => 'Profiles', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
 <div class="users index large-9 medium-8 columns content">
-    <h3><?= __('Users') ?></h3>
+    <h2><?= __('Users Overview') ?></h2>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('role_id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('id') ?></th>                
                 <th scope="col"><?= $this->Paginator->sort('username') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('role_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('email') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('password') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
@@ -33,10 +22,9 @@
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= $this->Number->format($user->id) ?></td>
-                <td><?= $user->has('role') ? $this->Html->link($user->role->name, ['controller' => 'Roles', 'action' => 'view', $user->role->id]) : '' ?></td>
                 <td><?= h($user->username) ?></td>
+                <td><?= $user->has('role') ? $this->Html->link($user->role->name, ['controller' => 'Roles', 'action' => 'view', $user->role->id]) : '' ?></td>
                 <td><?= h($user->email) ?></td>
-                <td><?= h($user->password) ?></td>
                 <td><?= h($user->created) ?></td>
                 <td><?= h($user->modified) ?></td>
                 <td class="actions">

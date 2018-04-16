@@ -1,0 +1,8 @@
+.message {
+    &.error {
+        background: rgba(#FF6B6B, 0.2);
+        color: #FF6B6B;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+}

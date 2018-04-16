@@ -1,0 +1,23 @@
+aside {
+    float: left;
+    background: $primary-color;
+    min-height: calc(100vh - 52px);
+    border-top: 2px solid #fff;
+    color: #fff;
+    min-width: 200px;
+
+    nav ul {
+        list-style-type: none;
+    }
+
+    nav li {
+        display: block;
+        padding: 0.5rem 1rem;
+    }
+
+    nav li a,
+    nav li h3{        
+        display: block;
+        padding: 0.5rem;
+    }
+}

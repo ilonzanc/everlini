@@ -25,33 +25,46 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?= $this->fetch('title') ?>
     </title>
     <?= $this->Html->meta('icon') ?>
-
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <script src="https://use.fontawesome.com/64d3cadbb4.js"></script>
     <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('cake.css') ?>
+    <?= $this->Html->css('main.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
-            <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-            </li>
-        </ul>
-        <div class="top-bar-section">
-            <ul class="right">
-                <li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>
+    <header>
+        <h1 style="color: transparent">Everlini<?= $this->Html->image('everlini_wit.png') ?></div></h1>
+        <form>
+            <input type="text" placeholder="<?= 'Zoeken in ' . $this->fetch('title')  . '...' ?>">
+        </form>
+        <div class="header__right"><i class="fa fa-user"></i><?= h($Auth->user('username')); ?></div>
+    </header>
+    <aside>
+        <nav>
+            <ul>
+                <li><a href="/">Dashboard</a></li>
+                <li><h3>Everlini</h3></li>
+                <li><a href="/">Events</a></li>
+                <li><a href="/">Venues</a></li>
+                <li><a href="/">Posts</a></li>
+                <li><a href="/">Profiles</a></li>
+                <li><a href="/">Media</a></li>
+                <li><a href="/">Interests</a></li>
+                <li><a href="/">Reviews</a></li>
+                <li><a href="/">Interests</a></li>
+                <li><h3>Accounts</h3></li>
+                <li><a href="/users">Users</a></li>
+                <li><a href="/roles">Roles</a></li>
             </ul>
-        </div>
-    </nav>
-    <?= $this->Flash->render() ?>
-    <div class="container clearfix">
+        </nav>
+    </aside>
+    <main>
+        <?= $this->Flash->render() ?>
+        <h1><a href=""><?= $this->fetch('title') ?></a></h1>
         <?= $this->fetch('content') ?>
-    </div>
-    <footer>
-    </footer>
+    </main>
 </body>
 </html>

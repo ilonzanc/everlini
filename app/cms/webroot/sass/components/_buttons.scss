@@ -1,0 +1,16 @@
+form button,
+.btn {
+    text-align: center;
+    padding: 0.5rem;
+    background: $primary-color;
+    color: #fff;
+    text-transform: lowercase;
+    min-width: 350px;
+    display: inline-block;
+    border-radius: 5px;
+    border: 1px solid $primary-color;
+}
+
+form button {
+    margin-top: 1rem;
+}
