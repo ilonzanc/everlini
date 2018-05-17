@@ -9,6 +9,17 @@ form button,
     display: inline-block;
     border-radius: 5px;
     border: 1px solid $primary-color;
+
+    &.small-btn {
+        min-width: auto;
+        padding: 0.5rem 1rem;
+
+        .fa {
+            margin-right: 0.5rem;
+        }
+    }
+
+
 }
 
 form button {

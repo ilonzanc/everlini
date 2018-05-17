@@ -21,12 +21,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $cakeDescription ?>:
+        Everlini - Dashboard -
         <?= $this->fetch('title') ?>
     </title>
     <?= $this->Html->meta('icon') ?>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
     <script src="https://use.fontawesome.com/64d3cadbb4.js"></script>
+    <script type="text/javascript" src="https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCoylGLZJMaYddtzoAHRQkGTxieuiT-ceI"></script>
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('main.css') ?>
 
@@ -36,28 +37,93 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </head>
 <body>
     <header>
-        <h1 style="color: transparent">Everlini<?= $this->Html->image('everlini_wit.png') ?></div></h1>
+        <a href="/"><h1 style="color: transparent">Everlini<?= $this->Html->image('everlini_wit.png') ?></div></h1></a>
         <form>
             <input type="text" placeholder="<?= 'Zoeken in ' . $this->fetch('title')  . '...' ?>">
         </form>
-        <div class="header__right"><i class="fa fa-user"></i><?= h($Auth->user('username')); ?></div>
+        <div class="header__right">
+            <?php if ($Auth->user('username')) :
+            ?>
+            <i class="fa fa-user"></i><?= h($Auth->user('username')); ?>
+            <?php
+            else :
+                echo $this->Html->link(
+                    'Inloggen',
+                    ['controller' => 'Users', 'action' => 'login']
+                );
+            endif;
+            ?>
+        </div>
     </header>
     <aside>
         <nav>
             <ul>
                 <li><a href="/">Dashboard</a></li>
                 <li><h3>Everlini</h3></li>
-                <li><a href="/">Events</a></li>
-                <li><a href="/">Venues</a></li>
-                <li><a href="/">Posts</a></li>
-                <li><a href="/">Profiles</a></li>
-                <li><a href="/">Media</a></li>
-                <li><a href="/">Interests</a></li>
-                <li><a href="/">Reviews</a></li>
-                <li><a href="/">Interests</a></li>
+                <li>
+                    <?php echo $this->Html->link(
+                        'Events',
+                        ['controller' => 'Events', 'action' => 'index']
+                    );
+                    ?>
+                </li>
+                <li>
+                    <?php echo $this->Html->link(
+                        'Venues',
+                        ['controller' => 'Venues', 'action' => 'index']
+                    );
+                    ?>
+                </li>
+                <li>
+                    <?php echo $this->Html->link(
+                        'Posts',
+                        ['controller' => 'Posts', 'action' => 'index']
+                    );
+                    ?>
+                </li>
+                <li>
+                    <?php echo $this->Html->link(
+                        'Profiles',
+                        ['controller' => 'Profiles', 'action' => 'index']
+                    );
+                    ?>
+                </li>
+                <li>
+                    <?php echo $this->Html->link(
+                        'Media',
+                        ['controller' => 'Attachments', 'action' => 'index']
+                    );
+                    ?>
+                </li>
+                <li>
+                    <?php echo $this->Html->link(
+                        'Interests',
+                        ['controller' => 'Interests', 'action' => 'index']
+                    );
+                    ?>
+                </li>
+                <li>
+                    <?php echo $this->Html->link(
+                        'Reviews',
+                        ['controller' => 'Reviews', 'action' => 'index']
+                    );
+                    ?>
+                </li>
                 <li><h3>Accounts</h3></li>
-                <li><a href="/users">Users</a></li>
-                <li><a href="/roles">Roles</a></li>
+                <li>
+                    <?php echo $this->Html->link(
+                        'Users',
+                        ['controller' => 'Users', 'action' => 'index']
+                    );
+                    ?>
+                </li>
+                <li>
+                    <?php echo $this->Html->link(
+                        'Roles',
+                        ['controller' => 'Roles', 'action' => 'index']
+                    );
+                    ?>
+                </li>
             </ul>
         </nav>
     </aside>

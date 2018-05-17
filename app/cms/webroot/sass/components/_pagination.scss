@@ -1,4 +1,15 @@
 ul.pagination {
     list-style-type: none;
     text-align: center;
+    margin: 1rem 0;
+    li {
+        display: inline-block;
+    }
+
+    a {
+        border: 2px solid $secundary-color;
+        color: $secundary-color;
+        padding: 0.2rem 0.5rem;
+        border-radius: 5px;
+    }
 }

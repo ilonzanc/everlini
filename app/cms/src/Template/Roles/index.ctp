@@ -1,5 +1,9 @@
-<h1>Roles</h1>
-<?= $this->Html->link('Add Role', ['action' => 'add']) ?>
+<h2>Roles Overview</h2>
+<section class="header__createbtn" id="actions-sidebar">
+    <?=
+        $this->Html->link('<i class="fa fa-plus"></i> New role', ['action' => 'add'],['escape'=>false,'class'=>'btn small-btn']);
+    ?>
+</section>
 <table>
     <tr>
         <th>Name</th>
