@@ -71,6 +71,7 @@ class ProfilesController extends AppController
 
     public function add()
     {
+        // First create a user
         $this->loadModel('Users');
         $username = null;
         $user = $this->Users->newEntity();
@@ -95,8 +96,10 @@ class ProfilesController extends AppController
         $newuser = $this->Users->find('all')
             ->where(['Users.username =' => $username]);
 
+        //find new created user
         $newuser = $newuser->first();
 
+        //create new profile with new user id as user_id
         if ($this->request->is('post')) {
             $data = $this->request->data;
             $profile->user_id = $newuser->id;

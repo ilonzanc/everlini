@@ -28,11 +28,13 @@
             <?php foreach ($events as $event): ?>
             <tr>
                 <td><?= $this->Number->format($event->id) ?></td>
-                <td><?= $event->has('profile') ? $this->Html->link($event->profile->id, ['controller' => 'Profiles', 'action' => 'view', $event->profile->id]) : '' ?></td>
-                <td><?= $event->has('venue') ? $this->Html->link($event->venue->name, ['controller' => 'Venues', 'action' => 'view', $event->venue->id]) : '' ?></td>
+                <!-- <td><?php /*$event->has('profile') ? $this->Html->link($event->profile->id, ['controller' => 'Profiles', 'action' => 'view', $event->profile->id]) : '' */ ?></td>-->
+
                 <td><?= h($event->name) ?></td>
+
                 <td><?= h($event->startdate) ?></td>
                 <td><?= h($event->enddate) ?></td>
+                <td><?= $event->has('venue') ? $this->Html->link($event->venue->name, ['controller' => 'Venues', 'action' => 'view', $event->venue->id]) : '' ?></td>
                 <td><?= h($event->created) ?></td>
                 <td><?= h($event->modified) ?></td>
                 <td class="actions">

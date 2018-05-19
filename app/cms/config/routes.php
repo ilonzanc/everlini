@@ -80,3 +80,46 @@ Router::scope('/', function (RouteBuilder $routes) {
  * how to customize the loading of plugin routes.
  */
 Plugin::routes();
+
+
+/**
+ * Load all the api routes
+ */
+
+/* Router::scope('/api', function ($routes) {
+    // Prior to 3.5.0 use `extensions()`
+        $routes->setExtensions(['json']);
+        $routes->resources('Recipes');
+
+}); */
+
+
+    // Because you are in the api scope,
+    // you do not need to include the /api prefix
+    // or the api route element.
+
+
+
+
+Router::prefix('api', function ($routes) {
+    // Because you are in the api scope,
+    // you do not need to include the /api prefix
+    // or the api route element.
+    $routes->setExtensions(['json']);
+    $routes->resources('Events');
+    $routes->resources('Profiles');
+    $routes->resources('Posts');
+    $routes->resources('Interests');
+    $routes->resources('Reviews');
+    $routes->connect('/users', ['controller' => 'Users', 'action' => 'index']);
+    $routes->connect(
+        '/login',
+        ['controller' => 'Users', 'action' => 'login']
+    );
+    $routes->connect(
+        '/token',
+        ['controller' => 'Users', 'action' => 'token']
+    );
+    $routes->connect('/users/:id', ['controller' => 'Users', 'action' => 'view'])->setPass(['id']);
+
+});
