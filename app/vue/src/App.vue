@@ -26,10 +26,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import axios from "axios";
+import moment from 'moment';
 
 import routes from './router/index.js';
 
 Vue.use(VueRouter);
+Vue.use(require('vue-moment'));
 
 export default {
   name: 'app',

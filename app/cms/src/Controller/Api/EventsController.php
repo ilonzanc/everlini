@@ -13,7 +13,10 @@ class EventsController extends AppController
 
     public function index()
     {
-        $events = $this->Events->find('all');
+        $events = $this->Events->find('all', array(
+            'contain' => array("Venues", "Profiles"),
+            //'conditions' => array("Events.venue_id" => $location)
+        ));
         $this->set([
             'events' => $events,
             '_serialize' => ['events']
@@ -22,7 +25,9 @@ class EventsController extends AppController
 
     public function view($id)
     {
-        $event = $this->Events->get($id);
+        $event = $this->Events->get($id, array(
+            'contain' => array("Venues")
+        ));
         $this->set([
             'event' => $event,
             '_serialize' => ['event']

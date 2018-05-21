@@ -5,7 +5,7 @@
  */
 ?>
 <div class="profiles index large-9 medium-8 columns content">
-    <h2><?= __('Profiles') ?></h2>
+    <h2><?= __('Profiles Overview') ?></h2>
     <section class="header__createbtn" id="actions-sidebar">
         <?=
             $this->Html->link('<i class="fa fa-plus"></i> New profile', ['action' => 'add'],['escape'=>false,'class'=>'btn small-btn']);

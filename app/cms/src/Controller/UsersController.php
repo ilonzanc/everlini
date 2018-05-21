@@ -15,6 +15,7 @@ class UsersController extends AppController
     public function initialize()
     {
         parent::initialize();
+        //$this->loadComponent('Csrf');
         $this->Auth->allow(['logout', 'register']);
     }
 
@@ -133,5 +134,13 @@ class UsersController extends AppController
         return $this->redirect($this->Auth->logout());
     }
 
-    
+    public function token()
+    {
+        $this->viewBuilder()->setLayout(false);
+        $token = $this->request->getParam('_csrfToken');
+        json_encode($token);
+        var_dump($token);
+    }
+
+
 }

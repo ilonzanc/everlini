@@ -1,0 +1,63 @@
+<template>
+  <div id="overview__comp">
+    <div class="container">
+      <h1>Overzicht</h1>
+    </div>
+    <section class="event" v-bind:key="event.id" v-for="event in events">
+
+
+          <div class="event-date">
+            <div class="event-day">{{event.startdate | moment("DD")}}</div>
+            <div class="event-month">{{event.startdate | moment("MMM")}}</div>
+          </div>
+          <div class="event-details">
+            <h2>{{ event.name }}</h2>
+            <p>{{ event.profile.firstname + ' ' + event.profile.lastname }}</p>
+          </div>
+
+    </section>
+
+
+  </div>
+</template>
+
+<script>
+  //import axios from "axios";
+  import moment from 'moment';
+
+  export default {
+    name: "overview",
+    data() {
+      return {
+        location: "",
+        events: []
+      };
+    },
+    mounted() {
+      let self = this;
+      axios({
+      method: "get",
+      url:
+        "http://localhost:8765/api/events.json",
+      headers: {
+      }
+      })
+      .then(function(response) {
+        console.log(response);
+        self.events = response.data.events;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+      const formattedDate = moment('19 Oct 2017').format('YYYYMMDD')
+      console.log(formattedDate)
+    },
+    methods: {
+
+    }
+  };
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style>
+</style>

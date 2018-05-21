@@ -88,6 +88,8 @@ class AppController extends Controller
             $this->set('_serialize', true);
         }
 
+        $this->response->header('Access-Control-Allow-Origin', '*');
+
     }
 
 

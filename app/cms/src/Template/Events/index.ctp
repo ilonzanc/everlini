@@ -5,7 +5,7 @@
  */
 ?>
 <div class="events index large-9 medium-8 columns content">
-    <h3><?= __('Events') ?></h3>
+    <h2><?= __('Events Overview') ?></h2>
     <section class="header__createbtn" id="actions-sidebar">
         <?=
             $this->Html->link('<i class="fa fa-plus"></i> New event', ['action' => 'add'],['escape'=>false,'class'=>'btn small-btn']);

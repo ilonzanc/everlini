@@ -2,11 +2,11 @@
   <div id="login">
 	  	<div class="container">
 			<h1>Aanmelden</h1>
-            <form method="POST" action="http://localhost:8765/api/login.json" @submit.prevent="onSubmit">
+            <form method="POST" action="" @submit.prevent="onSubmit">
 				<label for="name">Gebruikersnaam</label>
-				<input type="text" id="name" name="name" placeholder="Jouw gebruikersnaam..." required v-model="user.name">
+				<input type="text" id="name" name="name" placeholder="Jouw emailadres..." required v-model="user.email">
 				<label for="pass">Wachtwoord</label>
-				<input type="password" id="pass" name="pass" placeholder="********" required v-model="user.pass">
+				<input type="password" id="pass" name="pass" placeholder="********" required v-model="user.password">
 				<button type="submit" class="btn widebtn">Inloggen</button>
 				<p>Nog geen account?</p>
 				<p><router-link to="/registreren">Maak hier een gratis account aan!</router-link></p>
@@ -23,8 +23,8 @@ export default {
   data () {
     return {
       user: {
-        name: "",
-		    pass: ""
+        email: "newuser@mail.be",
+		    password: "secret"
       },
     }
   },
@@ -35,24 +35,20 @@ export default {
   methods: {
     onSubmit() {
       var self = this;
+      console.log("user: ");
+      console.log(this.user);
       axios({
         method: 'post',
-        url: "http://localhost:8765/api/login.json",
+        url: "",
         headers: {
-            //'Accept': 'application/hal+json',
-            //'Content-Type': 'application/hal+json',
-            "X-CSRF-Token": "T48cuYVRu1CRiXoV7-O35YUNV5A_j7Ro9jT5z5St0OA",
-            //'X-Requested-With': 'XMLHttpRequest'
+          'X-CSRF-Token': '2c40cb58d445214db32376ff083425edfe99ec502e238dcf45c0c78f8e12201ca360fcabfa5252a4e676fb281294ce4914d5665976960e3c9aef1cde977aca5d'
         },
         data: self.user
       })
       .then((response) => {
           console.log(response.data);
-          localStorage.setItem('loggedInUser', JSON.stringify(response.data));
-          localStorage.setItem('password', self.user.pass);
-          location.href = '/profiel/' + response.data.current_user.uid;
       })
-      .catch((error) => {
+      .catch((error, request) => {
           console.log(error);
       });
     },

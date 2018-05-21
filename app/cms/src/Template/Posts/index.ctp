@@ -5,7 +5,7 @@
  */
 ?>
 <div class="posts index large-9 medium-8 columns content">
-    <h2><?= __('Posts') ?></h2>
+    <h2><?= __('Posts Overview') ?></h2>
     <section class="header__createbtn" id="actions-sidebar">
         <?=
             $this->Html->link('<i class="fa fa-plus"></i> New post', ['action' => 'add'],['escape'=>false,'class'=>'btn small-btn']);

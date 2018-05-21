@@ -111,15 +111,5 @@ Router::prefix('api', function ($routes) {
     $routes->resources('Posts');
     $routes->resources('Interests');
     $routes->resources('Reviews');
-    $routes->connect('/users', ['controller' => 'Users', 'action' => 'index']);
-    $routes->connect(
-        '/login',
-        ['controller' => 'Users', 'action' => 'login']
-    );
-    $routes->connect(
-        '/token',
-        ['controller' => 'Users', 'action' => 'token']
-    );
-    $routes->connect('/users/:id', ['controller' => 'Users', 'action' => 'view'])->setPass(['id']);
 
 });
