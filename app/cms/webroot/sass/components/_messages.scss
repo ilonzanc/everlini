@@ -1,7 +1,16 @@
 .message {
     &.error {
-        background: rgba(#FF6B6B, 0.2);
-        color: #FF6B6B;
+        background: rgba($errorcolor, 0.2);
+        color: $errorcolor;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+}
+
+.message {
+    &.success {
+        background: rgba($confirmcolor, 0.2);
+        color: $confirmcolor;
         padding: 0.5rem;
         margin-bottom: 1rem;
     }

@@ -108,10 +108,10 @@ Router::prefix('api', function ($routes) {
     $routes->setExtensions(['json']);
     //$routes->resources('Events');
     $routes->connect(
-        '/events/:location',
+        '/events/:location/:startdate/:enddate',
         ['controller' => 'Events', 'action' => 'index']
     )
-    ->setPass(['location']);
+    ->setPass(['location', 'startdate', 'enddate']);
     $routes->resources('Profiles');
     $routes->resources('Posts');
     $routes->resources('Interests');

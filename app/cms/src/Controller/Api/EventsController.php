@@ -2,6 +2,7 @@
 // src/Api/Controller/EventsController.php
 namespace App\Controller\Api;
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 class EventsController extends AppController
 {
@@ -11,8 +12,12 @@ class EventsController extends AppController
         $this->loadComponent('RequestHandler');
     }
 
-    public function index($location)
+    public function index($location, $startdate, $enddate)
     {
+        $startdate = new Time($startdate);
+        $enddate = new Time($enddate);
+        $enddate->modify('+1 days');
+
         $events = $this->Events->find('all')->contain([
             'Venues' => [
                 'queryBuilder' => function ($q) use ($location) {
@@ -22,7 +27,10 @@ class EventsController extends AppController
             ],
             'Profiles' => [
             ]
-        ]);
+        ])
+        ->where(function($exp) use ($startdate, $enddate) {
+            return $exp->between('Events.startdate', $startdate, $enddate);
+       });
 
         $this->set([
             'events' => $events,

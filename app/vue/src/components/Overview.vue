@@ -12,7 +12,7 @@
           </div>
           <div class="event-details">
             <h2>{{ event.name }}</h2>
-            <p>{{ event.profile.firstname + ' ' + event.profile.lastname }}</p>
+            <p v-if="event.profile">{{ event.profile.firstname + ' ' + event.profile.lastname }}</p>
           </div>
 
     </section>
@@ -47,7 +47,7 @@
       axios({
       method: "get",
       url:
-        "http://localhost:8765/api/events/" + this.searchparams.location + ".json",
+        "http://localhost:8765/api/events/" + this.searchparams.location + "/" + this.searchparams.startdate + "/" + this.searchparams.enddate + ".json",
       headers: {
       }
       })
