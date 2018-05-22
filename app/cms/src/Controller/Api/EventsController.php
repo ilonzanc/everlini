@@ -11,12 +11,19 @@ class EventsController extends AppController
         $this->loadComponent('RequestHandler');
     }
 
-    public function index()
+    public function index($location)
     {
-        $events = $this->Events->find('all', array(
-            'contain' => array("Venues", "Profiles"),
-            //'conditions' => array("Events.venue_id" => $location)
-        ));
+        $events = $this->Events->find('all')->contain([
+            'Venues' => [
+                'queryBuilder' => function ($q) use ($location) {
+                    return $q
+                        ->where(['Venues.city' => $location]);
+                }
+            ],
+            'Profiles' => [
+            ]
+        ]);
+
         $this->set([
             'events' => $events,
             '_serialize' => ['events']

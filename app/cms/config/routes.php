@@ -106,7 +106,12 @@ Router::prefix('api', function ($routes) {
     // you do not need to include the /api prefix
     // or the api route element.
     $routes->setExtensions(['json']);
-    $routes->resources('Events');
+    //$routes->resources('Events');
+    $routes->connect(
+        '/events/:location',
+        ['controller' => 'Events', 'action' => 'index']
+    )
+    ->setPass(['location']);
     $routes->resources('Profiles');
     $routes->resources('Posts');
     $routes->resources('Interests');

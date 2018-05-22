@@ -17,6 +17,10 @@
 
     </section>
 
+    <section v-if="events.length == 0">
+      <p>Geen evenementen gevonden</p>
+    </section>
+
 
   </div>
 </template>
@@ -27,6 +31,11 @@
 
   export default {
     name: "overview",
+    computed: {
+			searchparams() {
+				return this.$store.state.searchparams;
+			}
+		},
     data() {
       return {
         location: "",
@@ -38,7 +47,7 @@
       axios({
       method: "get",
       url:
-        "http://localhost:8765/api/events.json",
+        "http://localhost:8765/api/events/" + this.searchparams.location + ".json",
       headers: {
       }
       })
