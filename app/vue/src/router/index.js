@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../components/Home'
 import Login from '../components/Login'
 import Overview from '../components/Overview'
+import Profile from '../components/Profile'
 
 let routes = [
     {
@@ -16,6 +17,10 @@ let routes = [
     {
         path: '/evenementen',
         component: Overview
+    },
+    {
+        path: '/profiel',
+        component: Profile
     }
 ]
 

@@ -116,5 +116,9 @@ Router::prefix('api', function ($routes) {
     $routes->resources('Posts');
     $routes->resources('Interests');
     $routes->resources('Reviews');
+    $routes->connect(
+        '/login',
+        ['controller' => 'Users', 'action' => 'login']
+    );
 
 });

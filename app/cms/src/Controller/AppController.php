@@ -16,7 +16,6 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
-use Cake\Http\Middleware\CsrfProtectionMiddleware;
 
 /**
  * Application Controller
@@ -44,7 +43,6 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
-        $this->loadComponent('Csrf');
 
         /*
          * Enable the following components for recommended CakePHP security settings.
@@ -87,8 +85,6 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
-
-        $this->response->header('Access-Control-Allow-Origin', '*');
 
     }
 

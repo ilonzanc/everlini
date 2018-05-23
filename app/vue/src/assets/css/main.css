@@ -539,7 +539,9 @@ form input[type="text"],
 form button.btn {
   display: block;
   width: 100%; }
-form input[type="text"] {
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
   border: 1px solid rgba(66, 66, 66, 0.5);
   border-radius: 5px;
   color: #424242;

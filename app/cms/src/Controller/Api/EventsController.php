@@ -25,8 +25,7 @@ class EventsController extends AppController
                         ->where(['Venues.city' => $location]);
                 }
             ],
-            'Profiles' => [
-            ]
+            'Profiles' => []
         ])
         ->where(function($exp) use ($startdate, $enddate) {
             return $exp->between('Events.startdate', $startdate, $enddate);

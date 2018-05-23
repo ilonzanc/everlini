@@ -3,8 +3,8 @@
 	  	<div class="container">
 			<h1>Aanmelden</h1>
             <form method="POST" action="" @submit.prevent="onSubmit">
-				<label for="name">Gebruikersnaam</label>
-				<input type="text" id="name" name="name" placeholder="Jouw emailadres..." required v-model="user.email">
+				<label for="email">Emailadres</label>
+				<input type="email" id="email" name="email" placeholder="Jouw emailadres..." required v-model="user.email">
 				<label for="pass">Wachtwoord</label>
 				<input type="password" id="pass" name="pass" placeholder="********" required v-model="user.password">
 				<button type="submit" class="btn widebtn">Inloggen</button>
@@ -23,30 +23,31 @@ export default {
   data () {
     return {
       user: {
-        email: "newuser@mail.be",
-		    password: "secret"
+        email: "",
+		    password: ""
       },
     }
   },
   mounted () {
+    let loggedInUser = JSON.parse(localStorage.getItem("user"));
+    if (loggedInUser) {
+      this.$router.push('/profiel');
+    }
     console.log('Login Component Mounted');
-    //console.log(csrf_field());
   },
   methods: {
     onSubmit() {
       var self = this;
-      console.log("user: ");
-      console.log(this.user);
       axios({
         method: 'post',
-        url: "",
-        headers: {
-          'X-CSRF-Token': '2c40cb58d445214db32376ff083425edfe99ec502e238dcf45c0c78f8e12201ca360fcabfa5252a4e676fb281294ce4914d5665976960e3c9aef1cde977aca5d'
-        },
+        url: "http://localhost:8765/api/login.json",
         data: self.user
       })
       .then((response) => {
-          console.log(response.data);
+          self.user = response.data;
+          localStorage.setItem("user", JSON.stringify(response.data));
+          this.$parent.session = JSON.parse(localStorage.getItem("user"));
+          this.$router.push('/profiel');
       })
       .catch((error, request) => {
           console.log(error);

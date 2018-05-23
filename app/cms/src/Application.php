@@ -19,6 +19,8 @@ use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Http\Middleware\SecurityHeadersMiddleware;
+use App\Middleware\CorsMiddleware;
 
 /**
  * Application setup class.
@@ -36,6 +38,15 @@ class Application extends BaseApplication
      */
     public function middleware($middlewareQueue)
     {
+        $headers = new SecurityHeadersMiddleware();
+        $headers
+            ->setCrossDomainPolicy()
+            ->setReferrerPolicy()
+            ->setXFrameOptions()
+            ->setXssProtection()
+            ->noOpen()
+            ->noSniff();
+
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
@@ -45,7 +56,9 @@ class Application extends BaseApplication
             ->add(AssetMiddleware::class)
 
             // Add routing middleware.
-            ->add(new RoutingMiddleware($this));
+            ->add(new RoutingMiddleware($this))
+            //->add($headers)
+            ->add(new CorsMiddleware());
 
         return $middlewareQueue;
     }

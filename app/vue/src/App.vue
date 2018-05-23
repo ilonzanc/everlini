@@ -8,11 +8,11 @@
       <nav :class="{ 'nav-open': navOpen }">
         <ul>
           <li><router-link to="/">Home</router-link></li>
-          <li v-if="session.profile_id != ''"><router-link to="/jouw-profiel">Jouw profiel</router-link></li>
+          <li v-if="session != null"><router-link to="/profiel">Jouw profiel</router-link></li>
           <li><router-link to="/about">About</router-link></li>
           <li><router-link to="/contact">Contact</router-link></li>
-          <li v-if="session.profile_id != ''"><router-link to="/" class="btn primary-btn">Uitloggen</router-link></li>
-          <li v-if="session.profile_id == ''"><router-link to="/aanmelden" class="btn primary-btn">Aanmelden</router-link></li>
+          <li v-if="session != null"><a href="#" class="btn primary-btn" @click.prevent="logOut">Uitloggen</a></li>
+          <li v-if="session == null"><router-link to="/aanmelden" class="btn primary-btn">Aanmelden</router-link></li>
         </ul>
       </nav>
     </header>
@@ -38,14 +38,7 @@ export default {
   data () {
     return {
       session: {
-        profile_id: '',
-        email: '',
-        first_name: '',
-        last_name: '',
-        housnr: '',
-        city: '',
-        country: '',
-        dateofbirth: '',
+        id: ""
       },
 	    navOpen: false,
     }
@@ -54,7 +47,10 @@ export default {
     $route() {
       this.navOpen = false;
     }
-	},
+  },
+  mounted () {
+    this.session = JSON.parse(localStorage.getItem("user"));
+  },
   methods: {
     onSaveSession: function (user) {
       console.log('click');
@@ -70,7 +66,13 @@ export default {
     },
     closeNav() {
       this.navOpen = false;
-		},
+    },
+    logOut() {
+      localStorage.removeItem("user");
+      this.session = null;
+      this.navOpen = false;
+      this.$router.push('/');
+    }
   }
 }
 </script>
