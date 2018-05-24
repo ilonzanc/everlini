@@ -112,13 +112,19 @@ Router::prefix('api', function ($routes) {
         ['controller' => 'Events', 'action' => 'index']
     )
     ->setPass(['location', 'startdate', 'enddate']);
+
     $routes->resources('Profiles');
     $routes->resources('Posts');
     $routes->resources('Interests');
     $routes->resources('Reviews');
     $routes->connect(
+        '/register',
+        ['controller' => 'Users', 'action' => 'register']
+    );
+    $routes->connect(
         '/login',
         ['controller' => 'Users', 'action' => 'login']
     );
+
 
 });

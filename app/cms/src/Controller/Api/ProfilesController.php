@@ -29,26 +29,35 @@ class ProfilesController extends AppController
         ]);
     }
 
-    public function add()
+    public function register()
     {
         $this->loadModel('Users');
         $username = null;
         $user = $this->Users->newEntity();
-        if ($this->request->is('post')) {
-            $user->role_id = (int)$this->request->data['role_id'];
-            $user->username = $this->request->data['username'];
-            $user->email = $this->request->data['email'];
-            $user->password = $this->request->data['password'];
 
+        //check if reauest is post
+        $shortFirstName = substr($this->request->data['firstname'], 0, 3);
+        $shortLastName = substr($this->request->data['lastname'], 0, 3);
+        $dobShort = substr(
+            $this->request->data['dateofbirth'],
+            strlen($this->request->data['dateofbirth']) - 2,
+            strlen($this->request->data['dateofbirth'])
+        );
+
+        $newusername = $shortFirstName . $shortLastName .$dobShort;
+
+        $user->role_id = (int)$this->request->data['role_id'];
+        $user->username = $newusername;
+        $user->email = $this->request->data['email'];
+        $user->password = $this->request->data['password'];
+
+        $username = $user->username;
+
+        if ($this->Users->save($user)) {
+            $message = 'The user has been saved.';
             $username = $user->username;
-
-            if ($this->Users->save($user)) {
-                $message = 'The user has been saved.';
-                $username = $user->username;
-            } else {
-                $message = 'The user could not be saved. Please, try again.';
-            }
-
+        } else {
+            $message = 'The user could not be saved. Please, try again.';
         }
 
         $profile = $this->Profiles->newEntity();
@@ -59,27 +68,26 @@ class ProfilesController extends AppController
         $newuser = $newuser->first();
 
         //create new profile with new user id as user_id
-        if ($this->request->is('post')) {
-            $data = $this->request->data;
-            $profile->user_id = $newuser->id;
-            $profile->firstname = $data['firstname'];
-            $profile->lastname = $data['lastname'];
 
-            $profiledob = $data['dateofbirth']['year'] . '-' . $data['dateofbirth']['month'] . '-' . $data['dateofbirth']['day'];
-            $profile->dateofbirth = strtotime($profiledob);
+        $data = $this->request->data;
+        $profile->user_id = $newuser->id;
+        $profile->firstname = $data['firstname'];
+        $profile->lastname = $data['lastname'];
 
-            $profile->streetname = $data['streetname'];
-            $profile->housenr = $data['housenr'];
-            $profile->city = $data['city'];
-            $profile->country = $data['country'];
-            $profile->organisation = $data['organisation'];
+        $profile->dateofbirth = strtotime($data['dateofbirth']);
 
-            if ($this->Profiles->save($profile)) {
-                $message = 'The profile has been saved.';
-            } else {
-                $message = "The profile could not be saved. Please, try again.";
-            }
+        $profile->streetname = $data['streetname'];
+        $profile->housenr = $data['housenr'];
+        $profile->city = $data['city'];
+        $profile->country = $data['country'];
+        $profile->organisation = $data['organisation'];
+
+        if ($this->Profiles->save($profile)) {
+            $message = 'The profile has been saved.';
+        } else {
+            $message = "The profile could not be saved. Please, try again.";
         }
+
 
         $this->set([
             'message' => $message,

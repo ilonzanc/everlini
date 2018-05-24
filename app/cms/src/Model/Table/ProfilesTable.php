@@ -87,25 +87,25 @@ class ProfilesTable extends Table
             ->scalar('streetname')
             ->maxLength('streetname', 255)
             ->requirePresence('streetname', 'create')
-            ->notEmpty('streetname');
+            ->allowEmpty('streetname');
 
         $validator
             ->scalar('housenr')
             ->maxLength('housenr', 10)
             ->requirePresence('housenr', 'create')
-            ->notEmpty('housenr');
+            ->allowEmpty('housenr');
 
         $validator
             ->scalar('city')
             ->maxLength('city', 255)
             ->requirePresence('city', 'create')
-            ->notEmpty('city');
+            ->allowEmpty('city');
 
         $validator
             ->scalar('country')
             ->maxLength('country', 255)
             ->requirePresence('country', 'create')
-            ->notEmpty('country');
+            ->allowEmpty('country');
 
         $validator
             ->boolean('organisation')

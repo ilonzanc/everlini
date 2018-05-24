@@ -2,6 +2,7 @@ import VueRouter from 'vue-router';
 
 import Home from '../components/Home'
 import Login from '../components/Login'
+import Register from '../components/Register'
 import Overview from '../components/Overview'
 import Profile from '../components/Profile'
 
@@ -13,6 +14,10 @@ let routes = [
     {
         path: '/aanmelden',
         component: Login
+    },
+    {
+        path: '/registreren',
+        component: Register
     },
     {
         path: '/evenementen',

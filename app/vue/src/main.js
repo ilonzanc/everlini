@@ -1,5 +1,3 @@
-//import Vue from 'vue';
-
 import Vue from 'vue';
 import App from './App.vue'
 import router from './router/index';
@@ -11,13 +9,9 @@ import { store } from './store';
 
 window.axios = axios;
 window.moment = moment;
-/* window.axios.defaults.headers.common = {
-    //'X-CSRF-TOKEN': window.Laravel.csrfToken,
-    'X-Requested-With': 'XMLHttpRequest',
-    'Access-Control-Allow-Origin': '*'
-} */
-
-//require('./bootstrap');
+window.axios.defaults.headers.common = {
+    //"Access-Control-Allow-Origin": "*",
+};
 
 new Vue({
   el: '#app',

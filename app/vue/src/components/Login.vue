@@ -2,7 +2,7 @@
   <div id="login">
 	  	<div class="container">
 			<h1>Aanmelden</h1>
-            <form method="POST" action="" @submit.prevent="onSubmit">
+            <form method="POST" action="http://localhost:8765/api/login.json" @submit.prevent="onSubmit">
 				<label for="email">Emailadres</label>
 				<input type="email" id="email" name="email" placeholder="Jouw emailadres..." required v-model="user.email">
 				<label for="pass">Wachtwoord</label>
@@ -61,4 +61,13 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+#login {
+  p {
+    text-align: center;
+    a {
+      font-weight: 700;
+    }
+  }
+}
+</style>

@@ -86,6 +86,13 @@ class AppController extends Controller
             $this->set('_serialize', true);
         }
 
+
+    }
+
+    public function beforeFilter(event $event) { //if you dont have this beforeFilter already
+        if ($this->request->is('options')) {
+            return $this->response;
+        }
     }
 
 
