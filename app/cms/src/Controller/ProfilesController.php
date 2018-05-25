@@ -53,22 +53,6 @@ class ProfilesController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
 
-    public function notadd()
-    {
-        $profile = $this->Profiles->newEntity();
-        if ($this->request->is('post')) {
-            $profile = $this->Profiles->patchEntity($profile, $this->request->getData());
-            if ($this->Profiles->save($profile)) {
-                $this->Flash->success(__('The profile has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The profile could not be saved. Please, try again.'));
-        }
-        $users = $this->Profiles->Users->find('list', ['limit' => 200]);
-        $this->set(compact('profile', 'users'));
-    }
-
     public function add()
     {
         // First create a user

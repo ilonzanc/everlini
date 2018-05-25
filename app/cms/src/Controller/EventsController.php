@@ -21,7 +21,7 @@ class EventsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Profiles', 'Venues']
+            'contain' => ['Users']
         ];
         $events = $this->paginate($this->Events);
 
@@ -38,7 +38,7 @@ class EventsController extends AppController
     public function view($id = null)
     {
         $event = $this->Events->get($id, [
-            'contain' => ['Profiles', 'Venues', 'Favorites', 'Posts']
+            'contain' => ['Users', 'Favorites', 'Posts']
         ]);
 
         $this->set('event', $event);
@@ -53,7 +53,32 @@ class EventsController extends AppController
     {
         $event = $this->Events->newEntity();
         if ($this->request->is('post')) {
-            $event = $this->Events->patchEntity($event, $this->request->getData());
+            $event->user_id =  $this->Auth->user('id');
+            $event->name = $this->request->data['name'];
+            $event->description = $this->request->data['description'];
+
+            //saving the startdate
+            $startdate = $this->request->data['startdate']['year'] . '-' .
+                $this->request->data['startdate']['month'] . '-' .
+                $this->request->data['startdate']['day'];
+            $starttime = $this->request->data['starttime'];
+            $fullstartdate = $startdate . ' ' . $starttime;
+            $event->startdate = strtotime($fullstartdate);
+
+            //saving the enddate
+            $enddate = $this->request->data['enddate']['year'] . '-' .
+                $this->request->data['enddate']['month'] . '-' .
+                $this->request->data['enddate']['day'];
+            $endtime = $this->request->data['endtime'];
+            $fullenddate = $enddate . ' ' . $endtime;
+            $event->enddate = strtotime($fullenddate);
+
+            $event->street = $this->request->data['street'];
+            $event->housenr = $this->request->data['housenr'];
+            $event->postal_code = $this->request->data['postal_code'];
+            $event->city = $this->request->data['city'];
+            $event->country = $this->request->data['country'];
+
             if ($this->Events->save($event)) {
                 $this->Flash->success(__('The event has been saved.'));
 
@@ -61,9 +86,8 @@ class EventsController extends AppController
             }
             $this->Flash->error(__('The event could not be saved. Please, try again.'));
         }
-        $profiles = $this->Events->Profiles->find('list', ['limit' => 200]);
-        $venues = $this->Events->Venues->find('list', ['limit' => 200]);
-        $this->set(compact('event', 'profiles', 'venues'));
+        $users = $this->Events->Users->find('list', ['limit' => 200]);
+        $this->set(compact('event', 'users'));
     }
 
     /**
@@ -87,9 +111,8 @@ class EventsController extends AppController
             }
             $this->Flash->error(__('The event could not be saved. Please, try again.'));
         }
-        $profiles = $this->Events->Profiles->find('list', ['limit' => 200]);
-        $venues = $this->Events->Venues->find('list', ['limit' => 200]);
-        $this->set(compact('event', 'profiles', 'venues'));
+        $users = $this->Events->Users->find('list', ['limit' => 200]);
+        $this->set(compact('event', 'users'));
     }
 
     /**

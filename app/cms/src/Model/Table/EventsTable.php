@@ -43,12 +43,8 @@ class EventsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Profiles', [
-            'foreignKey' => 'profile_id'
-        ]);
-        $this->belongsTo('Venues', [
-            'foreignKey' => 'venue_id',
-            'joinType' => 'INNER'
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id'
         ]);
         $this->hasMany('Favorites', [
             'foreignKey' => 'event_id'
@@ -81,6 +77,36 @@ class EventsTable extends Table
             ->allowEmpty('description');
 
         $validator
+            ->scalar('street')
+            ->maxLength('street', 255)
+            ->requirePresence('street', 'create')
+            ->notEmpty('street');
+
+        $validator
+            ->scalar('housenr')
+            ->maxLength('housenr', 255)
+            ->requirePresence('housenr', 'create')
+            ->notEmpty('housenr');
+
+        $validator
+            ->scalar('postal_code')
+            ->maxLength('postal_code', 255)
+            ->requirePresence('postal_code', 'create')
+            ->notEmpty('postal_code');
+
+        $validator
+            ->scalar('city')
+            ->maxLength('city', 255)
+            ->requirePresence('city', 'create')
+            ->notEmpty('city');
+
+        $validator
+            ->scalar('country')
+            ->maxLength('country', 255)
+            ->requirePresence('country', 'create')
+            ->allowEmpty('country');
+
+        $validator
             ->dateTime('startdate')
             ->allowEmpty('startdate');
 
@@ -100,8 +126,7 @@ class EventsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['profile_id'], 'Profiles'));
-        $rules->add($rules->existsIn(['venue_id'], 'Venues'));
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
     }

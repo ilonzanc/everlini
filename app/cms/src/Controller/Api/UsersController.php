@@ -103,7 +103,6 @@ class UsersController extends AppController
                 )
             ]);
             $message = $loggedInUser;
-            $message = $this->request->is('post');
         } else {
             $message = "The profile could not be saved. Please, try again.";
         }

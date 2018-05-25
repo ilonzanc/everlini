@@ -5,6 +5,7 @@ import Login from '../components/Login'
 import Register from '../components/Register'
 import Overview from '../components/Overview'
 import Profile from '../components/Profile'
+import ProfileEvents from '../components/ProfileEvents'
 
 let routes = [
     {
@@ -26,6 +27,10 @@ let routes = [
     {
         path: '/profiel',
         component: Profile
+    },
+    {
+        path: '/profiel/jouw-events',
+        component: ProfileEvents
     }
 ]
 

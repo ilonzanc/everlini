@@ -18,7 +18,6 @@
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('startdate') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('enddate') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('venue_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
@@ -28,13 +27,12 @@
             <?php foreach ($events as $event): ?>
             <tr>
                 <td><?= $this->Number->format($event->id) ?></td>
-                <!-- <td><?php /*$event->has('profile') ? $this->Html->link($event->profile->id, ['controller' => 'Profiles', 'action' => 'view', $event->profile->id]) : '' */ ?></td>-->
+                <!-- <td><?php /*$event->has('user') ? $this->Html->link($event->user->id, ['controller' => 'Users', 'action' => 'view', $event->user->id]) : '' */ ?></td>-->
 
                 <td><?= h($event->name) ?></td>
 
                 <td><?= h($event->startdate) ?></td>
                 <td><?= h($event->enddate) ?></td>
-                <td><?= $event->has('venue') ? $this->Html->link($event->venue->name, ['controller' => 'Venues', 'action' => 'view', $event->venue->id]) : '' ?></td>
                 <td><?= h($event->created) ?></td>
                 <td><?= h($event->modified) ?></td>
                 <td class="actions">

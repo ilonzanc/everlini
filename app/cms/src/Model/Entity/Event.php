@@ -7,8 +7,7 @@ use Cake\ORM\Entity;
  * Event Entity
  *
  * @property int $id
- * @property int $profile_id
- * @property int $venue_id
+ * @property int $user_id
  * @property string $name
  * @property string $description
  * @property \Cake\I18n\FrozenTime $startdate
@@ -16,8 +15,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
- * @property \App\Model\Entity\Profile $profile
- * @property \App\Model\Entity\Venue $venue
+ * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Favorite[] $favorites
  * @property \App\Model\Entity\Post[] $posts
  */
@@ -34,16 +32,19 @@ class Event extends Entity
      * @var array
      */
     protected $_accessible = [
-        'profile_id' => true,
-        'venue_id' => true,
+        'user_id' => true,
         'name' => true,
         'description' => true,
+        'street' => true,
+        'housenr' => true,
+        'city' => true,
+        'postal_code' => true,
+        'country' => true,
         'startdate' => true,
         'enddate' => true,
         'created' => true,
         'modified' => true,
-        'profile' => true,
-        'venue' => true,
+        'user' => true,
         'favorites' => true,
         'posts' => true
     ];
