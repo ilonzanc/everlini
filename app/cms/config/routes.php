@@ -114,8 +114,23 @@ Router::prefix('api', function ($routes) {
     ->setPass(['location', 'startdate', 'enddate']);
 
     $routes->connect(
+        '/events/:id',
+        ['controller' => 'Events', 'action' => 'view']
+    )->setPass(['id']);
+
+    $routes->connect(
         '/events/add',
         ['controller' => 'Events', 'action' => 'add']
+    );
+
+    $routes->connect(
+        '/events/:id/edit',
+        ['controller' => 'Events', 'action' => 'edit']
+    )->setPass(['id']);
+
+    $routes->connect(
+        '/events',
+        ['controller' => 'Events', 'action' => 'getEventsByUser', '?' => 'user']
     );
 
     $routes->resources('Profiles');

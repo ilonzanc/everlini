@@ -373,8 +373,7 @@ body {
   font-family: 'Montserrat', sans-serif; }
 
 a {
-  text-decoration: none;
-  color: inherit; }
+  text-decoration: none; }
 
 * {
   font-size: 16px;
@@ -560,8 +559,15 @@ form textarea {
   color: #fff;
   border-radius: 5px;
   padding: 0.8rem; }
+  .btn i {
+    color: #fff; }
   .btn.primary-btn {
     background: #48DBFB; }
+  .btn.secundary-btn {
+    background: #FECA57; }
+  .btn.small-btn {
+    min-width: 45px;
+    text-align: center; }
 
 #overview__comp .event {
   overflow: auto;

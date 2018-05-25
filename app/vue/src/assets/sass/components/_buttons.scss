@@ -4,7 +4,21 @@
     color: #fff;
     border-radius: 5px;
     padding: 0.8rem;
+
+    i {
+        color: #fff;
+    }
+
     &.primary-btn {
         background: $primary-color;
+    }
+    &.secundary-btn {
+        background: $secundary-color;
+
+    };
+    &.small-btn {
+        //display: inline;
+        min-width: 45px;
+        text-align: center;
     }
 }

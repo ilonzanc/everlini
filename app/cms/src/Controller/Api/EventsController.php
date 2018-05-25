@@ -16,7 +16,7 @@ class EventsController extends AppController
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['add']);
+        $this->Auth->allow(['add', 'getEventsByUser', 'edit', 'view']);
 
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
@@ -35,17 +35,12 @@ class EventsController extends AppController
         $enddate->modify('+1 days');
 
         $events = $this->Events->find('all')->contain([
-            'Venues' => [
-                'queryBuilder' => function ($q) use ($location) {
-                    return $q
-                        ->where(['Venues.city' => $location]);
-                }
-            ],
-            'Profiles' => []
+            'Users' => []
         ])
         ->where(function($exp) use ($startdate, $enddate) {
             return $exp->between('Events.startdate', $startdate, $enddate);
-       });
+        })
+        ->where(['Events.city' => $location]);
 
         $this->set([
             'events' => $events,
@@ -56,7 +51,6 @@ class EventsController extends AppController
     public function view($id)
     {
         $event = $this->Events->get($id, array(
-            'contain' => array("Venues")
         ));
         $this->set([
             'event' => $event,
@@ -70,7 +64,6 @@ class EventsController extends AppController
 
         $event = $this->Events->newEntity();
         if ($this->request->is('post')) {
-            $userid = $this->request->data['user_id'];
             $event->user_id = $this->request->data['user_id'];
             $event->name = $this->request->data['name'];
             $event->description = $this->request->data['description'];
@@ -115,18 +108,63 @@ class EventsController extends AppController
     public function edit($id)
     {
         $event = $this->Events->get($id);
+        $message = "bitch";
         if ($this->request->is(['post', 'put'])) {
-            $event = $this->Events->patchEntity($event, $this->request->getData());
+            $event->user_id = $this->request->data['user_id'];
+            $event->name = $this->request->data['name'];
+            $event->description = $this->request->data['description'];
+
+            //saving the startdate
+            $startdate = $this->request->data['startdate']['date'];
+            $starttime = $this->request->data['startdate']['time'];
+            $fullstartdate = $startdate . ' ' . $starttime;
+            $event->startdate = strtotime($fullstartdate);
+
+            //saving the enddate
+            $enddate = $this->request->data['enddate']['date'];
+            $endtime = $this->request->data['enddate']['time'];
+            $fullenddate = $enddate . ' ' . $endtime;
+            $event->enddate = strtotime($fullenddate);
+
+            $event->street = $this->request->data['street'];
+            $event->housenr = $this->request->data['housenr'];
+            $event->postal_code = $this->request->data['postal_code'];
+            $event->city = $this->request->data['city'];
+            $event->country = $this->request->data['country'];
+
             if ($this->Events->save($event)) {
-                $message = 'Saved';
-            } else {
-                $message = 'Error';
+                $message= 'The event was updated.';
             }
+            else {
+                $message= 'The event could not be updated. Please, try again.';
+            }
+
+
         }
+
         $this->set([
             'message' => $message,
             '_serialize' => ['message']
         ]);
+    }
+
+    public function getEventsByUser()
+    {
+        $this->autoRender = false;
+        $this->viewBuilder()->setLayout(null);
+
+        $message = "feck";
+
+        $user_id = $this->request->query('user');
+
+        $events = $this->Events->find('all', [
+            'conditions' => ['Events.user_id' => $user_id]
+        ]);
+
+        $events = json_encode($events);
+        $this->response->type('json');
+        $this->response->body($events);
+        return $this->response;
     }
 
     public function delete($id)

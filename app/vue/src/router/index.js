@@ -7,6 +7,7 @@ import Overview from '../components/Overview'
 import Profile from '../components/Profile'
 import ProfileEvents from '../components/ProfileEvents'
 import CreateEvent from '../components/CreateEvent'
+import UpdateEvent from '../components/UpdateEvent'
 
 let routes = [
     {
@@ -36,6 +37,10 @@ let routes = [
     {
         path: '/profiel/nieuw-event',
         component: CreateEvent
+    },
+    {
+        path: '/profiel/jouw-events/:id/bewerken',
+        component: UpdateEvent
     }
 ]
 

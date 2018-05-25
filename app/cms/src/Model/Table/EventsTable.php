@@ -9,8 +9,6 @@ use Cake\Validation\Validator;
 /**
  * Events Model
  *
- * @property \App\Model\Table\ProfilesTable|\Cake\ORM\Association\BelongsTo $Profiles
- * @property \App\Model\Table\VenuesTable|\Cake\ORM\Association\BelongsTo $Venues
  * @property \App\Model\Table\FavoritesTable|\Cake\ORM\Association\HasMany $Favorites
  * @property \App\Model\Table\PostsTable|\Cake\ORM\Association\HasMany $Posts
  *

@@ -12,7 +12,6 @@
           </div>
           <div class="event-details">
             <h2>{{ event.name }}</h2>
-            <p v-if="event.profile">{{ event.profile.firstname + ' ' + event.profile.lastname }}</p>
           </div>
 
     </section>
