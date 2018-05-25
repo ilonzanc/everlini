@@ -4,12 +4,28 @@ namespace App\Controller\Api;
 use App\Controller\AppController;
 use Cake\I18n\Time;
 
+use Cake\Event\Event;
+
 class EventsController extends AppController
 {
     public function initialize()
     {
         parent::initialize();
         $this->loadComponent('RequestHandler');
+    }
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['add']);
+
+        $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
+            withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
+            withHeader('Access-Control-Allow-Headers',
+                       'Accept, Authorization, Cache-Control, Content-Type, X-Requested-With, x-csrf-token')->
+            withHeader('Access-Control-Allow-Credentials', 'true')->
+            withHeader('Access-Control-Max-Age', '3600');
+
+        $this->response->send();
     }
 
     public function index($location, $startdate, $enddate)
@@ -50,17 +66,50 @@ class EventsController extends AppController
 
     public function add()
     {
-        $event = $this->Events->newEntity($this->request->getData());
-        if ($this->Events->save($event)) {
-            $message = 'Saved';
-        } else {
-            $message = 'Error';
+
+
+        $event = $this->Events->newEntity();
+        if ($this->request->is('post')) {
+            $userid = $this->request->data['user_id'];
+            $event->user_id = $this->request->data['user_id'];
+            $event->name = $this->request->data['name'];
+            $event->description = $this->request->data['description'];
+
+            //saving the startdate
+            $startdate = $this->request->data['startdate']['date'];
+            $starttime = $this->request->data['startdate']['time'];
+            $fullstartdate = $startdate . ' ' . $starttime;
+            $event->startdate = strtotime($fullstartdate);
+
+            //saving the enddate
+            $enddate = $this->request->data['enddate']['date'];
+            $endtime = $this->request->data['enddate']['time'];
+            $fullenddate = $enddate . ' ' . $endtime;
+            $event->enddate = strtotime($fullenddate);
+
+            $event->street = $this->request->data['location']['street'];
+            $event->housenr = $this->request->data['location']['housenr'];
+            $event->postal_code = $this->request->data['location']['postal_code'];
+            $event->city = $this->request->data['location']['city'];
+            $event->country = $this->request->data['location']['country'];
+
+            if ($this->Events->save($event)) {
+                $message= 'The event has been saved.';
+            }
+            else {
+                $message= 'The event could not be saved. Please, try again.';
+            }
+
+            $this->set([
+                'message' => $message,
+                'event' => $event,
+                'userid' => $userid,
+                '_serialize' => ['message', 'event', 'userid']
+            ]);
+
         }
-        $this->set([
-            'message' => $message,
-            'event' => $event,
-            '_serialize' => ['message', 'event']
-        ]);
+
+
     }
 
     public function edit($id)

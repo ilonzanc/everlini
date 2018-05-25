@@ -4,19 +4,26 @@ form {
         margin-bottom: 0.5rem;
     }
     input[type="text"],
-    button.btn {
+    button.btn,
+    textarea {
         display: block;
         width: 100%;
     }
 
     input[type="text"],
     input[type="email"],
-    input[type="password"] {
+    input[type="password"],
+    textarea {
         border: 1px solid rgba($text-color, 0.5);
         border-radius: 5px;
         color: $text-color;
         padding: 0.5rem;
         width: 100%;
         margin-bottom: 1rem;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 80px;
     }
 }

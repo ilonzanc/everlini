@@ -10,7 +10,6 @@ $today = date("Y");
     <?= $this->Form->create($event) ?>
     <h3><?= __('Add Event') ?></h3>
     <?php
-        echo $this->Form->control('user_id', ['options' => $users, 'empty' => true]);
         echo $this->Form->control('name');
         echo $this->Form->control('description');
         echo $this->Form->input( 'startdate', [

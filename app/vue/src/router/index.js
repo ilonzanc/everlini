@@ -6,6 +6,7 @@ import Register from '../components/Register'
 import Overview from '../components/Overview'
 import Profile from '../components/Profile'
 import ProfileEvents from '../components/ProfileEvents'
+import CreateEvent from '../components/CreateEvent'
 
 let routes = [
     {
@@ -31,6 +32,10 @@ let routes = [
     {
         path: '/profiel/jouw-events',
         component: ProfileEvents
+    },
+    {
+        path: '/profiel/nieuw-event',
+        component: CreateEvent
     }
 ]
 

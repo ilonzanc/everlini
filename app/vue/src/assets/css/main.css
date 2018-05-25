@@ -536,18 +536,23 @@ form label {
   display: block;
   margin-bottom: 0.5rem; }
 form input[type="text"],
-form button.btn {
+form button.btn,
+form textarea {
   display: block;
   width: 100%; }
 form input[type="text"],
 form input[type="email"],
-form input[type="password"] {
+form input[type="password"],
+form textarea {
   border: 1px solid rgba(66, 66, 66, 0.5);
   border-radius: 5px;
   color: #424242;
   padding: 0.5rem;
   width: 100%;
   margin-bottom: 1rem; }
+form textarea {
+  resize: vertical;
+  min-height: 80px; }
 
 .btn {
   display: inline-block;
