@@ -22,6 +22,9 @@ class Attachment extends Entity
      * @var array
      */
     protected $_accessible = [
-        'description' => true
+        'name' => true,
+        'path' => true,
+        'created' => true,
+        'modified' => true,
     ];
 }

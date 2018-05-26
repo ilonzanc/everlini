@@ -15,7 +15,8 @@
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('description') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('path') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -23,7 +24,8 @@
             <?php foreach ($attachments as $attachment): ?>
             <tr>
                 <td><?= $this->Number->format($attachment->id) ?></td>
-                <td><?= h($attachment->description) ?></td>
+                <td><?= h($attachment->name) ?></td>
+                <td><?= h($attachment->path) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $attachment->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $attachment->id]) ?>

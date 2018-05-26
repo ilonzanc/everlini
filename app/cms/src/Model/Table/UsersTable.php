@@ -45,7 +45,8 @@ class UsersTable extends Table
             'foreignKey' => 'role_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('Profiles', [
+
+        $this->hasOne('Profiles', [
             'foreignKey' => 'user_id'
         ]);
     }

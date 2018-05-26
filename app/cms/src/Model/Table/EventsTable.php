@@ -54,6 +54,11 @@ class EventsTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id'
         ]);
+
+        $this->belongsTo('Attachments', [
+            'foreignKey' => 'image_id',
+        ]);
+
         $this->hasMany('Favorites', [
             'foreignKey' => 'event_id'
         ]);

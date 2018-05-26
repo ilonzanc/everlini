@@ -4,6 +4,8 @@
  * @var \App\Model\Entity\Event[]|\Cake\Collection\CollectionInterface $events
  */
 ?>
+
+
 <div class="events index large-9 medium-8 columns content">
     <h2><?= __('Events Overview') ?></h2>
     <section class="header__createbtn" id="actions-sidebar">
@@ -15,6 +17,7 @@
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('image_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('startdate') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('enddate') ?></th>
@@ -28,6 +31,7 @@
             <?php foreach ($events as $event): ?>
             <tr>
                 <td><?= $this->Number->format($event->id) ?></td>
+                <td><?= (isset($event['image_id'])) ? $this->Html->link($event['image_id'], ['controller' => 'Attachments', 'action' => 'view', $event['image_id']]) : '' ?></td>
                 <!-- <td><?php /*$event->has('user') ? $this->Html->link($event->user->id, ['controller' => 'Users', 'action' => 'view', $event->user->id]) : '' */ ?></td>-->
 
                 <td><?= h($event->name) ?></td>

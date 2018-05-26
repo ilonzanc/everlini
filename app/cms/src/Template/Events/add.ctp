@@ -7,7 +7,7 @@
 $today = date("Y");
 ?>
 <div class="events form large-9 medium-8 columns content">
-    <?= $this->Form->create($event) ?>
+    <?= $this->Form->create($event, ['enctype' => 'multipart/form-data']) ?>
     <h3><?= __('Add Event') ?></h3>
     <?php
         echo $this->Form->control('name');
@@ -49,7 +49,7 @@ $today = date("Y");
         echo $this->Form->control('city');
         echo $this->Form->control('postal_code');
         echo $this->Form->control('country');
-        echo $this->Form->input('header_image', ['type' => 'file'])
+        echo $this->Form->file('submittedfile');
     ?>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>

@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Routing\Router;
 
 /**
  * Events Controller
@@ -38,7 +39,7 @@ class EventsController extends AppController
     public function view($id = null)
     {
         $event = $this->Events->get($id, [
-            'contain' => ['Users', 'Favorites', 'Posts']
+            'contain' => ['Users', 'Favorites', 'Posts', 'Attachments']
         ]);
 
         $this->set('event', $event);
@@ -51,6 +52,38 @@ class EventsController extends AppController
      */
     public function add()
     {
+        $this->loadModel('Attachments');
+
+        $newImageId = "";
+
+        if(!empty($this->request->data['submittedfile']['name'])) {
+            $filename = $this->request->data['submittedfile']['name'];
+            $url = Router::url('/', true) . 'img/events/' . $filename;
+            $uploadpath = '/img/events/';
+            $uploadfile = $_SERVER['DOCUMENT_ROOT']. $uploadpath . $filename;
+            if(move_uploaded_file($this->request->data['submittedfile']['tmp_name'], $uploadfile)){
+                $image = $this->Attachments->newEntity();
+                if ($this->request->is('post')) {
+                    var_dump($image);
+                    $image->name = $filename;
+                    $image->path = $url;
+                    if($this->Attachments->save($image)) {
+                        $this->Flash->success(__('The image was saved'));
+                        $newImageId = $image->id;
+                    } else {
+                        $this->Flash->error(__('Can not upload image. Please try again.'));
+                    }
+                } else {
+                    $this->Flash->error(__('Can not upload image. Please try again.'));
+                }
+            } else {
+                $this->Flash->error(__('Could not move image. Please, try again.'));
+            }
+        } else {
+            $this->Flash->error(__('No file selected. Please choose a file to upload'));
+        }
+
+
         $event = $this->Events->newEntity();
         if ($this->request->is('post')) {
             $event->user_id =  $this->Auth->user('id');
@@ -78,6 +111,7 @@ class EventsController extends AppController
             $event->postal_code = $this->request->data['postal_code'];
             $event->city = $this->request->data['city'];
             $event->country = $this->request->data['country'];
+            $event->image_id = $newImageId;
 
             if ($this->Events->save($event)) {
                 $this->Flash->success(__('The event has been saved.'));

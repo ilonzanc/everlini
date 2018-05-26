@@ -33,6 +33,7 @@ class Event extends Entity
      */
     protected $_accessible = [
         'user_id' => true,
+        'image_id' => true,
         'name' => true,
         'description' => true,
         'street' => true,
@@ -46,6 +47,7 @@ class Event extends Entity
         'modified' => true,
         'deleted' => true,
         'user' => true,
+        'image' => true,
         'favorites' => true,
         'posts' => true
     ];

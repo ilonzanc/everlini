@@ -33,6 +33,9 @@ class AttachmentsTable extends Table
         $this->setTable('attachments');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
     }
 
     /**
@@ -48,9 +51,14 @@ class AttachmentsTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->scalar('description')
-            ->maxLength('description', 45)
-            ->allowEmpty('description');
+            ->scalar('name')
+            ->maxLength('name', 255)
+            ->allowEmpty('name');
+
+        $validator
+            ->scalar('path')
+            ->maxLength('path', 255)
+            ->notEmpty('name');
 
         return $validator;
     }

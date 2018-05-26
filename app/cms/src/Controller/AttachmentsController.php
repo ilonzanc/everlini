@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Routing\Router;
 
 /**
  * Attachments Controller
@@ -48,16 +49,33 @@ class AttachmentsController extends AppController
      */
     public function add()
     {
-        $attachment = $this->Attachments->newEntity();
-        if ($this->request->is('post')) {
-            $attachment = $this->Attachments->patchEntity($attachment, $this->request->getData());
-            if ($this->Attachments->save($attachment)) {
-                $this->Flash->success(__('The attachment has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+        if(!empty($this->request->data['submittedfile']['name'])) {
+            $filename = $this->request->data['submittedfile']['name'];
+            $url = Router::url('/', true) . 'img/events/' . $filename;
+            $uploadpath = '/img/events/';
+            $uploadfile = $_SERVER['DOCUMENT_ROOT']. $uploadpath . $filename;
+            if(move_uploaded_file($this->request->data['submittedfile']['tmp_name'], $uploadfile)){
+                $image = $this->Attachments->newEntity();
+                if ($this->request->is('post')) {
+                    var_dump($image);
+                    $image->name = $filename;
+                    $image->path = $url;
+                    if($this->Attachments->save($image)) {
+                        $this->Flash->success(__('The image was saved'));
+                        $newImageId = $image->id;
+                    } else {
+                        $this->Flash->error(__('Can not upload image. Please try again.'));
+                    }
+                } else {
+                    $this->Flash->error(__('Can not upload image. Please try again.'));
+                }
+            } else {
+                $this->Flash->error(__('Could not move image. Please, try again.'));
             }
-            $this->Flash->error(__('The attachment could not be saved. Please, try again.'));
+        } else {
+            $this->Flash->error(__('No file selected. Please choose a file to upload'));
         }
+
         $this->set(compact('attachment'));
     }
 
