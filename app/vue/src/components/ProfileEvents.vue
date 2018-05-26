@@ -13,7 +13,7 @@
           <div class="column column-sm-4">
             <section class="action-btns">
               <router-link :to="'/profiel/jouw-events/' + event.id + '/bewerken'" class="btn secundary-btn small-btn"><i class="fa fa-pencil"></i></router-link>
-              <router-link to="/profiel/jouw-events/:id/verwijderen" class="btn secundary-btn small-btn"><i class="fa fa-trash"></i></router-link>
+              <a href="#" @click.prevent="deleteEvent(event.id)" class="btn secundary-btn small-btn"><i class="fa fa-trash"></i></a>
             </section>
           </div>
         </div>
@@ -50,6 +50,24 @@
       });
       const formattedDate = moment('19 Oct 2017').format('YYYYMMDD');
       console.log(formattedDate);
+    },
+    methods: {
+      deleteEvent(id) {
+        var self = this;
+        console.log("click");
+        axios({
+          method: 'put',
+          url: "http://localhost:8765/api/events/" + id + "/delete.json",
+          data: self.event,
+        })
+        .then((response) => {
+            console.log(response)
+            //this.$router.push('/profiel/jouw-events');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+      }
     }
   }
 </script>

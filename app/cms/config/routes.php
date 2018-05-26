@@ -129,6 +129,11 @@ Router::prefix('api', function ($routes) {
     )->setPass(['id']);
 
     $routes->connect(
+        '/events/:id/delete',
+        ['controller' => 'Events', 'action' => 'delete']
+    )->setPass(['id']);
+
+    $routes->connect(
         '/events',
         ['controller' => 'Events', 'action' => 'getEventsByUser', '?' => 'user']
     );

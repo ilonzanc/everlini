@@ -49,6 +49,7 @@ $today = date("Y");
         echo $this->Form->control('city');
         echo $this->Form->control('postal_code');
         echo $this->Form->control('country');
+        echo $this->Form->input('header_image', ['type' => 'file'])
     ?>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>

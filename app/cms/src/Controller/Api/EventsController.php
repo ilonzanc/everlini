@@ -16,7 +16,7 @@ class EventsController extends AppController
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['add', 'getEventsByUser', 'edit', 'view']);
+        $this->Auth->allow(['add', 'getEventsByUser', 'edit', 'view', 'delete']);
 
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
@@ -108,7 +108,6 @@ class EventsController extends AppController
     public function edit($id)
     {
         $event = $this->Events->get($id);
-        $message = "bitch";
         if ($this->request->is(['post', 'put'])) {
             $event->user_id = $this->request->data['user_id'];
             $event->name = $this->request->data['name'];
@@ -158,7 +157,7 @@ class EventsController extends AppController
         $user_id = $this->request->query('user');
 
         $events = $this->Events->find('all', [
-            'conditions' => ['Events.user_id' => $user_id]
+            'conditions' => ['Events.user_id' => $user_id, 'Events.deleted IS NULL' ]
         ]);
 
         $events = json_encode($events);
@@ -169,14 +168,18 @@ class EventsController extends AppController
 
     public function delete($id)
     {
+        $message = "Can't delete event";
         $event = $this->Events->get($id);
-        $message = 'Deleted';
-        if (!$this->Events->delete($event)) {
-            $message = 'Error';
+        $this->Events->touch($event, 'Events.softDelete');
+
+        if ($this->Events->save($event)) {
+            $message = 'Deleted';
         }
+
         $this->set([
             'message' => $message,
-            '_serialize' => ['message']
+            'event' => $event,
+            '_serialize' => ['message', 'event']
         ]);
     }
 }

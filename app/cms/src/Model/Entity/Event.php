@@ -44,6 +44,7 @@ class Event extends Entity
         'enddate' => true,
         'created' => true,
         'modified' => true,
+        'deleted' => true,
         'user' => true,
         'favorites' => true,
         'posts' => true
