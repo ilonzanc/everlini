@@ -34,17 +34,37 @@ class EventsController extends AppController
         $enddate = new Time($enddate);
         $enddate->modify('+1 days');
 
-        $events = $this->Events->find('all')->contain([
-            'Users' => []
-        ])
+        $interests = array();
+
+        $events = array();
+
+        $conditions = array();
+
+        $conditions[] = array('Events.startdate', $startdate, $enddate);
+        $conditions[] = array('Events.city' => $location);
+
+        $search_terms = $this->request->data['interests'];
+
+        foreach($search_terms as $search_term){
+            $interests[] = array('Events.name Like' =>'%'.$search_term.'%');
+            $interests[] = array('Events.description Like' =>'%'.$search_term.'%');
+        }
+
+        $events = $this->Events->find('all', [
+            'contain' => 'Users',
+            'conditions' => array('OR' => $interests)
+        ]);
+
+        $events->where(['Events.city' => $location])
         ->where(function($exp) use ($startdate, $enddate) {
             return $exp->between('Events.startdate', $startdate, $enddate);
-        })
-        ->where(['Events.city' => $location]);
+        });
 
         $this->set([
+            'conditions' => $conditions,
             'events' => $events,
-            '_serialize' => ['events']
+            'search_terms' => $search_terms,
+            '_serialize' => ['events', 'search_terms', 'conditions']
         ]);
     }
 

@@ -138,6 +138,22 @@ class EventsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $event = $this->Events->patchEntity($event, $this->request->getData());
+            //saving the startdate
+            $startdate = $this->request->data['startdate']['year'] . '-' .
+                $this->request->data['startdate']['month'] . '-' .
+                $this->request->data['startdate']['day'];
+            $starttime = $this->request->data['starttime'];
+            $fullstartdate = $startdate . ' ' . $starttime;
+            $event->startdate = strtotime($fullstartdate);
+
+            //saving the enddate
+            $enddate = $this->request->data['enddate']['year'] . '-' .
+                $this->request->data['enddate']['month'] . '-' .
+                $this->request->data['enddate']['day'];
+            $endtime = $this->request->data['endtime'];
+            $fullenddate = $enddate . ' ' . $endtime;
+            $event->enddate = strtotime($fullenddate);
+
             if ($this->Events->save($event)) {
                 $this->Flash->success(__('The event has been saved.'));
 

@@ -1,13 +1,13 @@
 import VueRouter from 'vue-router';
 
-import Home from '../components/Home'
-import Login from '../components/Login'
-import Register from '../components/Register'
-import Overview from '../components/Overview'
-import Profile from '../components/Profile'
-import ProfileEvents from '../components/ProfileEvents'
-import CreateEvent from '../components/CreateEvent'
-import UpdateEvent from '../components/UpdateEvent'
+import Home from '../views/Home'
+import Login from '../views/Login'
+import Register from '../views/Register'
+import Overview from '../views/Overview'
+import Profile from '../views/Profile'
+import ProfileEvents from '../views/ProfileEvents'
+import CreateEvent from '../views/CreateEvent'
+import UpdateEvent from '../views/UpdateEvent'
 
 let routes = [
     {

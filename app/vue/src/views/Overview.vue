@@ -44,11 +44,10 @@
     mounted() {
       let self = this;
       axios({
-      method: "get",
-      url:
-        "http://localhost:8765/api/events/" + this.searchparams.location + "/" + this.searchparams.startdate + "/" + this.searchparams.enddate + ".json",
-      headers: {
-      }
+      method: "post",
+      url: "http://localhost:8765/api/events/" + this.searchparams.location + "/" + this.searchparams.startdate + "/" + this.searchparams.enddate + ".json",
+      headers: { },
+      data: this.searchparams
       })
       .then(function(response) {
         console.log(response);

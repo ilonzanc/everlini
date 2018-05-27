@@ -749,6 +749,10 @@ form button {
   padding: 0.5rem;
   margin-bottom: 1rem; }
 
+.error-message {
+  color: #FF6B6B;
+  margin-bottom: 0.5rem; }
+
 .header__createbtn {
   text-align: right;
   padding-bottom: 1rem; }
