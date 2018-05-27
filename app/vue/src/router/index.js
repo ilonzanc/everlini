@@ -4,6 +4,7 @@ import Home from '../views/Home'
 import Login from '../views/Login'
 import Register from '../views/Register'
 import Overview from '../views/Overview'
+import EventDetail from '../views/EventDetail'
 import Profile from '../views/Profile'
 import ProfileEvents from '../views/ProfileEvents'
 import CreateEvent from '../views/CreateEvent'
@@ -25,6 +26,10 @@ let routes = [
     {
         path: '/evenementen',
         component: Overview
+    },
+    {
+        path: '/evenementen/:id',
+        component: EventDetail
     },
     {
         path: '/profiel',

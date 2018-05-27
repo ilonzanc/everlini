@@ -151,5 +151,15 @@ Router::prefix('api', function ($routes) {
         ['controller' => 'Users', 'action' => 'login']
     );
 
+    $routes->connect(
+        '/favorite/add',
+        ['controller' => 'Favorites', 'action' => 'add']
+    );
+
+    $routes->connect(
+        '/favorites',
+        ['controller' => 'Favorites', 'action' => 'index']
+    );
+
 
 });

@@ -15,12 +15,12 @@
           </div>
           <label>Interesses</label>
           <div class="interests_input">
-          <input type="text" name="0" v-model="params.interests[0]">
+          <input type="text" name="0" v-model="params.interests[0]" placeholder="Eigen interesse toevoegen...">
           <i class="fa fa-plus" @click.prevent="addRow"></i>
           </div>
           <div class="additional_interests" v-for="row in rows">
             <div class="interests_input">
-              <input type="text" :name="currentInputIndex" v-model="params.interests[row.index + 1]">
+              <input type="text" :name="currentInputIndex" v-model="params.interests[row.index + 1]" placeholder="Nog eentje...">
               <i class="fa fa-plus" @click.prevent="addRow"></i>
             </div>
           </div>
@@ -76,9 +76,11 @@
     position: absolute;
     right: 0;
     top: 0;
-    padding: 0.5rem;
-    background: green;
+    padding: 10px 12px 11px;
+    background: #FECA57;
     color: #fff;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 }
 </style>

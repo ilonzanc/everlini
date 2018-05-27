@@ -5,7 +5,7 @@
 		<a href="#" class="toggleBars" @click.prevent="toggleNav">
 			<img src="./assets/icons/hamburger_icon.svg">
 		</a>
-      <nav :class="{ 'nav-open': navOpen }">
+      <nav :class="['main-nav ', { 'nav-open': navOpen }]">
         <ul>
           <li><router-link to="/">Home</router-link></li>
           <li v-if="session != null"><router-link to="/profiel">Jouw profiel</router-link></li>
@@ -19,6 +19,18 @@
     <main>
       	<router-view></router-view>
     </main>
+    <footer>
+      <div class="container">
+        <nav class="footer-nav">
+          <ul>
+            <li><router-link to="/about">About</router-link></li>
+            <li><router-link to="/contact">Contact</router-link></li>
+            <li><router-link to="/privacy-policy">Privacy Policy</router-link></li>
+            <li><router-link to="/disclaimer">Disclaimer</router-link></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
   </div>
 </template>
 
