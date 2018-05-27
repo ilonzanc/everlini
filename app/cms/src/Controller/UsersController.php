@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Routing\Router;
 
 /**
  * Users Controller
@@ -29,7 +30,9 @@ class UsersController extends AppController
         $this->paginate = [
             'contain' => ['Roles']
         ];
-        $users = $this->paginate($this->Users);
+        $users = $this->paginate($this->Users->find('all', [
+            //"contain" => ['Attachments']
+        ]));
 
         $this->set(compact('users'));
     }
@@ -57,9 +60,41 @@ class UsersController extends AppController
      */
     public function register()
     {
+        $this->loadModel('Attachments');
+
+        $newImageId = "";
+
+        if(!empty($this->request->data['avatar']['name'])) {
+            $filename = $this->request->data['avatar']['name'];
+            $url = Router::url('/', true) . 'img/avatar/' . $filename;
+            $uploadpath = '/img/avatar/';
+            $uploadfile = $_SERVER['DOCUMENT_ROOT']. $uploadpath . $filename;
+            if(move_uploaded_file($this->request->data['avatar']['tmp_name'], $uploadfile)){
+                $image = $this->Attachments->newEntity();
+                if ($this->request->is('post')) {
+                    var_dump($image);
+                    $image->name = $filename;
+                    $image->path = $url;
+                    if($this->Attachments->save($image)) {
+                        $this->Flash->success(__('The image was saved'));
+                        $newImageId = $image->id;
+                    } else {
+                        $this->Flash->error(__('Can not upload image. Please try again.'));
+                    }
+                } else {
+                    $this->Flash->error(__('Can not upload image. Please try again.'));
+                }
+            } else {
+                $this->Flash->error(__('Could not move image. Please, try again.'));
+            }
+        } else {
+            $this->Flash->error(__('No file selected. Please choose a file to upload'));
+        }
+
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+            $user->image_id = $newImageId;
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 

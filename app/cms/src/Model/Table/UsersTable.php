@@ -49,6 +49,11 @@ class UsersTable extends Table
         $this->hasOne('Profiles', [
             'foreignKey' => 'user_id'
         ]);
+
+        $this->belongsTo('Attachments', [
+            'foreignKey' => 'image_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

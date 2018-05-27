@@ -4,12 +4,14 @@
  * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  */
 ?>
+
 <div class="users index large-9 medium-8 columns content">
     <h2><?= __('Users Overview') ?></h2>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('avatar') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('username') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('role_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('email') ?></th>
@@ -22,6 +24,7 @@
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= $this->Number->format($user->id) ?></td>
+                <td><?= $user->has('attachment') ? $this->Html->link($user->attachment->name, ['controller' => 'Attachments', 'action' => 'view', $user->attachment->id]) : '' ?></td>
                 <td><?= h($user->username) ?></td>
                 <td><?= $user->has('role') ? $this->Html->link($user->role->name, ['controller' => 'Roles', 'action' => 'view', $user->role->id]) : '' ?></td>
                 <td><?= h($user->email) ?></td>
