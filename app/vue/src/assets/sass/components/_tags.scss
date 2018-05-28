@@ -1,0 +1,21 @@
+
+.tag {
+    padding: 0.7rem 1.35rem;
+    border: 1px solid $primary-color;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0 0.5rem;
+
+    &:first-child {
+        margin-left: 0;
+    }
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &.selected {
+        background: $primary-color;
+        color: #fff;
+    }
+}

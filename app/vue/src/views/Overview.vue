@@ -40,10 +40,10 @@
     mounted() {
       let self = this;
       axios({
-      method: "post",
-      url: "http://localhost:8765/api/events/" + this.searchparams.location + "/" + this.searchparams.startdate + "/" + this.searchparams.enddate + ".json",
-      headers: { },
-      data: this.searchparams
+        method: "post",
+        url: "http://localhost:8765/api/events/" + this.searchparams.location + "/" + this.searchparams.startdate + "/" + this.searchparams.enddate + ".json",
+        headers: { },
+        data: this.searchparams
       })
       .then(function(response) {
         console.log(response);
@@ -52,6 +52,21 @@
       .catch(function(error) {
         console.log(error);
       });
+
+      axios({
+        method: "get",
+        url: "https://api.meetup.com/2/open_events.xml?topic=photo&time=,1w&key=766033144c453b4d295465e352538",
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+        }
+      })
+      .then(function(repsponse) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
       const formattedDate = moment('19 Oct 2017').format('YYYYMMDD')
       console.log(formattedDate)
     },

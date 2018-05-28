@@ -1,6 +1,6 @@
 form {
     label {
-        display: block;
+        display: inline-block;
         margin-bottom: 0.5rem;
     }
     input[type="text"],
@@ -17,7 +17,7 @@ form {
         border: 1px solid rgba($text-color, 0.5);
         border-radius: 5px;
         color: $text-color;
-        padding: 0.5rem;
+        padding: 13px;
         width: 100%;
         margin-bottom: 1rem;
     }
@@ -25,5 +25,24 @@ form {
     textarea {
         resize: vertical;
         min-height: 80px;
+    }
+}
+
+@media (min-width: 42.5rem) {
+    .inline-input {
+        display: inline-block;
+        width: auto;
+    }
+
+    .time-inputs  {
+        label{
+        text-transform: lowercase;
+        padding: 0.5rem;
+        }
+
+        .inline-input {
+            width: 165px;
+            display: inline;
+        }
     }
 }

@@ -5,8 +5,8 @@
 
 .row {
 	display: block;
-	margin-left: -0.5rem;
-	margin-right: -0.5rem;
+	margin-left: -1rem;
+	margin-right: -1rem;
 	zoom: 1;
 }
 .row::before, .row::after {
@@ -23,8 +23,8 @@
 	display: block;
 	max-width: 71.25rem;
 	margin: 0 auto;
-	padding-left: 1rem;
-	padding-right: 1rem;
+	padding-left: 2rem;
+	padding-right: 2rem;
     zoom: 1;
 
 	&.no-padding {
@@ -39,9 +39,9 @@
 	float: left;
 	width: 100%;
 	min-height: 1px;
-	padding-left: 0.5rem;
-	padding-right: 0.5rem;
-	margin-bottom: 0.5rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	margin-bottom: 1rem;
 	overflow: hidden;
 }
 

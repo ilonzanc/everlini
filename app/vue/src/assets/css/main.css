@@ -357,7 +357,8 @@ td,
 th {
   padding: 0; }
 
-* {
+*,
+h1 {
   margin: 0;
   padding: 0;
   border: 0;
@@ -369,8 +370,7 @@ th {
 body {
   overflow-x: hidden; }
 
-main {
-  padding-bottom: 2rem;
+.content {
   box-shadow: 0px 5px 10px rgba(66, 66, 66, 0.1); }
 
 * {
@@ -385,8 +385,8 @@ a {
 
 .row {
   display: block;
-  margin-left: -0.5rem;
-  margin-right: -0.5rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
   zoom: 1; }
 
 .row::before, .row::after {
@@ -402,8 +402,8 @@ a {
   display: block;
   max-width: 71.25rem;
   margin: 0 auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
   zoom: 1; }
   .container.no-padding {
     padding: 0; }
@@ -414,9 +414,9 @@ a {
   float: left;
   width: 100%;
   min-height: 1px;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  margin-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-bottom: 1rem;
   overflow: hidden; }
 
 @media (min-width: 20rem) {
@@ -478,6 +478,9 @@ header {
       height: 20px;
       cursor: pointer; }
 
+@media (min-width: 42.5rem) {
+  header {
+    padding: 1.5rem; } }
 nav.main-nav {
   position: absolute;
   left: 100%;
@@ -533,22 +536,36 @@ nav.footer-nav a {
     width: auto;
     float: right;
     height: auto;
-    padding: 0; }
+    padding: 0;
+    background: none;
+    margin-top: -0.5rem; }
     nav.main-nav li {
       list-style-type: none;
       display: inline-block; }
       nav.main-nav li a {
         font-size: 1.1rem;
-        padding: 0 0.5rem;
+        padding: 0.5rem;
         display: block;
-        margin: 0 0.5rem; }
+        margin: 0 2rem;
+        color: white;
+        font-weight: 500; }
+        nav.main-nav li a:hover {
+          color: white; }
         nav.main-nav li a.router-link-exact-active {
-          font-weight: bold; } }
+          font-weight: bold;
+          background: none; }
+      nav.main-nav li:last-child a {
+        background: #FECA57;
+        width: auto;
+        padding: 0.5rem 3rem;
+        margin: 0 2rem;
+        margin-right: 0;
+        color: white; } }
 footer {
   margin-top: 1rem; }
 
 form label {
-  display: block;
+  display: inline-block;
   margin-bottom: 0.5rem; }
 form input[type="text"],
 form button.btn,
@@ -562,28 +579,56 @@ form textarea {
   border: 1px solid rgba(66, 66, 66, 0.5);
   border-radius: 5px;
   color: #424242;
-  padding: 0.5rem;
+  padding: 13px;
   width: 100%;
   margin-bottom: 1rem; }
 form textarea {
   resize: vertical;
   min-height: 80px; }
 
+@media (min-width: 42.5rem) {
+  .inline-input {
+    display: inline-block;
+    width: auto; }
+
+  .time-inputs label {
+    text-transform: lowercase;
+    padding: 0.5rem; }
+  .time-inputs .inline-input {
+    width: 165px;
+    display: inline; } }
 .btn {
   display: inline-block;
   font-weight: 700;
   color: #fff;
   border-radius: 5px;
-  padding: 0.8rem; }
+  padding: 0.8rem;
+  border: 1px solid #fff; }
   .btn i {
     color: #fff; }
   .btn.primary-btn {
-    background: #48DBFB; }
+    background: #48DBFB;
+    border-color: #48DBFB; }
   .btn.secundary-btn {
-    background: #FECA57; }
+    background: #FECA57;
+    border-color: #FECA57; }
   .btn.small-btn {
     min-width: 45px;
     text-align: center; }
+
+.tag {
+  padding: 0.7rem 1.35rem;
+  border: 1px solid #48DBFB;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 0 0.5rem; }
+  .tag:first-child {
+    margin-left: 0; }
+  .tag:last-child {
+    margin-right: 0; }
+  .tag.selected {
+    background: #48DBFB;
+    color: #fff; }
 
 #overview__comp .event {
   overflow: auto;
@@ -608,5 +653,45 @@ form textarea {
     color: #fff; }
   #overview__comp .event .event-details {
     padding: 0.5rem 0; }
+
+#home {
+  text-align: center; }
+  #home .hero-image {
+    background: url("../images/adult-awesome-beautiful-763412.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height: 230px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1; }
+  #home form {
+    text-align: left; }
+  #home h1 {
+    color: #fff;
+    text-shadow: rgba(66, 66, 66, 0.5) 2px 2px 5px;
+    font-size: 1.5rem;
+    padding: 1rem 0 4rem; }
+
+@media (min-width: 42.5rem) {
+  #home {
+    min-height: calc(100vh - 72px); }
+    #home h1 {
+      font-size: 2.5rem;
+      padding: 3rem;
+      width: 960px;
+      margin: 0 auto; }
+    #home .hero-image {
+      height: 100vh; }
+    #home form {
+      padding: 2rem;
+      border-radius: 5px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 960px;
+      background: #fff; } }
 
 /*# sourceMappingURL=main.css.map */

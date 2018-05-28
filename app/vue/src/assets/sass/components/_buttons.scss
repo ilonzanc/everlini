@@ -4,6 +4,7 @@
     color: #fff;
     border-radius: 5px;
     padding: 0.8rem;
+    border: 1px solid #fff;
 
     i {
         color: #fff;
@@ -11,9 +12,11 @@
 
     &.primary-btn {
         background: $primary-color;
+        border-color: $primary-color;
     }
     &.secundary-btn {
         background: $secundary-color;
+        border-color: $secundary-color;
 
     };
     &.small-btn {
