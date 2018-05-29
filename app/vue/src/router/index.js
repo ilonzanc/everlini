@@ -1,14 +1,24 @@
 import VueRouter from 'vue-router';
 
 import Home from '../views/Home'
+
 import Login from '../views/Login'
 import Register from '../views/Register'
+
+import About from '../views/About'
+import Contact from '../views/Contact'
+import PrivacyPolicy from '../views/PrivacyPolicy'
+
 import Overview from '../views/Overview'
 import EventDetail from '../views/EventDetail'
+
 import Profile from '../views/Profile'
 import ProfileEvents from '../views/ProfileEvents'
+
 import CreateEvent from '../views/CreateEvent'
 import UpdateEvent from '../views/UpdateEvent'
+
+
 
 let routes = [
     {
@@ -22,6 +32,18 @@ let routes = [
     {
         path: '/registreren',
         component: Register
+    },
+    {
+        path: '/about',
+        component: About
+    },
+    {
+        path: '/contact',
+        component: Contact
+    },
+    {
+        path: '/privacy-policy',
+        component: PrivacyPolicy
     },
     {
         path: '/evenementen',

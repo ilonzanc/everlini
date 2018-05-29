@@ -1,5 +1,5 @@
 <template>
-  <div id="register">
+  <div id="register" class="content">
 	  	<div class="container">
         <h1>Registreren</h1>
         <form method="POST" action="http://localhost:8765/api/register.json" @submit.prevent="onSubmit">

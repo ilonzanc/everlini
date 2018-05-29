@@ -52,6 +52,7 @@ export default {
       session: {
         id: ""
       },
+      fbAccesToken: "",
 	    navOpen: false,
     }
   },

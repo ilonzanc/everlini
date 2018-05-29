@@ -1,16 +1,16 @@
 <template>
-  <div id="profile-events">
+  <div id="profile-events" class="content">
     <div class="container">
       <h1>Jouw events</h1>
       <router-link to="/profiel/nieuw-event" class="btn primary-btn"><i class="fa fa-plus"></i> Nieuw event</router-link>
       <section class="event" v-bind:key="event.id" v-for="event in events">
         <div class="row">
-          <div class="column column-sm-8">
+          <div class="column column-sm-9">
             <div class="event-details">
               <h2>{{ event.name }}</h2>
             </div>
           </div>
-          <div class="column column-sm-4">
+          <div class="column column-sm-3">
             <section class="action-btns">
               <router-link :to="'/profiel/jouw-events/' + event.id + '/bewerken'" class="btn secundary-btn small-btn"><i class="fa fa-pencil"></i></router-link>
               <a href="#" @click.prevent="deleteEvent(event.id)" class="btn secundary-btn small-btn"><i class="fa fa-trash"></i></a>
@@ -76,6 +76,14 @@
 #profile-events {
   .action-btns {
     float: right;
+
+    a {
+      float: right;
+
+      &:first-child {
+        margin-bottom: 0.5rem;
+      }
+    }
   }
   .event {
     margin: 0.5rem 0;

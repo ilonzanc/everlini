@@ -8,3 +8,23 @@ a {
     text-decoration: none;
 }
 
+h1 {
+    font-weight: 700;
+    font-size: 2.3rem;
+    margin-bottom: 1rem
+}
+
+p {
+    line-height: 150%;
+}
+
+p a {
+    border-bottom: 1px solid rgba($text-color, 0.3);
+    padding-bottom: 2px;
+    &:hover {
+        color: $secundary-color;
+        border-color: $secundary-color;
+    }
+
+}
+

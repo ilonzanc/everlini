@@ -1,5 +1,5 @@
 <template>
-  <div id="create-event">
+  <div id="create-event" class="content">
     <div class="container">
       <h1>Nieuw event toevoegen</h1>
       <form method="POST" action="http://localhost:8765/api/events/add.json" @submit.prevent="onSubmit">

@@ -1,8 +1,7 @@
 <template>
-  <div id="profile">
+  <div id="profile" class="content">
     <div class="container">
-      <h1>profiel</h1>
-      <p> {{ this.$parent.session.profiles[0].firstname }} </p>
+      <h1>{{ this.$parent.session.profile.firstname }}</h1>
       <router-link to="/profiel/jouw-events" class="btn primary-btn">Jouw events</router-link>
     </div>
   </div>

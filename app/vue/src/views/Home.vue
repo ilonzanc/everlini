@@ -56,6 +56,10 @@
           </div>
         </div>
       </form>
+      <div class="column column-sm-12 column-lg-6">
+        <button @click.prevent="getFBEventsByLocation" type="submit" class="btn primary-btn">Zoeken</button>
+        <ul class="events_list"></ul>
+      </div>
     </div>
   </div>
 </template>
@@ -94,6 +98,37 @@
         this.rows.push({value: this.params.interests[this.currentInputIndex], index: this.currentInputIndex});
 
         this.currentInputIndex++;
+      },
+      getFBEventsByLocation() {
+        let eventslist = document.querySelector('.events_list')
+        while (eventslist.firstChild) {
+          eventslist.removeChild(eventslist.firstChild);
+        }
+
+        let EventSearch = require("facebook-events-by-location-core");
+
+        let es = new EventSearch();
+
+        es.search({
+          "lat": 51.0535,
+          "lng": 3.7304,
+          "accessToken": this.$parent.fbAccesToken,
+          "distance": 2500
+        })
+        .then(function (response) {
+          let events = response.events;
+
+          for (i = 0; i < events.length; i++) {
+            console.log("Searching....");
+            const event = document.createElement('li');
+            const event_name = document.createTextNode(events[i].name);
+            event.appendChild(event_name);
+            eventslist.appendChild(event);
+          }
+        })
+        .catch(function (error) {
+          console.error(JSON.stringify(error));
+        });
       }
     }
   };

@@ -1,5 +1,5 @@
 <template>
-  <div id="update-event">
+  <div id="update-event" class="content">
     <div class="container">
       <h1>Event bewerken</h1>
       <form method="PUT" :action="'http://localhost:8765/api/events/' + this.$route.params.id + '/edit.json'" @submit.prevent="onSubmit">

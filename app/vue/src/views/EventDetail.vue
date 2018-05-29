@@ -1,5 +1,5 @@
 <template>
-  <div id="event-detail">
+  <div id="event-detail" class="content">
     <div class="container">
       <h1>{{ event.name }}</h1>
       {{event.startdate | moment("DD MMM") }} | {{event.startdate | moment("HH:mm")}} -
