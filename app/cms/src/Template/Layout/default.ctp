@@ -27,8 +27,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->meta('icon') ?>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
     <script src="https://use.fontawesome.com/64d3cadbb4.js"></script>
-    <script type="text/javascript" src="https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCoylGLZJMaYddtzoAHRQkGTxieuiT-ceI"></script>
-    <?= $this->Html->css('base.css') ?>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <?= $this->Html->css('main.css') ?>
 
     <?= $this->fetch('meta') ?>

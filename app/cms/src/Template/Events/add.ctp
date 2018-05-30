@@ -49,8 +49,48 @@ $today = date("Y");
         echo $this->Form->control('city');
         echo $this->Form->control('postal_code');
         echo $this->Form->control('country');
-        echo $this->Form->file('submittedfile');
+        echo $this->Form->control('address', array(
+            'id' => 'address'
+        ));
+        echo $this->Form->control('place_id', array(
+            'id' => 'place_id',
+            'label' => false,
+            'type' => 'hidden'
+        ));?>
+        <div id="suggestion-box"></div>
+
+        <?php echo $this->Form->file('submittedfile');
     ?>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+<script>
+    $(document).ready(function(){
+        $("#address").keyup(function(){
+            let search_text = $("#address").val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo $this->request->webroot;?>Events/geoCity",
+                data:{'search_text':search_text},
+                beforeSend: function(){
+                    $("#address").css("background","#fff no-repeat 380px");
+                },
+                success: function(data){
+                    $("#suggestion-box").show();
+                    $("#suggestion-box").html(data);
+                    $("#search-box").css("background", "#fff");
+                    $("#address").css("background", "none");
+                    if(data.length==0)
+                    {
+                        $("#place_id").val("");
+                    }
+                }
+            });
+        });
+    });
+    function selectCountry(city_name, place_id) {
+        $("#address").val(city_name);
+        $("#place_id").val(place_id);
+        $("#suggestion-box").hide();
+    }
+</script>

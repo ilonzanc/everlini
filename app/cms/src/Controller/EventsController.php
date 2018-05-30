@@ -14,6 +14,8 @@ use Cake\Routing\Router;
 class EventsController extends AppController
 {
 
+    public $APIkey = "AIzaSyCY30tr7QsW_ZjZRn94O2BttzRbRJNBbKM";
+
     /**
      * Index method
      *
@@ -52,11 +54,12 @@ class EventsController extends AppController
      */
     public function add()
     {
-        $this->loadModel('Attachments');
+        $event = $this->Events->newEntity();
+        if ($this->request->is('post')) {
+            $this->loadModel('Attachments');
 
-        $newImageId = "";
+            $newImageId = "";
 
-        if(!empty($this->request->data['submittedfile']['name'])) {
             $filename = $this->request->data['submittedfile']['name'];
             $url = Router::url('/', true) . 'img/events/' . $filename;
             $uploadpath = '/img/events/';
@@ -74,18 +77,12 @@ class EventsController extends AppController
                         $this->Flash->error(__('Can not upload image. Please try again.'));
                     }
                 } else {
-                    $this->Flash->error(__('Can not upload image. Please try again.'));
+                    $this->Flash->error(__('Can not upload image, request must be post. Please try again.'));
                 }
             } else {
                 $this->Flash->error(__('Could not move image. Please, try again.'));
             }
-        } else {
-            $this->Flash->error(__('No file selected. Please choose a file to upload'));
-        }
 
-
-        $event = $this->Events->newEntity();
-        if ($this->request->is('post')) {
             $event->user_id =  $this->Auth->user('id');
             $event->name = $this->request->data['name'];
             $event->description = $this->request->data['description'];
@@ -111,6 +108,16 @@ class EventsController extends AppController
             $event->postal_code = $this->request->data['postal_code'];
             $event->city = $this->request->data['city'];
             $event->country = $this->request->data['country'];
+            $event->address = $this->request->data['address'];
+
+            $data = $this->getCoordinates($this->request->data['address']);
+
+            $lat = $data['results'][0]['geometry']['location']['lat'];
+            $lng = $data['results'][0]['geometry']['location']['lng'];
+
+            $event->lat = $lat;
+            $event->lng = $lng;
+
             $event->image_id = $newImageId;
 
             if ($this->Events->save($event)) {
@@ -183,5 +190,49 @@ class EventsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function geoCity() {
+        if ($this->request->is('ajax')) {
+            $search_text = $this->request->data['search_text'];
+            $url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=". $search_text . "&language=nl&types=geocode&key=" . $this->APIkey;
+            $response = $this->get_web_page($url);
+
+            $result = array();
+            if (isset($response) && !empty($response)) {
+                foreach ($response['predictions'] as $key => $location) {
+                    $result[$key]['description'] = $location['description'];
+                    $result[$key]['place_id'] = $location['place_id'];
+                }
+            }
+            $this->set(compact('result'));
+        }
+    }
+
+    public function get_web_page($url)
+	{
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		$response_a = json_decode($response,true);
+		return $response_a;
+    }
+
+    public function getCoordinates($address)
+    {
+        $address = str_replace(' ', '%20', $address);
+        $url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" . $address . "&key=" . $this->APIkey;
+        $response = $this->get_web_page($url);
+
+        $result = array();
+        if (isset($response) && !empty($response)) {
+            return $response;
+        }
+
     }
 }
