@@ -33,7 +33,6 @@ class User extends Entity
     protected $_accessible = [
         'role_id' => true,
         'image_id' => true,
-        'username' => true,
         'email' => true,
         'password' => true,
         'created' => true,
@@ -49,7 +48,7 @@ class User extends Entity
      * @var array
      */
     protected $_hidden = [
-        //'password'
+        'password'
     ];
 
     // Hash password

@@ -16,8 +16,12 @@ aside {
     }
 
     nav li a,
-    nav li h3{        
+    nav li h3{
         display: block;
         padding: 0.5rem;
+    }
+
+    .fa {
+        width: 30px;
     }
 }

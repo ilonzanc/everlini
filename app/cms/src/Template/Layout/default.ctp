@@ -37,9 +37,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <header>
         <a href="/"><h1 style="color: transparent">Everlini<?= $this->Html->image('everlini_wit.png') ?></div></h1></a>
+        <?php if ($this->request->params['action'] == "index") : ?>
         <form>
             <input type="text" placeholder="<?= 'Zoeken in ' . $this->fetch('title')  . '...' ?>">
         </form>
+        <?php endif; ?>
         <div class="header__right">
             <?php if ($Auth->user('username')) :
             ?>
@@ -57,69 +59,78 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <aside>
         <nav>
             <ul>
-                <li><a href="/">Dashboard</a></li>
+                <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
                 <li><h3>Everlini</h3></li>
                 <li>
                     <?php echo $this->Html->link(
-                        'Events',
-                        ['controller' => 'Events', 'action' => 'index']
+                        '<i class="fa fa-calendar"></i> Events',
+                        ['controller' => 'Events', 'action' => 'index'],
+                        ['escape'=>false]
                     );
                     ?>
                 </li>
                 <li>
                     <?php echo $this->Html->link(
-                        'Venues',
-                        ['controller' => 'Venues', 'action' => 'index']
+                        '<i class="fa fa-file-text-o"></i> Posts',
+                        ['controller' => 'Posts', 'action' => 'index'],
+                        ['escape'=>false]
                     );
                     ?>
                 </li>
                 <li>
                     <?php echo $this->Html->link(
-                        'Posts',
-                        ['controller' => 'Posts', 'action' => 'index']
+                        '<i class="fa fa-user-o"></i> Profiles',
+                        ['controller' => 'Profiles', 'action' => 'index'],
+                        ['escape'=>false]
                     );
                     ?>
                 </li>
                 <li>
                     <?php echo $this->Html->link(
-                        'Profiles',
-                        ['controller' => 'Profiles', 'action' => 'index']
+                        '<i class="fa fa-users"></i> Organisations',
+                        ['controller' => 'Organisations', 'action' => 'index'],
+                        ['escape'=>false]
                     );
                     ?>
                 </li>
                 <li>
                     <?php echo $this->Html->link(
-                        'Media',
-                        ['controller' => 'Attachments', 'action' => 'index']
+                        '<i class="fa fa-picture-o"></i> Media',
+                        ['controller' => 'Attachments', 'action' => 'index'],
+                        ['escape'=>false]
                     );
                     ?>
                 </li>
                 <li>
                     <?php echo $this->Html->link(
-                        'Interests',
-                        ['controller' => 'Interests', 'action' => 'index']
+                        '<i class="fa fa-heart-o"></i> Interests',
+                        ['controller' => 'Interests', 'action' => 'index'],
+                        ['escape'=>false]
                     );
                     ?>
                 </li>
                 <li>
                     <?php echo $this->Html->link(
-                        'Reviews',
-                        ['controller' => 'Reviews', 'action' => 'index']
+                        '<i class="fa fa-star-o"></i> Reviews',
+                        ['controller' => 'Reviews', 'action' => 'index'],
+                        ['escape'=>false]
                     );
                     ?>
                 </li>
                 <li><h3>Accounts</h3></li>
                 <li>
                     <?php echo $this->Html->link(
-                        'Users',
-                        ['controller' => 'Users', 'action' => 'index']
+                        '<i class="fa fa-user-o"></i> Users',
+                        ['controller' => 'Users', 'action' => 'index'],
+                        ['escape'=>false]
                     );
                     ?>
                 </li>
                 <li>
                     <?php echo $this->Html->link(
-                        'Roles',
-                        ['controller' => 'Roles', 'action' => 'index']
+                        '<i class="fa fa-key"></i> Roles',
+                        ['controller' => 'Roles', 'action' => 'index'],
+                        ['escape'=>false]
                     );
                     ?>
                 </li>
@@ -128,6 +139,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </aside>
     <main>
         <?= $this->Flash->render() ?>
+        <?php if ($this->request->params['action'] != "index") : ?>
+        <?= $this->Html->link(__('<i class="fa fa-angle-left"></i> Back to ' . $this->fetch('title') . ' Overview'), ['action' => 'index'], ['escape' => false]) ?>
+        <?php endif; ?>
         <h1><a href=""><?= $this->fetch('title') ?></a></h1>
         <?= $this->fetch('content') ?>
     </main>

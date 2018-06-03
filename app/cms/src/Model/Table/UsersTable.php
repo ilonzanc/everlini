@@ -50,6 +50,10 @@ class UsersTable extends Table
             'foreignKey' => 'user_id'
         ]);
 
+        $this->hasOne('Organisations', [
+            'foreignKey' => 'user_id'
+        ]);
+
         $this->belongsTo('Attachments', [
             'foreignKey' => 'image_id',
             'joinType' => 'INNER'
@@ -71,8 +75,7 @@ class UsersTable extends Table
         $validator
             ->scalar('username')
             ->maxLength('username', 255)
-            ->requirePresence('username', 'create')
-            ->notEmpty('username');
+            ->allowEmpty('username');
 
         $validator
             ->email('email')

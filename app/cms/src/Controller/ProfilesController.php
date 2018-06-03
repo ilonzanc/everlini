@@ -59,17 +59,15 @@ class ProfilesController extends AppController
         $this->loadModel('Users');
         $username = null;
         $user = $this->Users->newEntity();
+        $newuserid = "";
         if ($this->request->is('post')) {
             $user->role_id = (int)$this->request->data['role_id'];
-            $user->username = $this->request->data['username'];
             $user->email = $this->request->data['email'];
             $user->password = $this->request->data['password'];
 
-            $username = $user->username;
-
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-                $username = $user->username;
+                $newuserid = $user['id'];
             } else {
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
@@ -77,16 +75,11 @@ class ProfilesController extends AppController
         }
 
         $profile = $this->Profiles->newEntity();
-        $newuser = $this->Users->find('all')
-            ->where(['Users.username =' => $username]);
-
-        //find new created user
-        $newuser = $newuser->first();
 
         //create new profile with new user id as user_id
         if ($this->request->is('post')) {
             $data = $this->request->data;
-            $profile->user_id = $newuser->id;
+            $profile->user_id = $newuserid;
             $profile->firstname = $data['firstname'];
             $profile->lastname = $data['lastname'];
 

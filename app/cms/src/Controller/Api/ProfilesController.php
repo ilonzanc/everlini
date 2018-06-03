@@ -35,7 +35,7 @@ class ProfilesController extends AppController
         $username = null;
         $user = $this->Users->newEntity();
 
-        //check if reauest is post
+        //TODO: check if reauest is post
         $shortFirstName = substr($this->request->data['firstname'], 0, 3);
         $shortLastName = substr($this->request->data['lastname'], 0, 3);
         $dobShort = substr(

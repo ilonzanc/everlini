@@ -675,6 +675,8 @@ aside {
   aside nav li h3 {
     display: block;
     padding: 0.5rem; }
+  aside .fa {
+    width: 30px; }
 
 table {
   width: 100%; }
