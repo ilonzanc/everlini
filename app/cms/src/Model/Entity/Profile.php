@@ -44,7 +44,6 @@ class Profile extends Entity
         'housenr' => true,
         'city' => true,
         'country' => true,
-        'organisation' => true,
         'created' => true,
         'modified' => true,
         'user' => true,

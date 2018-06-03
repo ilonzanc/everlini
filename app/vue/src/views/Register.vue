@@ -2,41 +2,72 @@
   <div id="register" class="content">
 	  	<div class="container">
         <h1>Registreren</h1>
-        <form method="POST" action="http://localhost:8765/api/register.json" @submit.prevent="onSubmit">
-          <input type="hidden" id="role_id" name="role_id" required v-model="user.role_id">
-          <label for="firstname">Voornaam</label>
-          <input type="text" id="firstname" name="firstname" placeholder="Jouw voornaam..." required v-model="user.firstname">
-          <label for="lastname">Naam</label>
-          <input type="text" id="lastname" name="lastname" placeholder="Jouw naam..." required v-model="user.lastname">
-          <label for="dateofbirth">Geboortedatum</label>
-          <input type="text" id="dateofbirth" name="dateofbirth" placeholder="Jouw geboortedatum..." required v-model="user.dateofbirth">
-          <label for="email">Emailadres</label>
-          <input type="email" id="email" name="email" placeholder="Jouw emailadres..." required v-model="user.email">
-          <label for="pass">Wachtwoord</label>
-          <input type="password" id="pass" name="pass" placeholder="********" required v-model="user.password">
-          <button type="submit" class="btn widebtn">Registreren</button>
-        </form>
+        <tabs>
+          <tab name="als gebruiker" :selected="true" :registerType = "'profile'">
+            <h2>Als gebruiker</h2>
+            <form method="POST" action="http://localhost:8765/api/register.json" @submit.prevent="onSubmit">
+              <input type="text" id="profile_role_id" name="role_id" required v-model="user.role_id">
+              <label for="firstname">Voornaam</label>
+              <input type="text" id="profile_firstname" name="firstname" placeholder="Jouw voornaam..." required v-model="user.firstname">
+              <label for="lastname">Naam</label>
+              <input type="text" id="profile_lastname" name="lastname" placeholder="Jouw naam..." required v-model="user.lastname">
+              <label for="dateofbirth">Geboortedatum</label>
+              <input type="text" id="profile_dateofbirth" name="dateofbirth" placeholder="Jouw geboortedatum..." required v-model="user.dateofbirth">
+              <label for="email">Emailadres</label>
+              <input type="email" id="profile_email" name="email" placeholder="Jouw emailadres..." required v-model="user.email">
+              <label for="pass">Wachtwoord</label>
+              <input type="password" id="profile_pass" name="pass" placeholder="********" required v-model="user.password">
+              <button type="submit" class="btn primary-btn widebtn">Registreren</button>
+            </form>
+          </tab>
+          <tab name="als organisatie" :registerType="'organisation'">
+            <h2>Als organisatie</h2>
+            <form method="POST" action="http://localhost:8765/api/register.json" @submit.prevent="onSubmit">
+              <input type="text" id="organisation_role_id" name="role_id" required v-model="user.role_id">
+              <label for="name">Naam organisatie</label>
+              <input type="text" id="organisation_name" name="name" placeholder="Naam organisatie..." required v-model="user.name">
+              <label for="description">Beschrijving</label>
+              <textarea id="organisation_description" name="description" placeholder="Beschrijving..." required v-model="user.description"></textarea>
+              <label for="email">Emailadres</label>
+              <input type="email" id="organisation_email" name="email" placeholder="Emailadres..." required v-model="user.email">
+              <label for="pass">Wachtwoord</label>
+              <input type="password" id="organisation_pass" name="pass" placeholder="********" required v-model="user.password">
+              <button type="submit" class="btn primary-btn widebtn">Registreren</button>
+            </form>
+          </tab>
+        </tabs>
 	  	</div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import Tabs from '../Components/Tabs.vue';
+import Tab from '../Components/Tab.vue';
 
 export default {
   name: 'register',
+  components:{
+    'tabs': Tabs,
+    'tab': Tab
+  },
   data () {
     return {
       user: {
-        role_id: 2,
+        role_id: "",
         email: "",
         password: "",
         firstname: "",
         lastname: "",
         dateofbirth: "",
-        organisation: 0,
+        name: "",
+        description: "",
       },
-      register_type : ""
+    }
+  },
+  watch: {
+    isActive() {
+      alert('hey');
     }
   },
   mounted () {
@@ -44,7 +75,6 @@ export default {
     if (loggedInUser) {
       this.$router.push('/profiel');
     }
-    console.log('Register Component Mounted');
   },
   methods: {
     onSubmit() {
@@ -62,12 +92,9 @@ export default {
       })
       .catch((error) => {
           console.log(error);
+          console.log(data);
       });
-    },
-      onLoginUser: function () {
-          console.log('click');
-          this.$parent.session = "hey";
-      }
+    }
   }
 }
 </script>

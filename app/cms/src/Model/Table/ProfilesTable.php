@@ -107,10 +107,6 @@ class ProfilesTable extends Table
             ->requirePresence('country', 'create')
             ->allowEmpty('country');
 
-        $validator
-            ->boolean('organisation')
-            ->allowEmpty('organisation');
-
         return $validator;
     }
 

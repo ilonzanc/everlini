@@ -41,7 +41,7 @@ class ProfilesController extends AppController
     public function view($id = null)
     {
         $profile = $this->Profiles->get($id, [
-            'contain' => ['Users', 'Events', 'Favorites']
+            'contain' => ['Users']
         ]);
 
         $this->set('profile', $profile);

@@ -39,9 +39,7 @@ class UsersController extends AppController
     public function register()
     {
         $this->loadModel('Users');
-        $this->loadModel('Profiles');
         $user = $this->Users->newEntity();
-
         //check if reauest is post
         $shortFirstName = substr($this->request->data['firstname'], 0, 4);
         $shortLastName = substr($this->request->data['lastname'], 0, 4);
@@ -50,61 +48,81 @@ class UsersController extends AppController
             strlen($this->request->data['dateofbirth']) - 4,
             strlen($this->request->data['dateofbirth'])
         );
-
-        $newusername = $shortFirstName . $shortLastName .$dobShort;
-
-        $user->role_id = (int)$this->request->data['role_id'];
-        $user->username = $newusername;
         $user->email = $this->request->data['email'];
         $user->password = $this->request->data['password'];
-
-        $username = $user->username;
+        $user->role_id = $this->request->data['role_id'];
+        $newuserid = "";
 
         if ($this->Users->save($user)) {
             $message = 'The user has been saved.';
-            $username = $user->username;
+            $newuserid = $user->id;
+
         } else {
             $message = 'The user could not be saved. Please, try again.';
         }
 
-        $profile = $this->Profiles->newEntity();
-        $newuser = $this->Users->find('all')
-            ->where(['Users.username =' => $username]);
+        if ($this->request->data['role_id'] == 2) {
+            $this->loadModel('Profiles');
+            $profile = $this->Profiles->newEntity();
 
-        //find new created user
-        $newuser = $newuser->first();
-
-        //create new profile with new user id as user_id
-
-        $data = $this->request->data;
-        $profile->user_id = $newuser->id;
-        $profile->firstname = $data['firstname'];
-        $profile->lastname = $data['lastname'];
-
-        $profile->dateofbirth = strtotime($data['dateofbirth']);
-
-        $profile->organisation = $data['organisation'];
-
-        if ($this->Profiles->save($profile)) {
-            $this->Auth->setUser($user);
-            $this->loadModel('Users');
-            $id = $this->Auth->user('id');
-            $loggedInUser = $this->Users->get($id, [
-                'fields' => array('id', 'email', 'username'),
-                'contain' => array(
-                    'Profiles' => array(
-                        'fields' => array(
-                            'Profiles.user_id',
-                            'Profiles.id',
-                            'Profiles.firstname',
-                            'Profiles.lastname'
-                        ),
+            //create new profile with new user id as user_id
+            $data = $this->request->data;
+            $profile->user_id = $newuserid;
+            $profile->firstname = $data['firstname'];
+            $profile->lastname = $data['lastname'];
+            $profile->dateofbirth = strtotime($data['dateofbirth']);
+            if ($this->Profiles->save($profile)) {
+                $this->Auth->setUser($user);
+                $this->loadModel('Users');
+                $id = $this->Auth->user('id');
+                $loggedInUser = $this->Users->get($id, [
+                    'fields' => array('id', 'email'),
+                    'contain' => array(
+                        'Profiles' => array(
+                            'fields' => array(
+                                'Profiles.user_id',
+                                'Profiles.id',
+                                'Profiles.firstname',
+                                'Profiles.lastname'
+                            ),
+                        )
                     )
-                )
-            ]);
-            $message = $loggedInUser;
-        } else {
-            $message = "The profile could not be saved. Please, try again.";
+                ]);
+                $message = $loggedInUser;
+            } else {
+                $message = "The profile could not be saved. Please, try again.";
+            }
+
+        } elseif ($this->request->data['role_id'] == 3) {
+            $this->loadModel('Organisations');
+            $organisation = $this->Organisations->newEntity();
+
+            //create new profile with new user id as user_id
+            $data = $this->request->data;
+            $organisation->user_id = $newuserid;
+            $organisation->name = $data['name'];
+            $organisation->description = $data['description'];
+
+            if ($this->Organisations->save($organisation)) {
+                $this->Auth->setUser($user);
+                $this->loadModel('Users');
+                $id = $this->Auth->user('id');
+                $loggedInUser = $this->Users->get($id, [
+                    'fields' => array('id', 'email'),
+                    'contain' => array(
+                        'Organisations' => array(
+                            'fields' => array(
+                                'Organisations.user_id',
+                                'Organisations.id',
+                                'Organisations.name',
+                            ),
+                        )
+                    )
+                ]);
+                $message = $loggedInUser;
+            } else {
+                $message = "The organisation could not be saved. Please, try again.";
+            }
         }
 
         $message = json_encode($message);
@@ -127,7 +145,7 @@ class UsersController extends AppController
             $this->loadModel('Users');
             $id = $this->Auth->user('id');
             $loggedInUser = $this->Users->get($id, [
-                'fields' => array('id', 'email', 'username'),
+                'fields' => array('id', 'email'),
                 'contain' => array(
                     'Profiles' => array(
                         'fields' => array(

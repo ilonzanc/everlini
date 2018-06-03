@@ -51,10 +51,6 @@
             <th scope="row"><?= __('Modified') ?></th>
             <td><?= h($profile->modified) ?></td>
         </tr>
-        <tr>
-            <th scope="row"><?= __('Organisation') ?></th>
-            <td><?= $profile->organisation ? __('Yes') : __('No'); ?></td>
-        </tr>
     </table>
     <div class="related">
         <h4><?= __('Related Events') ?></h4>
