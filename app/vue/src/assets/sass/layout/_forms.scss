@@ -5,7 +5,8 @@ form {
     }
     input[type="text"],
     button.btn,
-    textarea {
+    textarea,
+    .form-input {
         display: block;
         width: 100%;
     }
@@ -19,6 +20,10 @@ form {
         color: $text-color;
         padding: 13px;
         width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .form-input {
         margin-bottom: 1rem;
     }
 
@@ -44,5 +49,9 @@ form {
             width: 165px;
             display: inline;
         }
+    }
+
+    form textarea {
+        min-height: 150px;
     }
 }

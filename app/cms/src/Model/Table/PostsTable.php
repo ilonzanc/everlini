@@ -38,7 +38,17 @@ class PostsTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created' => 'new',
+                    'modified' => 'always',
+                ],
+                'Posts.softDelete' => [
+                    'deleted' => 'always'
+                ]
+            ]
+        ]);
 
         $this->belongsTo('Events', [
             'foreignKey' => 'event_id',

@@ -1,20 +1,24 @@
 <template>
   <div id="login" class="content">
 	  	<div class="container">
-			<h1>Aanmelden</h1>
-      <section v-if="fbloginstatus != 'connected'" class="facebook-login">
-        <div class="fb-login-button" data-max-rows="1" data-size="large" data-width="100%" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
-        <div class="separator"></div>
-      </section>
-      <form method="POST" action="http://localhost:8765/api/login.json" @submit.prevent="onSubmit">
-				<label for="email">Emailadres</label>
-				<input type="email" id="email" name="email" placeholder="Jouw emailadres..." required v-model="user.email">
-				<label for="pass">Wachtwoord</label>
-				<input type="password" id="pass" name="pass" placeholder="********" required v-model="user.password">
-				<button type="submit" class="btn primary-btn">Inloggen</button>
-				<p>Nog geen account?</p>
-				<p><router-link to="/registreren">Maak hier een gratis account aan!</router-link></p>
-			</form>
+        <div class="row">
+          <div class="column column-sm-12 column-lg-6">
+            <h1>Aanmelden</h1>
+            <section v-if="fbloginstatus != 'connected'" class="facebook-login">
+              <div class="fb-login-button" data-max-rows="1" data-size="large" data-width="100%" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+              <div class="separator"></div>
+            </section>
+            <form method="POST" action="http://localhost:8765/api/login.json" @submit.prevent="onSubmit">
+              <label for="email">Emailadres</label>
+              <input type="email" id="email" name="email" placeholder="Jouw emailadres..." required v-model="user.email">
+              <label for="pass">Wachtwoord</label>
+              <input type="password" id="pass" name="pass" placeholder="********" required v-model="user.password">
+              <button type="submit" class="btn primary-btn">Inloggen</button>
+              <p>Nog geen account?</p>
+              <p><router-link to="/registreren">Maak hier een gratis account aan!</router-link></p>
+            </form>
+          </div>
+        </div>
 	  	</div>
   </div>
 </template>
@@ -105,7 +109,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #login {
   p {
     text-align: center;
@@ -121,6 +125,13 @@ export default {
   .separator {
     margin: 2rem 0;
     border-top: 1px solid rgba(#424242, 0.2);
+  }
+}
+
+@media (min-width: 42.5rem) {
+  #login .column {
+    margin: auto;
+    float: none;
   }
 }
 </style>

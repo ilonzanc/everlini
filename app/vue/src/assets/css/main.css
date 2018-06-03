@@ -385,6 +385,12 @@ h1 {
   font-size: 2.3rem;
   margin-bottom: 1rem; }
 
+h2 {
+  font-size: 2rem; }
+
+h3 {
+  font-size: 1.7rem; }
+
 p {
   line-height: 150%; }
 
@@ -508,7 +514,8 @@ nav.main-nav {
   text-align: center;
   padding: 1rem 0;
   transition: left 0.3s ease-in;
-  z-index: 20; }
+  z-index: 20;
+  text-transform: lowercase; }
   nav.main-nav.nav-open {
     position: absolute;
     left: 0; }
@@ -543,7 +550,7 @@ nav.footer-nav a {
   padding: 0.2rem 1.5rem;
   display: block; }
 
-@media (min-width: 42.5rem) {
+@media (min-width: 60rem) {
   .toggleBars {
     display: none; }
 
@@ -585,7 +592,8 @@ form label {
   margin-bottom: 0.5rem; }
 form input[type="text"],
 form button.btn,
-form textarea {
+form textarea,
+form .form-input {
   display: block;
   width: 100%; }
 form input[type="text"],
@@ -597,6 +605,8 @@ form textarea {
   color: #424242;
   padding: 13px;
   width: 100%;
+  margin-bottom: 1rem; }
+form .form-input {
   margin-bottom: 1rem; }
 form textarea {
   resize: vertical;
@@ -612,14 +622,21 @@ form textarea {
     padding: 0.5rem; }
   .time-inputs .inline-input {
     width: 165px;
-    display: inline; } }
+    display: inline; }
+
+  form textarea {
+    min-height: 150px; } }
 .btn {
   display: inline-block;
-  font-weight: 700;
+  font-weight: 600;
   color: #fff;
   border-radius: 5px;
   padding: 0.8rem;
-  border: 1px solid #fff; }
+  border: 1px solid #fff;
+  text-transform: lowercase; }
+  .btn span {
+    color: #fff;
+    margin-left: 0.5rem; }
   .btn i {
     color: #fff; }
   .btn.primary-btn {
@@ -631,7 +648,16 @@ form textarea {
   .btn.small-btn {
     min-width: 45px;
     text-align: center; }
+    .btn.small-btn span {
+      display: none;
+      color: #fff; }
+  .btn.delete-btn {
+    border-color: #FF6B6B;
+    background: #FF6B6B; }
 
+@media (min-width: 42.5rem) {
+  .btn.small-btn span {
+    display: inline; } }
 .tag {
   padding: 0.7rem;
   border: 1px solid #48DBFB;

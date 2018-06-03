@@ -1,10 +1,16 @@
 .btn {
     display: inline-block;
-    font-weight: 700;
+    font-weight: 600;
     color: #fff;
     border-radius: 5px;
     padding: 0.8rem;
     border: 1px solid #fff;
+    text-transform: lowercase;
+
+    span {
+        color: #fff;
+        margin-left: 0.5rem;
+    }
 
     i {
         color: #fff;
@@ -23,5 +29,24 @@
         //display: inline;
         min-width: 45px;
         text-align: center;
+        span {
+            display: none;
+            color: #fff;
+        }
+    }
+
+    &.delete-btn {
+        border-color: $error-color;
+        background: $error-color;
+    }
+}
+
+@media (min-width: 42.5rem) {
+    .btn {
+        &.small-btn {
+            span {
+                display: inline;
+            }
+        }
     }
 }

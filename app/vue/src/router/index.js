@@ -12,11 +12,15 @@ import PrivacyPolicy from '../views/PrivacyPolicy'
 import Overview from '../views/Overview'
 import EventDetail from '../views/EventDetail'
 
-import Profile from '../views/Profile'
-import ProfileEvents from '../views/ProfileEvents'
+import Profile from '../views/Profile/Profile'
+import ProfileEvents from '../views/Profile/ProfileEvents'
+import ProfileEventDetail from '../views/Profile/ProfileEventDetail'
 
-import CreateEvent from '../views/CreateEvent'
-import UpdateEvent from '../views/UpdateEvent'
+import CreateEvent from '../views/Profile/CreateEvent'
+import UpdateEvent from '../views/Profile/UpdateEvent'
+
+import CreatePost from '../views/Profile/CreatePost'
+import UpdatePost from '../views/Profile/UpdatePost'
 
 
 
@@ -62,13 +66,25 @@ let routes = [
         component: ProfileEvents
     },
     {
-        path: '/profiel/nieuw-event',
-        component: CreateEvent
+        path: '/profiel/jouw-events/:id',
+        component: ProfileEventDetail
     },
     {
         path: '/profiel/jouw-events/:id/bewerken',
         component: UpdateEvent
-    }
+    },
+    {
+        path: '/profiel/jouw-events/:id/nieuwe-blogpost',
+        component: CreatePost
+    },
+    {
+        path: '/profiel/jouw-events/:id/posts/:postid/bewerken',
+        component: UpdatePost
+    },
+    {
+        path: '/profiel/nieuw-event',
+        component: CreateEvent
+    },
 ]
 
 export default new VueRouter({

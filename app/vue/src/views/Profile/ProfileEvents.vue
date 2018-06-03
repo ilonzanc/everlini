@@ -3,21 +3,23 @@
     <div class="container">
       <h1>Jouw events</h1>
       <router-link to="/profiel/nieuw-event" class="btn primary-btn"><i class="fa fa-plus"></i> Nieuw event</router-link>
-      <section class="event" v-bind:key="event.id" v-for="event in events">
-        <div class="row">
-          <div class="column column-sm-9">
-            <div class="event-details">
-              <h2>{{ event.name }}</h2>
+      <router-link v-bind:key="event.id" v-for="event in events" :to="'/profiel/jouw-events/' + event.id">
+        <article class="event">
+          <div class="row">
+            <div class="column column-sm-9">
+              <div class="event-details">
+                <h2>{{ event.name }}</h2>
+              </div>
+            </div>
+            <div class="column column-sm-3">
+              <section class="action-btns">
+                <router-link :to="'/profiel/jouw-events/' + event.id + '/bewerken'" class="btn secundary-btn small-btn"><i class="fa fa-pencil"></i></router-link>
+                <a href="#" @click.prevent="deleteEvent(event.id)" class="btn secundary-btn small-btn delete-btn"><i class="fa fa-trash"></i></a>
+              </section>
             </div>
           </div>
-          <div class="column column-sm-3">
-            <section class="action-btns">
-              <router-link :to="'/profiel/jouw-events/' + event.id + '/bewerken'" class="btn secundary-btn small-btn"><i class="fa fa-pencil"></i></router-link>
-              <a href="#" @click.prevent="deleteEvent(event.id)" class="btn secundary-btn small-btn"><i class="fa fa-trash"></i></a>
-            </section>
-          </div>
-        </div>
-      </section>
+        </article>
+      </router-link>
       <section v-if="events.length == 0">
         <p>Je hebt nog geen evenementen aangemaakt :(</p>
       </section>
@@ -48,8 +50,6 @@
       .catch(function(error) {
         console.log(error);
       });
-      const formattedDate = moment('19 Oct 2017').format('YYYYMMDD');
-      console.log(formattedDate);
     },
     methods: {
       deleteEvent(id) {

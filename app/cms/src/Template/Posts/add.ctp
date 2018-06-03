@@ -4,25 +4,15 @@
  * @var \App\Model\Entity\Post $post
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Posts'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Events'), ['controller' => 'Events', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Event'), ['controller' => 'Events', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
 <div class="posts form large-9 medium-8 columns content">
     <?= $this->Form->create($post, ['enctype' => 'multipart/form-data']) ?>
-    <fieldset>
-        <legend><?= __('Add Post') ?></legend>
+        <h2><?= __('Add Post') ?></h2>
         <?php
             echo $this->Form->control('event_id', ['options' => $events]);
             echo $this->Form->control('title');
             echo $this->Form->control('body');
             echo $this->Form->control('published');
         ?>
-    </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>

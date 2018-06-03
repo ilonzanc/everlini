@@ -35,6 +35,7 @@ class Post extends Entity
         'published' => true,
         'created' => true,
         'modified' => true,
+        'deleted' => true,
         'event' => true
     ];
 }

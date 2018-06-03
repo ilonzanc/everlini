@@ -2,21 +2,21 @@
   <div id="overview__comp" class="content">
     <div class="container">
       <h1>Overzicht</h1>
-    </div>
-    <router-link :to="'/evenementen/' + event.id" v-bind:key="event.id" v-for="event in events">
-      <section class="event" >
-        <div class="event-date">
-          <div class="event-day">{{event.startdate | moment("DD")}}</div>
-          <div class="event-month">{{event.startdate | moment("MMM")}}</div>
-        </div>
-        <div class="event-details">
-          <h2>{{ event.name }}</h2>
-        </div>
+      <router-link :to="'/evenementen/' + event.id" v-bind:key="event.id" v-for="event in events">
+        <section class="event" >
+          <div class="event-date">
+            <div class="event-day">{{event.startdate | moment("DD")}}</div>
+            <div class="event-month">{{event.startdate | moment("MMM")}}</div>
+          </div>
+          <div class="event-details">
+            <h2>{{ event.name }}</h2>
+          </div>
+        </section>
+      </router-link>
+      <section v-if="events.length == 0">
+        <p>Geen evenementen gevonden</p>
       </section>
-    </router-link>
-    <section v-if="events.length == 0">
-      <p>Geen evenementen gevonden</p>
-    </section>
+    </div>
   </div>
 </template>
 

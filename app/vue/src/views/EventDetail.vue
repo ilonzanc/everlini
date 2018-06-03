@@ -5,8 +5,15 @@
       {{event.startdate | moment("DD MMM") }} | {{event.startdate | moment("HH:mm")}} -
       {{event.enddate | moment("DD MMM")}} | {{event.enddate | moment("HH:mm")}}
       <p>{{ event.street }} {{ event.housenr }}, {{ event.postal_code }} {{ event.city }}</p>
-      <a href="#" class="btn small-btn save-btn" @click.prevent="saveEvent"><i class="fa fa-heart"></i> Opslaan</a>
+      <a href="#" class="btn small-btn save-btn" @click.prevent="saveEvent" v-if="session != null"><i class="fa fa-heart"></i> Opslaan</a>
       <p>{{ event.description }}</p>
+      <section class="event-blog">
+        <h2>Blog</h2>
+        <article class="event-blog-post" v-for="post in event.posts" :key="post.id" v-if="post.published == true">
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.body }}</p>
+        </article>
+      </section>
     </div>
   </div>
 </template>

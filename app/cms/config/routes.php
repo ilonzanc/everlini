@@ -139,7 +139,32 @@ Router::prefix('api', function ($routes) {
     );
 
     $routes->resources('Profiles');
-    $routes->resources('Posts');
+
+    $routes->connect(
+        '/posts',
+        ['controller' => 'Posts', 'action' => 'index']
+    );
+
+    $routes->connect(
+        '/posts/:id',
+        ['controller' => 'Posts', 'action' => 'view']
+    )->setPass(['id']);
+
+    $routes->connect(
+        '/posts/add',
+        ['controller' => 'Posts', 'action' => 'add']
+    );
+
+    $routes->connect(
+        '/posts/:id/edit',
+        ['controller' => 'Posts', 'action' => 'edit']
+    )->setPass(['id']);
+
+    $routes->connect(
+        '/posts/:id/delete',
+        ['controller' => 'Posts', 'action' => 'delete']
+    )->setPass(['id']);
+
     $routes->resources('Interests');
     $routes->resources('Reviews');
     $routes->connect(

@@ -20,6 +20,7 @@
                 <th scope="col"><?= $this->Paginator->sort('published') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('deleted') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -32,6 +33,7 @@
                 <td><?= h($post->published) ?></td>
                 <td><?= h($post->created) ?></td>
                 <td><?= h($post->modified) ?></td>
+                <td><?= h($post->deleted) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $post->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $post->id]) ?>

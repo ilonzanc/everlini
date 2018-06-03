@@ -51,7 +51,7 @@ class EventsController extends AppController
         }
 
         $events = $this->Events->find('all', [
-            'contain' => 'Users',
+            'contain' => ['Users'],
             'conditions' => array('OR' => $interests)
         ]);
 
@@ -70,8 +70,14 @@ class EventsController extends AppController
 
     public function view($id)
     {
-        $event = $this->Events->get($id, array(
-        ));
+        $event = $this->Events->find()
+        ->contain(
+            'Posts', function ($q) {
+                return $q
+                    ->where(['Posts.deleted IS NULL']);
+        })
+        ->where(['Events.id' => $id]);
+
         $this->set([
             'event' => $event,
             '_serialize' => ['event']
@@ -172,7 +178,7 @@ class EventsController extends AppController
         $this->autoRender = false;
         $this->viewBuilder()->setLayout(null);
 
-        $message = "feck";
+        $message = "";
 
         $user_id = $this->request->query('user');
 
