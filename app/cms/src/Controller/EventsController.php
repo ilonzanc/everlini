@@ -143,7 +143,32 @@ class EventsController extends AppController
         $event = $this->Events->get($id, [
             'contain' => []
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        if ($this->request->is(['patch', 'post', 'put', 'options'])) {
+            $this->loadModel('Attachments');
+
+            $newImageId = "";
+
+            $filename = $this->request->data['submittedfile']['name'];
+            $url = Router::url('/', true) . 'img/events/' . $filename;
+            $uploadpath = '/img/events/';
+            $uploadfile = $_SERVER['DOCUMENT_ROOT']. $uploadpath . $filename;
+            if(move_uploaded_file($this->request->data['submittedfile']['tmp_name'], $uploadfile)){
+                $image = $this->Attachments->newEntity();
+
+                    var_dump($image);
+                    $image->name = $filename;
+                    $image->path = $url;
+                    if($this->Attachments->save($image)) {
+                        $this->Flash->success(__('The image was saved'));
+                        $newImageId = $image->id;
+                    } else {
+                        $this->Flash->error(__('Can not upload image. Please try again.'));
+                    }
+
+            } else {
+                $this->Flash->error(__('Could not move image. Please, try again.'));
+            }
+
             $event = $this->Events->patchEntity($event, $this->request->getData());
             //saving the startdate
             $startdate = $this->request->data['startdate']['year'] . '-' .
@@ -161,6 +186,8 @@ class EventsController extends AppController
             $fullenddate = $enddate . ' ' . $endtime;
             $event->enddate = strtotime($fullenddate);
 
+            $event->image_id = $newImageId;
+
             if ($this->Events->save($event)) {
                 $this->Flash->success(__('The event has been saved.'));
 
@@ -168,6 +195,7 @@ class EventsController extends AppController
             }
             $this->Flash->error(__('The event could not be saved. Please, try again.'));
         }
+
         $users = $this->Events->Users->find('list', ['limit' => 200]);
         $this->set(compact('event', 'users'));
     }

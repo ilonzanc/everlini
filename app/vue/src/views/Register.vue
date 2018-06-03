@@ -3,7 +3,7 @@
 	  	<div class="container">
         <h1>Registreren</h1>
         <tabs>
-          <tab name="als gebruiker" :selected="true" :registerType = "'profile'">
+          <tab name="als gebruiker" :selected="true">
             <h2>Als gebruiker</h2>
             <form method="POST" action="http://localhost:8765/api/register.json" @submit.prevent="onSubmit">
               <input type="text" id="profile_role_id" name="role_id" required v-model="user.role_id">
@@ -20,7 +20,7 @@
               <button type="submit" class="btn primary-btn widebtn">Registreren</button>
             </form>
           </tab>
-          <tab name="als organisatie" :registerType="'organisation'">
+          <tab name="als organisatie">
             <h2>Als organisatie</h2>
             <form method="POST" action="http://localhost:8765/api/register.json" @submit.prevent="onSubmit">
               <input type="text" id="organisation_role_id" name="role_id" required v-model="user.role_id">

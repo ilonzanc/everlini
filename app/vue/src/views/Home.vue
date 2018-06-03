@@ -73,6 +73,9 @@
       }
     },
     name: "home",
+    props: {
+      currentPage: "home"
+    },
     data() {
       return {
         currentInputIndex: 0,

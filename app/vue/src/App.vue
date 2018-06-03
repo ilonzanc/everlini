@@ -1,6 +1,6 @@
 <template>
   <div id="app" v-on:save-session="onSaveSession">
-    <header>
+    <header :class="{ 'transparent-header': isHome }">
 		<router-link to="/"><img src="./assets/images/logo.svg" class="logo"></router-link>
 		<a href="#" class="toggleBars" @click.prevent="toggleNav">
 			<img src="./assets/icons/hamburger_icon.svg">
@@ -11,8 +11,8 @@
           <li v-if="session != null"><router-link to="/profiel">Jouw profiel</router-link></li>
           <li><router-link to="/about">About</router-link></li>
           <li><router-link to="/contact">Contact</router-link></li>
-          <li v-if="session != null"><a href="#" class="btn primary-btn" @click.prevent="logOut">Uitloggen</a></li>
-          <li v-if="session == null"><router-link to="/aanmelden" class="btn primary-btn">Aanmelden</router-link></li>
+          <li v-if="session != null"><a href="#" class="btn secundary-btn" @click.prevent="logOut">Uitloggen</a></li>
+          <li v-if="session == null"><router-link to="/aanmelden" class="btn secundary-btn">Aanmelden</router-link></li>
         </ul>
       </nav>
     </header>
@@ -53,16 +53,19 @@ export default {
         id: ""
       },
       fbAccesToken: "",
-	    navOpen: false,
+      navOpen: false,
+      isHome: false
     }
   },
   watch: {
     $route() {
       this.navOpen = false;
+      this.checkIfHome();
     }
   },
   mounted () {
     this.session = JSON.parse(localStorage.getItem("user"));
+    this.checkIfHome();
   },
   methods: {
     onSaveSession: function (user) {
@@ -85,6 +88,15 @@ export default {
       this.session = null;
       this.navOpen = false;
       this.$router.push('/');
+    },
+    checkIfHome() {
+      console.log("Check if home....");
+      if(this.$route.name == "home") {
+        this.isHome = true;
+      }
+      else {
+        this.isHome = false;
+      }
     }
   }
 }

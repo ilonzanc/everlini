@@ -41,9 +41,10 @@
       axios({
       method: "get",
       url:
-        "http://localhost:8765/api/events?user=" + this.$parent.session.id + ".json",
+        "http://localhost:8765/api/events?user=" + self.$parent.session.id + ".json",
       })
       .then(function(response) {
+        console.log(self.$parent.session.id);
         console.log(response);
         self.events = response.data;
       })

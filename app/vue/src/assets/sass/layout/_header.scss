@@ -13,6 +13,10 @@ header {
         }
     }
 
+    &.transparent-header {
+        background: rgba($text-color, 0.3);
+    }
+
 }
 
 @media (min-width: 42.5rem) {

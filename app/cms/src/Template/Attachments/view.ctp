@@ -15,5 +15,9 @@
             <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($attachment->id) ?></td>
         </tr>
+        <tr>
+            <th scope="row"><?= __('Path') ?></th>
+            <td><?= h($attachment->path) ?></td>
+        </tr>
     </table>
 </div>

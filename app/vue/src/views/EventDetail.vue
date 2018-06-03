@@ -1,11 +1,12 @@
 <template>
   <div id="event-detail" class="content">
+    <div class="event-detail-header" style="background: url('')"></div>
     <div class="container">
       <h1>{{ event.name }}</h1>
       {{event.startdate | moment("DD MMM") }} | {{event.startdate | moment("HH:mm")}} -
       {{event.enddate | moment("DD MMM")}} | {{event.enddate | moment("HH:mm")}}
       <p>{{ event.street }} {{ event.housenr }}, {{ event.postal_code }} {{ event.city }}</p>
-      <a href="#" class="btn small-btn save-btn" @click.prevent="saveEvent" v-if="session != null"><i class="fa fa-heart"></i> Opslaan</a>
+      <a href="#" class="btn small-btn save-btn" @click.prevent="saveEvent" v-if="$parent.session != null"><i class="fa fa-heart"></i> Opslaan</a>
       <p>{{ event.description }}</p>
       <section class="event-blog">
         <h2>Blog</h2>
@@ -43,7 +44,7 @@
       })
       .then(function(response) {
         console.log(response);
-        self.event = response.data.event;
+        self.event = response.data.event[0];
       })
       .catch(function(error) {
         console.log(error);
@@ -59,7 +60,7 @@
           headers: { },
           data: {
             event_id: self.event.id,
-            user_id: this.$parent.session.id
+            user_id: self.$parent.session.id
           }
         })
         .then(function(response) {

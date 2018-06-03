@@ -86,8 +86,6 @@ class EventsController extends AppController
 
     public function add()
     {
-
-
         $event = $this->Events->newEntity();
         if ($this->request->is('post')) {
             $event->user_id = $this->request->data['user_id'];
@@ -122,8 +120,7 @@ class EventsController extends AppController
             $this->set([
                 'message' => $message,
                 'event' => $event,
-                'userid' => $userid,
-                '_serialize' => ['message', 'event', 'userid']
+                '_serialize' => ['message', 'event']
             ]);
 
         }
@@ -134,6 +131,7 @@ class EventsController extends AppController
     public function edit($id)
     {
         $event = $this->Events->get($id);
+        $message = "Couldn't update event";
         if ($this->request->is(['post', 'put'])) {
             $event->user_id = $this->request->data['user_id'];
             $event->name = $this->request->data['name'];
@@ -158,13 +156,15 @@ class EventsController extends AppController
             $event->country = $this->request->data['country'];
 
             if ($this->Events->save($event)) {
-                $message= 'The event was updated.';
+                $message = 'The event was updated.';
             }
             else {
-                $message= 'The event could not be updated. Please, try again.';
+                $message = 'The event could not be updated. Please, try again.';
             }
 
 
+        } else {
+            $message = "Request was not a post or put request";
         }
 
         $this->set([

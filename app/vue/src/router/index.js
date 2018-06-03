@@ -27,7 +27,8 @@ import UpdatePost from '../views/Profile/UpdatePost'
 let routes = [
     {
         path: '/',
-        component: Home
+        component: Home,
+        name: 'home'
     },
     {
         path: '/aanmelden',

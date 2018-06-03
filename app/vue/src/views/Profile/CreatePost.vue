@@ -7,7 +7,7 @@
         <input type="text" id="title" name="title" required v-model="post.title" placeholder="Titel van je blogpost...">
         <label for="body">Inhoud</label>
         <textarea id="body" name="body" required v-model="post.body" placeholder="Inhoud van je blogpost..."></textarea>
-        <div class="form-input"><input type="checkbox" id="published" name="published" v-model="post.published"> Online</div>
+        <div class="form-input"><input type="checkbox" id="published" name="published" v-model="post.published"> <label for="published">Online</label></div>
         <button class="btn primary-btn" type="submit">Toevoegen</button>
       </form>
     </div>

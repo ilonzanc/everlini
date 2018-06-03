@@ -25,7 +25,7 @@
         <input type="text" id="postal_code" name="postal_code" required v-model="event.postal_code" placeholder="Postcode...">
         <label for="country">Land</label>
         <input type="text" id="country" name="country" required v-model="event.country" placeholder="Land...">
-        <button class="btn primary-btn" type="submit">Toevoegen</button>
+        <button class="btn primary-btn" type="submit">Bewerken</button>
       </form>
     </div>
   </div>
@@ -33,6 +33,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 export default {
   name: "update-event",
   data () {
@@ -66,14 +67,14 @@ export default {
       })
       .then((response) => {
           console.log(response)
-          self.event = response.data.event;
+          self.event = response.data.event[0];
           moment().utcOffset(-2);
-          let fullstartdate = response.data.event.startdate;
+          let fullstartdate = response.data.event[0].startdate;
           let startdate = moment(String(fullstartdate)).utcOffset(0).format('DD-MM-YYYY');
           let starttime = moment(String(fullstartdate)).utcOffset(0).format('HH:mm');
           self.event.startdate = JSON.parse('{ "time":"' + starttime + '", "date":"' + startdate + '"}');
 
-          let fullenddate = response.data.event.enddate;
+          let fullenddate = response.data.event[0].enddate;
           let enddate = moment(String(fullenddate)).utcOffset(0).format('DD-MM-YYYY');
           let endtime = moment(String(fullenddate)).utcOffset(0).format('HH:mm');
           self.event.enddate = JSON.parse('{ "time":"' + endtime + '", "date":"' + enddate + '"}');

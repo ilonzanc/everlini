@@ -705,10 +705,20 @@ form textarea {
 form textarea {
   resize: vertical; }
 
+.gallery-image {
+  height: 200px;
+  width: calc(20% - 4rem);
+  margin: 2rem;
+  float: left;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center; }
+
 ul.pagination {
   list-style-type: none;
   text-align: center;
-  margin: 1rem 0; }
+  margin: 1rem 0;
+  clear: both; }
   ul.pagination li {
     display: inline-block; }
   ul.pagination a {

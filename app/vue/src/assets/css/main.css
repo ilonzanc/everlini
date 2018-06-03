@@ -499,6 +499,8 @@ header {
     header .toggleBars img {
       height: 20px;
       cursor: pointer; }
+  header.transparent-header {
+    background: rgba(66, 66, 66, 0.3); }
 
 @media (min-width: 42.5rem) {
   header {
