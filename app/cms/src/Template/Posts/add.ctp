@@ -11,6 +11,7 @@
             echo $this->Form->control('event_id', ['options' => $events]);
             echo $this->Form->control('title');
             echo $this->Form->control('body');
+            echo $this->Form->file('File. ', array('type'=>'file','multiple'=>'multiple'));
             echo $this->Form->control('published');
         ?>
     <?= $this->Form->button(__('Submit')) ?>

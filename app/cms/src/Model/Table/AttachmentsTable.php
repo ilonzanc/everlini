@@ -36,6 +36,10 @@ class AttachmentsTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsToMany('Post', [
+            'joinTable' => 'attachments_posts',
+        ]);
+
     }
 
     /**

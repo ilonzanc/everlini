@@ -54,6 +54,15 @@ class PostsTable extends Table
             'foreignKey' => 'event_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->belongsTo('Events', [
+            'foreignKey' => 'event_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->belongsToMany('Attachment', [
+            'joinTable' => 'attachments_posts',
+        ]);
     }
 
     /**
