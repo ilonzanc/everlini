@@ -1,0 +1,33 @@
+#authentication-layout {
+    background: $primary-color;
+    //color: #fff;
+
+    main {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        img {
+            width: 300px;
+            margin: 0 auto 70px;
+            display: block;
+        }
+    }
+
+    .content {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 5px;
+    }
+
+    form {
+        min-width: 450px;
+
+        input[type="email"],
+        input[type="password"],
+        button {
+            width: 100%;
+        }
+    }
+}

@@ -34,7 +34,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
-<body>
+<body id="default-layout">
     <header>
         <a href="/"><h1 style="color: transparent">Everlini<?= $this->Html->image('everlini_wit.png') ?></div></h1></a>
         <?php if ($this->request->params['action'] == "index") : ?>
