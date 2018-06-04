@@ -649,9 +649,25 @@ header {
     background: #FECA57;
     height: 52px;
     padding: 1rem;
-    color: #fff; }
+    color: #fff;
+    position: relative;
+    min-width: 150px; }
     header .header__right .fa {
-      margin-right: 1rem; }
+      width: 20px; }
+    header .header__right .user-dropdown {
+      position: absolute;
+      background: #FECA57;
+      list-style-type: none;
+      left: 0;
+      padding: 1rem;
+      width: 100%;
+      display: none; }
+      header .header__right .user-dropdown .fa {
+        margin-left: 0.5rem; }
+      header .header__right .user-dropdown a {
+        display: block; }
+      header .header__right .user-dropdown.open {
+        display: block; }
 
 aside {
   float: left;
@@ -672,16 +688,22 @@ aside {
   aside .fa {
     width: 30px; }
 
-table {
+table.overview-table {
   width: 100%; }
+  table.overview-table th {
+    text-align: left;
+    text-transform: lowercase; }
+  table.overview-table th,
+  table.overview-table td {
+    padding: 0.5rem; }
 
-th {
-  text-align: left;
-  text-transform: lowercase; }
-
-th,
-td {
+table.vertical-table th,
+table.vertical-table td {
   padding: 0.5rem; }
+table.vertical-table th {
+  text-align: left;
+  text-transform: lowercase;
+  padding-left: 0; }
 
 form label {
   display: block;

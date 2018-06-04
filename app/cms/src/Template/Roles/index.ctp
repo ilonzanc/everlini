@@ -4,7 +4,7 @@
         $this->Html->link('<i class="fa fa-plus"></i> New role', ['action' => 'add'],['escape'=>false,'class'=>'btn small-btn']);
     ?>
 </section>
-<table>
+<table class="overview-table" cellpadding="0" cellspacing="0">
     <tr>
         <th>Name</th>
         <th>Created</th>

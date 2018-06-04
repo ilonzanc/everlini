@@ -5,7 +5,7 @@
  */
 ?>
 <div class="profiles view large-9 medium-8 columns content">
-    <h3><?= h($profile->id) ?></h3>
+    <h2><?= h($profile->id) ?></h2>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('User') ?></th>

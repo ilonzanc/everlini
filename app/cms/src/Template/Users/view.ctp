@@ -5,8 +5,12 @@
  */
 ?>
 <div class="users view large-9 medium-8 columns content">
-    <h3><?= h($user->id) ?></h3>
+    <h2><?= h($user->username) ?></h2>
     <table class="vertical-table">
+        <tr>
+            <th scope="row"><?= __('Id') ?></th>
+            <td><?= $this->Number->format($user->id) ?></td>
+        </tr>
         <tr>
             <th scope="row"><?= __('Role') ?></th>
             <td><?= $user->has('role') ? $this->Html->link($user->role->name, ['controller' => 'Roles', 'action' => 'view', $user->role->id]) : '' ?></td>
@@ -19,14 +23,7 @@
             <th scope="row"><?= __('Email') ?></th>
             <td><?= h($user->email) ?></td>
         </tr>
-        <tr>
-            <th scope="row"><?= __('Password') ?></th>
-            <td><?= h($user->password) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($user->id) ?></td>
-        </tr>
+
         <tr>
             <th scope="row"><?= __('Created') ?></th>
             <td><?= h($user->created) ?></td>
@@ -37,7 +34,7 @@
         </tr>
     </table>
     <div class="related">
-        <h4><?= __('Related Profiles') ?></h4>
+        <h3><?= __('Related Profiles') ?></h3>
         <?php if (!empty($user->profiles)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>

@@ -43,6 +43,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </form>
         <?php endif; ?>
         <div class="header__right">
+            <a href="#" class="user-btn">
             <?php if ($Auth->user('username')) :
             ?>
             <i class="fa fa-user"></i><?= h($Auth->user('username')); ?>
@@ -54,6 +55,17 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 );
             endif;
             ?>
+            </a>
+            <ul class="user-dropdown">
+                <li>
+                    <?php echo $this->Html->link(
+                        'logout<i class="fa fa-sign-out"></i>',
+                        ['controller' => 'Users', 'action' => 'logout'],
+                        ['escape'=>false]
+                    );
+                    ?>
+                </li>
+            </ul>
         </div>
     </header>
     <aside>
@@ -147,3 +159,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </main>
 </body>
 </html>
+<script>
+    let userbutton = document.querySelector('.user-btn');
+    userbutton.addEventListener('click', e => {
+        e.preventDefault(e);
+        document.querySelector('.user-dropdown').classList.toggle('open');
+    });
+</script>

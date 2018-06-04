@@ -7,7 +7,7 @@
 
 <div class="users index large-9 medium-8 columns content">
     <h2><?= __('Users Overview') ?></h2>
-    <table cellpadding="0" cellspacing="0">
+    <table class="overview-table" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>

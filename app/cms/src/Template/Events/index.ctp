@@ -13,7 +13,7 @@
             $this->Html->link('<i class="fa fa-plus"></i> New event', ['action' => 'add'],['escape'=>false,'class'=>'btn small-btn']);
         ?>
     </section>
-    <table cellpadding="0" cellspacing="0">
+    <table class="overview-table" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>

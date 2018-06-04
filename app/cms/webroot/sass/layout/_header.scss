@@ -11,7 +11,7 @@ header {
     }
 
     h1 img {
-        height: 20px;        
+        height: 20px;
     }
 
     form input[type="text"] {
@@ -20,7 +20,7 @@ header {
         height: 52px;
         border: none;
         margin-bottom: 0;
-    }   
+    }
 
     .header__right {
         float: right;
@@ -28,9 +28,33 @@ header {
         height: 52px;
         padding: 1rem;
         color: #fff;
+        position: relative;
+        min-width: 150px;
 
         .fa {
-            margin-right: 1rem
+            width: 20px;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            background: $secundary-color;
+            list-style-type: none;
+            left: 0;
+            padding: 1rem;
+            width: 100%;
+            display: none;
+
+            .fa {
+                margin-left: 0.5rem;
+            }
+
+            a {
+                display: block;
+            }
+
+            &.open {
+                display: block;
+            }
         }
     }
 }
