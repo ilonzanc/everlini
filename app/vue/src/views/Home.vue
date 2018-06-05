@@ -11,7 +11,8 @@
             <input type="text" id="location" name="location" placeholder="Waar zullen we zoeken?" v-model="params.location">
           </div>
           <div class="column column-sm-12 column-lg-6">
-            <label>Binnen 13 km</label>
+            <label>Binnen <span class="radius-value">{{params.radiusValue}}</span> km</label>
+            <vue-slider class="custom-slider" ref="slider" v-model="params.radiusValue" v-bind="slider_options"></vue-slider>
           </div>
         </div>
         <label>Datum</label>
@@ -66,11 +67,15 @@
 
 <script>
   import axios from "axios";
+  import vueSlider from 'vue-slider-component';
   export default {
     computed: {
       searchparams() {
         return this.$store.getters.getSearch;
       }
+    },
+    components: {
+      vueSlider
     },
     name: "home",
     props: {
@@ -86,6 +91,24 @@
           startdate: "",
           enddate: "",
           interests: [],
+          radiusValue: 0,
+        },
+        slider_options: {
+          min: 0,
+          max: 25,
+          interval: 5,
+          piecewise: true,
+          piecewiseLabel: true,
+          tooltip: false,
+          data: [
+            "0",
+            "5",
+            "10",
+            "15",
+            "20",
+            "25",
+          ],
+          dotSize: 25,
         }
       };
     },
@@ -152,8 +175,6 @@
       cursor: pointer;
     }
   }
-
-
 
   @media (min-width: 42.5rem) {
     .timecolumn {

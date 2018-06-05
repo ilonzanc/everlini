@@ -15,12 +15,16 @@ form {
     input[type="email"],
     input[type="password"],
     textarea {
-        border: 1px solid rgba($text-color, 0.5);
+        border: 1px solid rgba($text-color, 0.2);
         border-radius: 5px;
         color: $text-color;
         padding: 13px;
         width: 100%;
         margin-bottom: 1rem;
+
+        &:focus {
+            border: 1px solid rgba($text-color, 0.5);
+        }
     }
 
     .form-input {
@@ -30,6 +34,38 @@ form {
     textarea {
         resize: vertical;
         min-height: 80px;
+    }
+
+    .radius-value {
+        color: $primary-color;
+        font-weight: 600;
+    }
+
+    .custom-slider {
+        padding: 1rem !important;
+
+        .vue-slider {
+            background: none;
+            border: rgba($text-color, 0.2) 1px solid;
+        }
+
+        .vue-slider-dot {
+            background: $secundary-color;
+            box-shadow: none;
+        }
+
+        .vue-slider-process {
+            background: rgba($secundary-color, 0.5);
+        }
+
+        .vue-slider-piecewise-item span.vue-slider-piecewise-dot {
+            display: none;
+        }
+
+        .vue-slider-piecewise-item span.vue-slider-piecewise-label {
+            margin-top: 0.5rem;
+            font-size: 14px;
+        }
     }
 }
 

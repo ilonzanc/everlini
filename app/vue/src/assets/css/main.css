@@ -602,17 +602,40 @@ form input[type="text"],
 form input[type="email"],
 form input[type="password"],
 form textarea {
-  border: 1px solid rgba(66, 66, 66, 0.5);
+  border: 1px solid rgba(66, 66, 66, 0.2);
   border-radius: 5px;
   color: #424242;
   padding: 13px;
   width: 100%;
   margin-bottom: 1rem; }
+  form input[type="text"]:focus,
+  form input[type="email"]:focus,
+  form input[type="password"]:focus,
+  form textarea:focus {
+    border: 1px solid rgba(66, 66, 66, 0.5); }
 form .form-input {
   margin-bottom: 1rem; }
 form textarea {
   resize: vertical;
   min-height: 80px; }
+form .radius-value {
+  color: #48DBFB;
+  font-weight: 600; }
+form .custom-slider {
+  padding: 1rem !important; }
+  form .custom-slider .vue-slider {
+    background: none;
+    border: rgba(66, 66, 66, 0.2) 1px solid; }
+  form .custom-slider .vue-slider-dot {
+    background: #FECA57;
+    box-shadow: none; }
+  form .custom-slider .vue-slider-process {
+    background: rgba(254, 202, 87, 0.5); }
+  form .custom-slider .vue-slider-piecewise-item span.vue-slider-piecewise-dot {
+    display: none; }
+  form .custom-slider .vue-slider-piecewise-item span.vue-slider-piecewise-label {
+    margin-top: 0.5rem;
+    font-size: 14px; }
 
 @media (min-width: 42.5rem) {
   .inline-input {
