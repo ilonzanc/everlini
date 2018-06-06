@@ -61,7 +61,17 @@ $today = date("Y");
         echo $this->Form->control('city');
         echo $this->Form->control('postal_code');
         echo $this->Form->control('country');
-        echo $this->Form->file('submittedfile');
+        echo $this->Form->control('address', array(
+            'id' => 'address'
+        ));
+        echo $this->Form->control('place_id', array(
+            'id' => 'place_id',
+            'label' => false,
+            'type' => 'hidden'
+        ));?>
+        <div id="suggestion-box"></div>
+
+        <?php echo $this->Form->file('submittedfile');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

@@ -61,6 +61,7 @@
         <button @click.prevent="getFBEventsByLocation" type="submit" class="btn primary-btn">Zoeken</button>
         <ul class="events_list"></ul>
       </div> -->
+      <div id="map"></div>
     </div>
   </div>
 </template>
@@ -117,8 +118,9 @@
     },
     methods: {
       onSubmit() {
-        this.$store.commit('updateSearch', this.params);
-        this.$router.push('/evenementen');
+        this.getCoordinates(this.params.location);
+        //this.$store.commit('updateSearch', this.params);
+        //this.$router.push('/evenementen');
       },
       addRow: function() {
         this.rows.push({value: this.params.interests[this.currentInputIndex], index: this.currentInputIndex});
@@ -155,7 +157,33 @@
         .catch(function (error) {
           console.error(JSON.stringify(error));
         });
-      }
+      },
+      getCoordinates(searchtext) {
+        var map;
+        var service;
+        var infowindow;
+        var pyrmont = new google.maps.LatLng(-33.8665433,151.1956316);
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: pyrmont,
+            zoom: 15
+          });
+
+        let request = {
+          query: searchtext
+        };
+
+        service = new google.maps.places.PlacesService(map);
+        service.textSearch(request, this.placesCallback);
+      },
+      placesCallback(results, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          for (let i = 0; i < results.length; i++) {
+            let place = results[i];
+            console.log(place.geometry.location.lat());
+          }
+        }
+      },
     }
   };
 </script>

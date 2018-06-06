@@ -13,7 +13,7 @@
           </div>
         </section>
       </router-link>
-      <section v-if="events.length == 0">
+      <section v-if="!events">
         <p>Geen evenementen gevonden</p>
       </section>
     </div>
@@ -23,6 +23,8 @@
 <script>
   //import axios from "axios";
   import moment from 'moment';
+
+
 
   export default {
     name: "overview",
@@ -34,7 +36,8 @@
     data() {
       return {
         location: "",
-        events: []
+        events: [],
+        meetupevents: []
       };
     },
     mounted() {
@@ -52,23 +55,20 @@
       .catch(function(error) {
         console.log(error);
       });
-
-      /* axios({
-        method: "get",
-        url: "https://api.meetup.com/2/open_events.xml?topic=photo&time=,1w&key=766033144c453b4d295465e352538",
-        headers: {
-          "Access-Control-Allow-Origin": "*"
-        }
+      this.$jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=3.7304&page=20&radius=5&lat=51.0535')
+      .then(json => {
+        console.log(json);
+      }).catch(err => {
+        // Failed.
       })
-      .then(function(repsponse) {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error);
-      }); */
 
-      const formattedDate = moment('19 Oct 2017').format('YYYYMMDD')
-      console.log(formattedDate)
+      this.$http.jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=3.7304&page=20&radius=5&lat=51.0535', options)
+      .then(function(data){
+          let events = data.jsonp();
+          console.log(events);
+          self.meetupevents = events.events;
+      }, function(error) {
+      })
     },
     methods: {
 

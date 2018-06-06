@@ -44,6 +44,9 @@ import routes from './router/index.js';
 
 Vue.use(VueRouter);
 Vue.use(require('vue-moment'));
+var VueResource = require('vue-resource');
+
+Vue.use(VueResource);
 
 export default {
   name: 'app',

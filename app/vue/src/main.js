@@ -4,6 +4,13 @@ import router from './router/index';
 import axios from 'axios';
 import moment from 'moment';
 
+import VueResource from 'vue-resource';
+Vue.use(VueResource);
+
+
+import VueJsonp from 'vue-jsonp';
+Vue.use(VueJsonp)
+
 import { store } from './store';
 
 
@@ -17,5 +24,7 @@ new Vue({
   el: '#app',
   render: h => h(App),
   router: router,
-  store
+  store,
+  VueResource,
+  VueJsonp
 })
