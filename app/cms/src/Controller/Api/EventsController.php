@@ -87,40 +87,58 @@ class EventsController extends AppController
     public function add()
     {
         $event = $this->Events->newEntity();
+        if ($this->request->data['meetup_id']) {
+            $event = $this->Events->newEntity(
+                $this->request->getData(),
+                ['validate' => 'meetup']
+            );
+        }
+
+        $message = [];
+
         if ($this->request->is('post')) {
-            $event->user_id = $this->request->data['user_id'];
-            $event->name = $this->request->data['name'];
-            $event->description = $this->request->data['description'];
+            if (empty($this->request->data['meetup_id'])) {
+                $event->user_id = $this->request->data['user_id'];
+                $event->name = $this->request->data['name'];
+                $event->description = $this->request->data['description'];
 
-            //saving the startdate
-            $startdate = $this->request->data['startdate']['date'];
-            $starttime = $this->request->data['startdate']['time'];
-            $fullstartdate = $startdate . ' ' . $starttime;
-            $event->startdate = strtotime($fullstartdate);
+                //saving the startdate
+                $startdate = $this->request->data['startdate']['date'];
+                $starttime = $this->request->data['startdate']['time'];
+                $fullstartdate = $startdate . ' ' . $starttime;
+                $event->startdate = strtotime($fullstartdate);
 
-            //saving the enddate
-            $enddate = $this->request->data['enddate']['date'];
-            $endtime = $this->request->data['enddate']['time'];
-            $fullenddate = $enddate . ' ' . $endtime;
-            $event->enddate = strtotime($fullenddate);
+                //saving the enddate
+                $enddate = $this->request->data['enddate']['date'];
+                $endtime = $this->request->data['enddate']['time'];
+                $fullenddate = $enddate . ' ' . $endtime;
+                $event->enddate = strtotime($fullenddate);
+                $message[] = 'meetup id was empty <br>';
+            } else {
+                $event->meetup_id = $this->request->data['meetup_id'];
 
-            $event->street = $this->request->data['location']['street'];
-            $event->housenr = $this->request->data['location']['housenr'];
-            $event->postal_code = $this->request->data['location']['postal_code'];
-            $event->city = $this->request->data['location']['city'];
-            $event->country = $this->request->data['location']['country'];
+                $event->name = null;
+                $event->description = null;
+                $event->startdate = null;
+
+                $message[] = 'meetu id was not empty <br>';
+            }
 
             if ($this->Events->save($event)) {
-                $message= 'The event has been saved.';
+                $message[] = 'The event has been saved.';
+                $errors = $event->errors();
             }
             else {
-                $message= 'The event could not be saved. Please, try again.';
+                $message[] = 'The event could not be saved. Please, try again.';
+                $errors = $event->errors();
             }
 
             $this->set([
+                'data' => $this->request->data,
                 'message' => $message,
                 'event' => $event,
-                '_serialize' => ['message', 'event']
+                'errors' => $errors,
+                '_serialize' => ['data', 'message', 'event', 'errors']
             ]);
 
         }

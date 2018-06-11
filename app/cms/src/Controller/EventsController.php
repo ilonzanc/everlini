@@ -103,11 +103,6 @@ class EventsController extends AppController
             $fullenddate = $enddate . ' ' . $endtime;
             $event->enddate = strtotime($fullenddate);
 
-            $event->street = $this->request->data['street'];
-            $event->housenr = $this->request->data['housenr'];
-            $event->postal_code = $this->request->data['postal_code'];
-            $event->city = $this->request->data['city'];
-            $event->country = $this->request->data['country'];
             $event->address = $this->request->data['address'];
 
             $data = $this->getCoordinates($this->request->data['address']);

@@ -90,42 +90,31 @@ class EventsTable extends Table
             ->allowEmpty('description');
 
         $validator
-            ->scalar('street')
-            ->maxLength('street', 255)
-            ->requirePresence('street', 'create')
-            ->notEmpty('street');
-
-        $validator
-            ->scalar('housenr')
-            ->maxLength('housenr', 255)
-            ->requirePresence('housenr', 'create')
-            ->notEmpty('housenr');
-
-        $validator
-            ->scalar('postal_code')
-            ->maxLength('postal_code', 255)
-            ->requirePresence('postal_code', 'create')
-            ->notEmpty('postal_code');
-
-        $validator
-            ->scalar('city')
-            ->maxLength('city', 255)
-            ->requirePresence('city', 'create')
-            ->notEmpty('city');
-
-        $validator
-            ->scalar('country')
-            ->maxLength('country', 255)
-            ->requirePresence('country', 'create')
-            ->allowEmpty('country');
-
-        $validator
             ->dateTime('startdate')
             ->allowEmpty('startdate');
 
         $validator
             ->dateTime('enddate')
             ->allowEmpty('enddate');
+
+        $validator
+            ->dateTime('meetup_id')
+            ->allowEmpty('meetup_id');
+
+        return $validator;
+    }
+
+    public function validationMeetup($validator)
+    {
+
+        $validator
+            ->integer('meetup_id')
+            ->notEmpty('meetup_id');
+
+        $validator
+            ->scalar('name')
+            ->allowEmpty('name');
+
 
         return $validator;
     }

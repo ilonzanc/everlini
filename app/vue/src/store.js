@@ -16,12 +16,23 @@ export const store = new Vuex.Store({
             enddate: "",
             interests: [],
             radiusValue : ""
+        },
+        eventIsMeetup: false,
+        currentMeetUpEvent: {
+            id: "",
+            groupname: ""
         }
     },
     getters: {
         getSearchValues(state) {
             return state.searchparams;
-        }
+        },
+        getEventIsMeetup(state) {
+            return state.eventIsMeetup;
+        },
+        getCurrentMeetUpEvent(state) {
+            return state.currentMeetUpEvent;
+        },
     },
     mutations: {
         updateSearchValues(state, newparams) {
@@ -32,6 +43,12 @@ export const store = new Vuex.Store({
             state.searchparams.startdate = newparams.startdate;
             state.searchparams.enddate = newparams.enddate;
             state.searchparams.interests = newparams.interests;
+        },
+        updateEventIsMeetup(state, newparams) {
+            state.eventIsMeetup = newparams;
+        },
+        updateMeetUpEvent(state, newparams) {
+            state.currentMeetUpEvent = newparams;
         }
     },
     plugins: [createPersistedState()]

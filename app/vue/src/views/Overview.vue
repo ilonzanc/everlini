@@ -45,7 +45,14 @@
           </div>
         </section>
       </router-link>
-      <router-link v-if="meetupevent.visibility == 'public'" :to="'/evenementen/' + meetupevent.id" v-bind:key="meetupevent.id" v-for="meetupevent in meetupevents">
+      <a
+        href="#"
+        data-event-type="meetup"
+        v-if="meetupevent.visibility == 'public'"
+        v-bind:key="meetupevent.id"
+        v-for="meetupevent in meetupevents"
+        @click.prevent="saveMeetupEvent(meetupevent.id, meetupevent.group.urlname)"
+      >
         <section class="event" >
           <div class="event-date">
             <div class="event-day">{{meetupevent.local_date | moment("DD")}}</div>
@@ -55,7 +62,7 @@
             <h2>{{ meetupevent.name }}</h2>
           </div>
         </section>
-      </router-link>
+      </a>
       <section v-if="events.length == 0 && meetupevents.length == 0">
         <p>Geen evenementen gevonden :(</p>
       </section>
@@ -99,6 +106,7 @@
           enddate: "",
           interests: [],
           radiusValue: 0,
+
         },
         slider_options: {
           min: 0,
@@ -119,10 +127,16 @@
         },
         dateClass: "dateTabs",
         asideOpen: false,
-      };
+        eventIsMeetup: false,
+        currentMeetUpEvent: {
+            id: "",
+            groupname: ""
+        }
+      }
     },
     mounted() {
       this.params = this.searchparams;
+      this.eventIsMeetup = this.meetupeventstate;
       axios({
         method: "post",
         url: "http://localhost:8765/api/events/" + this.searchparams.location + "/" + this.searchparams.startdate + "/" + this.searchparams.enddate + ".json",
@@ -161,6 +175,13 @@
         let today = new Date();
         today = moment(String(today)).utcOffset(0).format('YYYY-MM-DD');
         return today;
+      },
+      saveMeetupEvent(id, groupname) {
+        console.log('clicked on meetup event');
+        this.currentMeetUpEvent.id = id;
+        this.currentMeetUpEvent.groupname = groupname;
+        this.$store.commit('updateMeetUpEvent', this.currentMeetUpEvent);
+        this.$router.push('/evenementen/' + id);
       }
     }
   };
