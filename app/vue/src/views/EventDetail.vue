@@ -9,7 +9,7 @@
       <span v-if="event.enddate"> - {{event.enddate | moment("DD MMM")}} | {{event.enddate | moment("HH:mm")}}</span>
       <p v-if="event.street">{{ event.street }} {{ event.housenr }}, {{ event.postal_code }} {{ event.city }}</p>
       <p v-if="event.venue">{{ event.venue.address_1 }}, {{ event.venue.city }}</p>
-      <a href="#" class="btn small-btn save-btn" @click.prevent="saveEvent" v-if="$parent.session != null"><i class="fa fa-heart"></i> Opslaan</a>
+      <a href="#" class="btn small-btn save-btn" @click.prevent="saveEvent" v-if="$parent.session != null"><i :class="['fa fa-heart', { 'red': eventFavorited }]"></i>{{eventFavorited ? 'Opgeslagen!' : 'Opslaan'}}</a>
       <p v-html="event.description"></p>
       <section class="event-blog">
         <h2>Blog</h2>
@@ -36,11 +36,12 @@
     data() {
       return {
         location: "",
-        event: ""
+        event: "",
+        eventFavorited: false
       }
     },
     mounted() {
-      console.log('Mounted Detail Vue Component');
+      //console.log('Mounted Detail Vue Component');
       if(!this.currentMeetUpEvent.id) {
         axios({
           method: "get",
@@ -48,27 +49,27 @@
           headers: { },
         })
         .then(response => {
-          console.log(response);
+          //console.log(response);
           this.event = response.data.event[0];
         })
         .catch(error => {
-          console.log(error);
+          //console.log(error);
         });
       } else {
         this.$jsonp('https://api.meetup.com/' + this.currentMeetUpEvent.groupname + '/events/' + this.currentMeetUpEvent.id + '?key=766033144c453b4d295465e352538&sign=true')
         .then(json => {
-          console.log(json);
+          //console.log(json);
           this.event = json.data;
           this.event.startdate = json.data.local_date + ' ' + json.data.local_time ;
+          this.checkIfFavorited();
         }).catch(err => {
-          console.log(err);
+          //console.log(err);
         })
       }
 
     },
     methods: {
       saveEvent() {
-        console.log('click');
         delete this.event.created;
         if (this.currentMeetUpEvent.id) {
           this.event.meetup_id = this.event.id;
@@ -80,25 +81,75 @@
           })
           .then(response => {
             console.log(response);
+            this.event.id = response.data.id;
+            this.saveFavorite();
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        } else {
+          this.saveFavorite();
+        }
+
+      },
+      saveFavorite() {
+        if(this.eventFavorited == false) {
+          axios({
+            method: "post",
+            url: "http://localhost:8765/api/favorite/add.json",
+            headers: { },
+            data: {
+              event_id: this.event.id,
+              user_id: this.$parent.session.id
+            }
+          })
+          .then(response => {
+            console.log(response);
+            this.eventFavorited = true;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        } else {
+          axios({
+            method: "delete",
+            url: "http://localhost:8765/api/favorite/delete.json",
+            headers: { },
+            data: {
+              event_id: this.event.id,
+              user_id: this.$parent.session.id,
+              meetup_id: this.currentMeetUpEvent.id
+            }
+          })
+          .then(response => {
+            console.log(response);
+            this.eventFavorited = false;
           })
           .catch(error => {
             console.log(error);
           });
         }
+
+      },
+      checkIfFavorited() {
         axios({
-          method: "post",
-          url: "http://localhost:8765/api/favorite/add.json",
+          method: "put",
+          url: "http://localhost:8765/api/favorites.json",
           headers: { },
           data: {
             event_id: this.event.id,
-            user_id: this.$parent.session.id
+            user_id: this.$parent.session.id,
+            meetup_id: this.currentMeetUpEvent.id
           }
         })
         .then(response => {
-          console.log(response);
+          //console.log(response);
+          if(response.data.favorites.length >= 1 ) {
+            this.eventFavorited = true;
+          }
         })
         .catch(error => {
-          console.log(error);
+          //console.log(error);
         });
       }
     }

@@ -21,7 +21,7 @@ class FavoritesController extends AppController
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['add', 'index']);
+        $this->Auth->allow(['add', 'index', 'delete']);
 
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
@@ -40,13 +40,23 @@ class FavoritesController extends AppController
      */
     public function index()
     {
+        $this->loadModel('Events');
 
-        $favorites = $this->Favorites->find('all', [
-            'contain' => ['Users', 'Events']
-        ]);
+        $eventId = $this->request->data('event_id');
+        if ($this->request->data('meetup_id') != null) {
+            $event = $this->Events->find()
+                ->where(['meetup_id' => $this->request->data['meetup_id']]);
+            $event = $event->first();
+            $eventId = $event['id'];
+        }
+
+        $favorites = $this->Favorites->find('all')
+            ->where(['event_id' => $eventId, 'user_id' => $this->request->data('user_id')]);
+
         $this->set([
+            'event' => $event,
             'favorites' => $favorites,
-            '_serialize' => ['favorites']
+            '_serialize' => ['favorites', 'event']
         ]);
 
     }
@@ -64,16 +74,20 @@ class FavoritesController extends AppController
             $favorite = $this->Favorites->patchEntity($favorite, $this->request->getData());
             if ($this->Favorites->save($favorite)) {
                 $message= 'Saved the event to favorites';
+                $errors = $favorite->errors();
             } else {
                 $message= 'Could not save the event to favorites, something went wrong';
+                $errors = $favorite->errors();
             }
         } else {
             $message= 'This is not a POST request.';
         }
 
         $this->set([
+            'favorite' => $favorite,
             'message' => $message,
-            '_serialize' => ['message', 'event', 'userid']
+            'errors' => $errors,
+            '_serialize' => ['message', 'event', 'favorite', 'errors']
         ]);
 
     }
@@ -87,14 +101,36 @@ class FavoritesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $favorite = $this->Favorites->get($id);
-        if ($this->Favorites->delete($favorite)) {
-            $this->Flash->success(__('The favorite has been deleted.'));
-        } else {
-            $this->Flash->error(__('The favorite could not be deleted. Please, try again.'));
+        $this->loadModel('Events');
+
+        $eventId = $this->request->data('event_id');
+        if ($this->request->data('meetup_id') != null) {
+            $event = $this->Events->find()
+                ->where(['meetup_id' => $this->request->data['meetup_id']]);
+            $event = $event->first();
+            $eventId = $event['id'];
         }
 
-        return $this->redirect(['action' => 'index']);
+        $favorites = $this->Favorites->find('all')
+            ->where(['event_id' => $eventId, 'user_id' => $this->request->data('user_id')]);
+
+        $favorite = $favorites->first();
+
+        $favorite = $this->Favorites->get($favorite['id']);
+
+        if ($this->Favorites->delete($favorite)) {
+            $message= 'Favorite was deleted';
+            $errors = $favorite->errors();
+        } else {
+            $message= 'Could not delete the favorite';
+            $errors = $favorite->errors();
+        }
+
+        $this->set([
+            'favorite' => $favorite,
+            'message' => $message,
+            'errors' => $errors,
+            '_serialize' => ['message', 'errors', 'favorite']
+        ]);
     }
 }

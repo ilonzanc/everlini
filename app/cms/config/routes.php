@@ -186,5 +186,10 @@ Router::prefix('api', function ($routes) {
         ['controller' => 'Favorites', 'action' => 'index']
     );
 
+    $routes->connect(
+        '/favorite/delete',
+        ['controller' => 'Favorites', 'action' => 'delete']
+    );
+
 
 });

@@ -669,7 +669,10 @@ form .custom-slider {
     color: #fff;
     margin-left: 0.5rem; }
   .btn i {
-    color: #fff; }
+    color: #fff;
+    margin-right: 0.5rem; }
+    .btn i.red {
+      color: #FF6B6B; }
   .btn.primary-btn {
     background: #48DBFB;
     border-color: #48DBFB; }

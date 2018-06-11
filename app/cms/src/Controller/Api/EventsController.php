@@ -86,18 +86,12 @@ class EventsController extends AppController
 
     public function add()
     {
-        $event = $this->Events->newEntity();
-        if ($this->request->data['meetup_id']) {
-            $event = $this->Events->newEntity(
-                $this->request->getData(),
-                ['validate' => 'meetup']
-            );
-        }
-
         $message = [];
 
         if ($this->request->is('post')) {
-            if (empty($this->request->data['meetup_id'])) {
+            if ($this->request->data['meetup_id'] == null) {
+                $event = $this->Events->newEntity();
+
                 $event->user_id = $this->request->data['user_id'];
                 $event->name = $this->request->data['name'];
                 $event->description = $this->request->data['description'];
@@ -113,33 +107,70 @@ class EventsController extends AppController
                 $endtime = $this->request->data['enddate']['time'];
                 $fullenddate = $enddate . ' ' . $endtime;
                 $event->enddate = strtotime($fullenddate);
-                $message[] = 'meetup id was empty <br>';
+
+                if ($this->Events->save($event)) {
+                    $message = 'The event has been saved.';
+                    $errors = $event->errors();
+
+                    if($this->request->data['meetup_id']) {
+                        $event = json_encode($event);
+                        $this->response->type('json');
+                        $this->response->body($event);
+                        return $this->response;
+                    }
+                }
+                else {
+                    $message = 'The event could not be saved. Please, try again.';
+                    $errors = $event->errors();
+                }
+
+                $this->set([
+                    'data' => $event,
+                    'message' => $message,
+                    'event' => $event,
+                    'errors' => $errors,
+                    '_serialize' => ['query', 'data', 'message', 'event', 'errors']
+                ]);
+
             } else {
-                $event->meetup_id = $this->request->data['meetup_id'];
+                $query = $this->Events->find()
+                    ->where(['meetup_id' => $this->request->data['meetup_id']]);
 
-                $event->name = null;
-                $event->description = null;
-                $event->startdate = null;
+                $query = $query->first();
 
-                $message[] = 'meetu id was not empty <br>';
+                if(empty($query)) {
+                    $event = $this->Events->newEntity(
+                        $this->request->getData(),
+                        ['validate' => 'meetup']
+                    );
+
+                    $event->meetup_id = $this->request->data['meetup_id'];
+
+                    $event->name = null;
+                    $event->description = null;
+                    $event->startdate = null;
+
+                    if ($this->Events->save($event)) {
+                        $message = 'The event has been saved.';
+                        $errors = $event->errors();
+
+                        $event = json_encode($event);
+                        $this->response->type('json');
+                        $this->response->body($event);
+                        return $this->response;
+
+                    }
+                    else {
+                        $message = 'The event could not be saved. Please, try again.';
+                    }
+
+                } else {
+                    $query = json_encode($query);
+                    $this->response->type('json');
+                    $this->response->body($query);
+                    return $this->response;
+                }
             }
-
-            if ($this->Events->save($event)) {
-                $message[] = 'The event has been saved.';
-                $errors = $event->errors();
-            }
-            else {
-                $message[] = 'The event could not be saved. Please, try again.';
-                $errors = $event->errors();
-            }
-
-            $this->set([
-                'data' => $this->request->data,
-                'message' => $message,
-                'event' => $event,
-                'errors' => $errors,
-                '_serialize' => ['data', 'message', 'event', 'errors']
-            ]);
 
         }
 
