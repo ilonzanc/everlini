@@ -593,6 +593,7 @@ form label {
   display: inline-block;
   margin-bottom: 0.5rem; }
 form input[type="text"],
+form input[type="date"],
 form button.btn,
 form textarea,
 form .form-input {
@@ -601,18 +602,23 @@ form .form-input {
 form input[type="text"],
 form input[type="email"],
 form input[type="password"],
+form input[type="date"],
 form textarea {
-  border: 1px solid rgba(66, 66, 66, 0.2);
+  border: 1px solid rgba(66, 66, 66, 0.5);
   border-radius: 5px;
-  color: #424242;
+  color: rgba(66, 66, 66, 0.5);
   padding: 13px;
   width: 100%;
   margin-bottom: 1rem; }
   form input[type="text"]:focus,
   form input[type="email"]:focus,
   form input[type="password"]:focus,
+  form input[type="date"]:focus,
   form textarea:focus {
-    border: 1px solid rgba(66, 66, 66, 0.5); }
+    border: 1px solid rgba(66, 66, 66, 0.5);
+    color: #424242; }
+form input[type="date"] {
+  padding-right: 0; }
 form .form-input {
   margin-bottom: 1rem; }
 form textarea {
@@ -622,7 +628,7 @@ form .radius-value {
   color: #48DBFB;
   font-weight: 600; }
 form .custom-slider {
-  padding: 1rem !important; }
+  padding: 1.2rem !important; }
   form .custom-slider .vue-slider {
     background: none;
     border: rgba(66, 66, 66, 0.2) 1px solid; }
@@ -683,24 +689,6 @@ form .custom-slider {
 @media (min-width: 42.5rem) {
   .btn.small-btn span {
     display: inline; } }
-.tag {
-  padding: 0.7rem;
-  border: 1px solid #48DBFB;
-  border-radius: 5px;
-  display: inline-block;
-  margin: 0 0.1rem; }
-  .tag:first-child {
-    margin-left: 0; }
-  .tag:last-child {
-    margin-right: 0; }
-  .tag.selected {
-    background: #48DBFB;
-    color: #fff; }
-
-@media (min-width: 42.5rem) {
-  .tag {
-    padding: 0.7rem 1.35rem;
-    margin: 0 0.5rem; } }
 #overview__comp .event {
   overflow: auto;
   box-shadow: 0px 0px 5px rgba(66, 66, 66, 0.1);
@@ -724,6 +712,12 @@ form .custom-slider {
     color: #fff; }
   #overview__comp .event .event-details {
     padding: 0.5rem 0; }
+#overview__comp .aside__filter {
+  position: absolute;
+  top: 59px;
+  left: 100%; }
+  #overview__comp .aside__filter.open-aside {
+    left: 0; }
 
 #home {
   text-align: center; }
@@ -745,6 +739,21 @@ form .custom-slider {
     font-size: 1.5rem;
     margin: 0;
     height: calc(230px - 60px); }
+  #home .dateTabs li {
+    float: left;
+    margin: 0 0.8rem; }
+    #home .dateTabs li a {
+      padding: 0.8rem 1.2rem;
+      border: 1px solid #48DBFB;
+      border-radius: 5px;
+      display: inline-block; }
+    #home .dateTabs li:first-child {
+      margin-left: 0; }
+    #home .dateTabs li:last-child {
+      margin-right: 0; }
+    #home .dateTabs li.is-active a {
+      background: #48DBFB;
+      color: #fff; }
 
 @media (min-width: 42.5rem) {
   #home {
@@ -764,6 +773,10 @@ form .custom-slider {
       top: 50%;
       transform: translate(-50%, -50%);
       width: 960px;
-      background: #fff; } }
+      background: #fff; }
+
+  .dateTabs .tag {
+    padding: 0.7rem 1.35rem;
+    margin: 0 0.5rem; } }
 
 /*# sourceMappingURL=main.css.map */

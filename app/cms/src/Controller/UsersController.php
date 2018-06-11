@@ -31,7 +31,7 @@ class UsersController extends AppController
             'contain' => ['Roles']
         ];
         $users = $this->paginate($this->Users->find('all', [
-            //"contain" => ['Attachments']
+            "contain" => ['Attachments']
         ]));
 
         $this->set(compact('users'));

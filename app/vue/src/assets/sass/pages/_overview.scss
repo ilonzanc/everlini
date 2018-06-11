@@ -28,4 +28,14 @@
     }
   }
 
+  .aside__filter {
+    position: absolute;
+    top: 59px;
+    left: 100%;
+
+    &.open-aside {
+      left: 0;
+    }
+  }
+
 }

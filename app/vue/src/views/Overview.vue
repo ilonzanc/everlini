@@ -2,6 +2,38 @@
   <div id="overview__comp" class="content">
     <div class="container">
       <h1>Overzicht</h1>
+      <aside class="aside__filter">
+        <form @submit.prevent="onSubmit">
+          <label for="location">Locatie</label>
+          <input type="text" id="location" name="location" placeholder="Waar zullen we zoeken?" v-model="params.location.name">
+          <label>Binnen <span class="radius-value">{{params.radiusValue}}</span> km</label>
+          <vue-slider class="custom-slider" ref="slider" v-model="params.radiusValue" v-bind="slider_options"></vue-slider>
+          <label>Datum</label>
+          <tabs :tabsClassName="dateClass">
+            <tab name="vandaag" ></tab>
+            <tab name="deze week"></tab>
+            <tab name="deze maand"></tab>
+          </tabs>
+          <div class="time-inputs">
+              <label for="startdate">Van</label>
+              <input class="inline-input" type="date" :min="getDateOfToday()" id="startdate" name="startdate" placeholder="dd-mm-jjjj" v-model="params.startdate">
+              <label for="enddate">Tot</label>
+              <input class="inline-input" type="date" id="enddate" name="enddate" placeholder="dd-mm-jjjj" v-model="params.enddate">
+          </div>
+          <label>Interesses</label>
+          <div class="interests_input">
+            <input type="text" name="0" v-model="params.interests[0]" placeholder="Eigen interesse toevoegen...">
+            <i class="fa fa-plus" @click.prevent="addRow"></i>
+          </div>
+          <div class="additional_interests" v-bind:key="row.index" v-for="row in rows">
+            <div class="interests_input">
+              <input type="text" :name="currentInputIndex" v-model="params.interests[row.index + 1]" placeholder="Nog eentje...">
+              <i class="fa fa-plus" @click.prevent="addRow"></i>
+            </div>
+          </div>
+          <button type="submit" class="btn primary-btn">Zoeken</button>
+        </form>
+      </aside>
       <router-link :to="'/evenementen/' + event.id" v-bind:key="event.id" v-for="event in events">
         <section class="event" >
           <div class="event-date">
@@ -13,8 +45,19 @@
           </div>
         </section>
       </router-link>
-      <section v-if="!events">
-        <p>Geen evenementen gevonden</p>
+      <router-link v-if="meetupevent.visibility == 'public'" :to="'/evenementen/' + meetupevent.id" v-bind:key="meetupevent.id" v-for="meetupevent in meetupevents">
+        <section class="event" >
+          <div class="event-date">
+            <div class="event-day">{{meetupevent.local_date | moment("DD")}}</div>
+            <div class="event-month">{{meetupevent.local_date | moment("MMM")}}</div>
+          </div>
+          <div class="event-details">
+            <h2>{{ meetupevent.name }}</h2>
+          </div>
+        </section>
+      </router-link>
+      <section v-if="events.length == 0 && meetupevents.length == 0">
+        <p>Geen evenementen gevonden :(</p>
       </section>
     </div>
   </div>
@@ -23,55 +66,102 @@
 <script>
   //import axios from "axios";
   import moment from 'moment';
-
-
+  import vueSlider from 'vue-slider-component';
+  import Tabs from '../Components/Tabs.vue';
+  import Tab from '../Components/Tab.vue';
 
   export default {
     name: "overview",
     computed: {
 			searchparams() {
-				return this.$store.state.searchparams;
-			}
+        return this.$store.getters.getSearchValues;
+      }
 		},
+    components: {
+      vueSlider,
+      'tabs': Tabs,
+      'tab': Tab
+    },
     data() {
       return {
-        location: "",
         events: [],
-        meetupevents: []
+        meetupevents: [],
+        currentInputIndex: 0,
+        inputs: [ 'fullname', 'email'],
+        rows: [],
+        params: {
+          location: {
+            name: "",
+            lat: "",
+            lng: ""
+          },
+          startdate: "",
+          enddate: "",
+          interests: [],
+          radiusValue: 0,
+        },
+        slider_options: {
+          min: 0,
+          max: 25,
+          interval: 5,
+          piecewise: true,
+          piecewiseLabel: true,
+          tooltip: false,
+          data: [
+            "0",
+            "5",
+            "10",
+            "15",
+            "20",
+            "25",
+          ],
+          dotSize: 25,
+        },
+        dateClass: "dateTabs",
+        asideOpen: false,
       };
     },
     mounted() {
-      let self = this;
+      this.params = this.searchparams;
       axios({
         method: "post",
         url: "http://localhost:8765/api/events/" + this.searchparams.location + "/" + this.searchparams.startdate + "/" + this.searchparams.enddate + ".json",
         headers: { },
         data: this.searchparams
       })
-      .then(function(response) {
+      .then(response => {
         console.log(response);
-        self.events = response.data.events;
+        this.events = response.data.events;
       })
-      .catch(function(error) {
+      .catch(error => {
         console.log(error);
       });
-      this.$jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=3.7304&page=20&radius=5&lat=51.0535')
+
+      let floatLat = parseFloat(this.searchparams.location.lat);
+      let floatLng = parseFloat(this.searchparams.location.lng);
+
+      let formattedStartDate = moment(String(this.searchparams.startdate)).format('YYYY-MM-DDTHH:MM:SS');
+      let formattedEndDate = moment(String(this.searchparams.enddate)).format('YYYY-MM-DDTHH:MM:SS');
+
+      this.$jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=' + floatLng +
+        '&page=20&radius=' + this.searchparams.radiusValue +
+        '&lat=' + floatLat +
+        '&start_date_range=' + formattedStartDate +
+        '&end_date_range=' + formattedEndDate
+      )
       .then(json => {
         console.log(json);
+        this.meetupevents = json.data.events;
       }).catch(err => {
-        // Failed.
-      })
-
-      this.$http.jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=3.7304&page=20&radius=5&lat=51.0535', options)
-      .then(function(data){
-          let events = data.jsonp();
-          console.log(events);
-          self.meetupevents = events.events;
-      }, function(error) {
+        console.log(err);
       })
     },
     methods: {
-
+      getDateOfToday() {
+        let today = new Date();
+        today = moment(String(today)).utcOffset(0).format('YYYY-MM-DD');
+        return today;
+      }
     }
   };
 </script>

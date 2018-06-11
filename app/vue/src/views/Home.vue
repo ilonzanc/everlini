@@ -8,7 +8,7 @@
         <div class="row">
           <div class="column column-sm-12 column-lg-6">
             <label for="location">Locatie</label>
-            <input type="text" id="location" name="location" placeholder="Waar zullen we zoeken?" v-model="params.location">
+            <input id="pac-input" type="text" name="location" placeholder="Waar zullen we zoeken?" v-model="params.location.name" @keyup="initMap">
           </div>
           <div class="column column-sm-12 column-lg-6">
             <label>Binnen <span class="radius-value">{{params.radiusValue}}</span> km</label>
@@ -18,21 +18,18 @@
         <label>Datum</label>
         <div class="row">
           <div class="column column-sm-12 column-lg-6 timecolumn">
-            <div class="tags-flexbox">
-              <div class="tag">vandaag</div>
-              <div class="tag">deze week</div>
-              <div class="tag">deze maand</div>
-            </div>
+            <tabs :tabsClassName="dateClass">
+              <tab name="vandaag" ></tab>
+              <tab name="deze week"></tab>
+              <tab name="deze maand"></tab>
+            </tabs>
           </div>
           <div class="column column-sm-12 column-lg-6">
             <div class="time-inputs">
-
                 <label for="startdate">Van</label>
-                <input class="inline-input" type="text" id="startdate" name="startdate" placeholder="dd-mm-jjjj" v-model="params.startdate">
-
-
+                <input class="inline-input" type="date" :min="getDateOfToday()" id="startdate" name="startdate" placeholder="dd-mm-jjjj" v-model="params.startdate">
                 <label for="enddate">Tot</label>
-                <input class="inline-input" type="text" id="enddate" name="enddate" placeholder="dd-mm-jjjj" v-model="params.enddate">
+                <input class="inline-input" type="date" id="enddate" name="enddate" placeholder="dd-mm-jjjj" v-model="params.enddate">
 
             </div>
           </div>
@@ -45,7 +42,7 @@
               <input type="text" name="0" v-model="params.interests[0]" placeholder="Eigen interesse toevoegen...">
               <i class="fa fa-plus" @click.prevent="addRow"></i>
             </div>
-            <div class="additional_interests" v-for="row in rows">
+            <div class="additional_interests" v-bind:key="row.index" v-for="row in rows">
               <div class="interests_input">
                 <input type="text" :name="currentInputIndex" v-model="params.interests[row.index + 1]" placeholder="Nog eentje...">
                 <i class="fa fa-plus" @click.prevent="addRow"></i>
@@ -69,14 +66,20 @@
 <script>
   import axios from "axios";
   import vueSlider from 'vue-slider-component';
+  import Tabs from '../Components/Tabs.vue';
+  import Tab from '../Components/Tab.vue';
+  import moment from 'moment';
+
   export default {
     computed: {
       searchparams() {
-        return this.$store.getters.getSearch;
+        return this.$store.getters.getSearchValues;
       }
     },
     components: {
-      vueSlider
+      vueSlider,
+      'tabs': Tabs,
+      'tab': Tab
     },
     name: "home",
     props: {
@@ -88,7 +91,11 @@
         inputs: [ 'fullname', 'email'],
         rows: [],
         params: {
-          location: "",
+          location: {
+            name: "",
+            lat: "",
+            lng: ""
+          },
           startdate: "",
           enddate: "",
           interests: [],
@@ -110,7 +117,8 @@
             "25",
           ],
           dotSize: 25,
-        }
+        },
+        dateClass: "dateTabs"
       };
     },
     mounted() {
@@ -118,9 +126,8 @@
     },
     methods: {
       onSubmit() {
-        this.getCoordinates(this.params.location);
-        //this.$store.commit('updateSearch', this.params);
-        //this.$router.push('/evenementen');
+        this.$store.commit('updateSearchValues', this.params);
+        this.$router.push('/evenementen');
       },
       addRow: function() {
         this.rows.push({value: this.params.interests[this.currentInputIndex], index: this.currentInputIndex});
@@ -158,32 +165,30 @@
           console.error(JSON.stringify(error));
         });
       },
-      getCoordinates(searchtext) {
-        var map;
-        var service;
-        var infowindow;
-        var pyrmont = new google.maps.LatLng(-33.8665433,151.1956316);
-
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: pyrmont,
-            zoom: 15
-          });
-
-        let request = {
-          query: searchtext
-        };
-
-        service = new google.maps.places.PlacesService(map);
-        service.textSearch(request, this.placesCallback);
+      getDateOfToday() {
+        let today = new Date();
+        today = moment(String(today)).utcOffset(0).format('YYYY-MM-DD');
+        return today;
       },
-      placesCallback(results, status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-          for (let i = 0; i < results.length; i++) {
-            let place = results[i];
-            console.log(place.geometry.location.lat());
+      initMap() {
+        let input = document.getElementById('pac-input');
+        let autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', () => {
+          var place = autocomplete.getPlace();
+          if (!place.geometry) {
+            // User entered the name of a Place that was not suggested and
+            // pressed the Enter key, or the Place Details request failed.
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
           }
-        }
-      },
+          console.log(this.params);
+          this.params.location.name = place.formatted_address;
+          this.params.location.lat = place.geometry.location.lat();
+          this.params.location.lng = place.geometry.location.lng();
+          console.log(place);
+        });
+      }
     }
   };
 </script>

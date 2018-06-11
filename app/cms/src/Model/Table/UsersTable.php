@@ -56,7 +56,6 @@ class UsersTable extends Table
 
         $this->belongsTo('Attachments', [
             'foreignKey' => 'image_id',
-            'joinType' => 'INNER'
         ]);
     }
 

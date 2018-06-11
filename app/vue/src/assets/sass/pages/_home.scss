@@ -23,6 +23,32 @@
         margin: 0;
         height: calc(230px - 60px);
     }
+
+    .dateTabs {
+        li {
+            float: left;
+            margin: 0 0.8rem;
+            a {
+                padding: 0.8rem 1.2rem;
+                border: 1px solid $primary-color;
+                border-radius: 5px;
+                display: inline-block;
+            }
+
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            &.is-active a {
+                background: $primary-color;
+                color: #fff;
+            }
+        }
+    }
 }
 
 @media (min-width: 42.5rem) {
@@ -49,4 +75,12 @@
             background: #fff;
         }
     }
+
+    .dateTabs{
+        .tag {
+            padding: 0.7rem 1.35rem;
+            margin: 0 0.5rem;
+        }
+    }
+
 }

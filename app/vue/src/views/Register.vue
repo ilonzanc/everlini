@@ -5,7 +5,7 @@
         <tabs>
           <tab name="als gebruiker" :selected="true">
             <h2>Als gebruiker</h2>
-            <form method="POST" action="http://localhost:8765/api/register.json" @submit.prevent="onSubmit">
+            <form @submit.prevent="onSubmit(2)">
               <input type="text" id="profile_role_id" name="role_id" required v-model="user.role_id">
               <label for="firstname">Voornaam</label>
               <input type="text" id="profile_firstname" name="firstname" placeholder="Jouw voornaam..." required v-model="user.firstname">
@@ -22,7 +22,7 @@
           </tab>
           <tab name="als organisatie">
             <h2>Als organisatie</h2>
-            <form method="POST" action="http://localhost:8765/api/register.json" @submit.prevent="onSubmit">
+            <form @submit.prevent="onSubmit(3)">
               <input type="text" id="organisation_role_id" name="role_id" required v-model="user.role_id">
               <label for="name">Naam organisatie</label>
               <input type="text" id="organisation_name" name="name" placeholder="Naam organisatie..." required v-model="user.name">
@@ -78,7 +78,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      var self = this;
       axios({
         method: 'post',
         url: "http://localhost:8765/api/register.json",
