@@ -157,18 +157,30 @@
       let formattedStartDate = moment(String(this.searchparams.startdate)).format('YYYY-MM-DDTHH:MM:SS');
       let formattedEndDate = moment(String(this.searchparams.enddate)).format('YYYY-MM-DDTHH:MM:SS');
 
-      this.$jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=' + floatLng +
-        '&page=20&radius=' + this.searchparams.radiusValue +
-        '&lat=' + floatLat +
-        '&start_date_range=' + formattedStartDate +
-        '&end_date_range=' + formattedEndDate
-      )
-      .then(json => {
-        console.log(json);
-        this.meetupevents = json.data.events;
-      }).catch(err => {
-        console.log(err);
-      })
+      let interests = this.searchparams.interests;
+
+      for (let i = 0; i < interests.length; i++) {
+        let interest = interests[i];
+        this.$jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=' + floatLng +
+          '&page=20&radius=' + this.searchparams.radiusValue +
+          '&lat=' + floatLat +
+          '&start_date_range=' + formattedStartDate +
+          '&end_date_range=' + formattedEndDate +
+          '&fields=*, group_category' +
+          '&text=' + interest
+        )
+        .then(json => {
+          console.log(json);
+          for (let j = 0; j < json.data.events.length; j ++) {
+            this.meetupevents.push(json.data.events[j]);
+          }
+
+        }).catch(err => {
+          console.log(err);
+        })
+      }
+
+
     },
     methods: {
       getDateOfToday() {

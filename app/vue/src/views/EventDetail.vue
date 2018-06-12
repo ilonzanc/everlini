@@ -56,7 +56,8 @@
           //console.log(error);
         });
       } else {
-        this.$jsonp('https://api.meetup.com/' + this.currentMeetUpEvent.groupname + '/events/' + this.currentMeetUpEvent.id + '?key=766033144c453b4d295465e352538&sign=true')
+        this.$jsonp('https://api.meetup.com/' +
+          this.currentMeetUpEvent.groupname + '/events/' + this.currentMeetUpEvent.id + '?key=766033144c453b4d295465e352538&sign=true&fields=*, group_category')
         .then(json => {
           //console.log(json);
           this.event = json.data;
