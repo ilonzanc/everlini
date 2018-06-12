@@ -74,6 +74,16 @@ form {
             font-size: 14px;
         }
     }
+
+    .form-error {
+        color: $error-color;
+        font-size: 0.8rem;
+        display: block;
+        .fa {
+            color: $error-color;
+            margin-right: 0.5rem;
+        }
+    }
 }
 
 @media (min-width: 42.5rem) {

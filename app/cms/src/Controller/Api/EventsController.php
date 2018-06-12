@@ -70,23 +70,11 @@ class EventsController extends AppController
             })
             ->contain('Users');
 
-        /* $events = $this->Events->find('all', [
-            'contain' => ['Users'],
-            'conditions' => array('OR' => $interests)
-        ]); */
-
-        /* $events->where(['Events.city' => $location])
-        ->where(function($exp) use ($startdate, $enddate) {
-            return $exp->between('Events.startdate', $startdate, $enddate);
-        }); */
-
         $data = $this->request->data;
 
         $this->set([
             'events' => $events,
-            'startdate' => $startdate,
-            'data' => $data,
-            '_serialize' => ['events', 'data', 'startdate']
+            '_serialize' => ['events']
         ]);
     }
 

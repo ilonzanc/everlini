@@ -9,6 +9,7 @@
           <div class="column column-sm-12 column-lg-6">
             <label for="location">Locatie</label>
             <input id="pac-input" type="text" name="location" placeholder="Waar zullen we zoeken?" v-model="params.location.name" @keyup="initMap">
+            <span v-if="errors.location.name" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.location.name}}</span>
           </div>
           <div class="column column-sm-12 column-lg-6">
             <label>Binnen <span class="radius-value">{{params.radiusValue}}</span> km</label>
@@ -28,9 +29,10 @@
             <div class="time-inputs">
                 <label for="startdate">Van</label>
                 <input class="inline-input" type="date" :min="getDateOfToday()" id="startdate" name="startdate" placeholder="dd-mm-jjjj" v-model="params.startdate">
+                <span v-if="errors.startdate" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.startdate}}</span>
                 <label for="enddate">Tot</label>
                 <input class="inline-input" type="date" id="enddate" name="enddate" placeholder="dd-mm-jjjj" v-model="params.enddate">
-
+                <span v-if="errors.enddate" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.enddate}}</span>
             </div>
           </div>
         </div>
@@ -48,6 +50,7 @@
                 <i class="fa fa-plus" @click.prevent="addRow"></i>
               </div>
             </div>
+            <span v-if="errors.interests" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.interests}}</span>
           </div>
           <div class="column column-sm-12 column-lg-6">
             <button type="submit" class="btn primary-btn">Zoeken</button>
@@ -99,26 +102,35 @@
           startdate: "",
           enddate: "",
           interests: [],
-          radiusValue: 0,
+          radiusValue: 5,
         },
         slider_options: {
-          min: 0,
-          max: 25,
+          min: 5,
+          max: 30,
           interval: 5,
           piecewise: true,
           piecewiseLabel: true,
           tooltip: false,
           data: [
-            "0",
             "5",
             "10",
             "15",
             "20",
             "25",
+            "30",
           ],
           dotSize: 25,
         },
-        dateClass: "dateTabs"
+        dateClass: "dateTabs",
+        errors: {
+          location: {
+            name: false
+          },
+          startdate: false,
+          enddate: false,
+          interests: false
+        },
+        validationStatus: true
       };
     },
     mounted() {
@@ -126,8 +138,58 @@
     },
     methods: {
       onSubmit() {
+        for (let k = 0; k < this.params.interests.length; k++) {
+          if (this.params.interests[k].length < 3 ) {
+            this.params.interests.splice(k);
+          }
+        }
         this.$store.commit('updateSearchValues', this.params);
-        this.$router.push('/evenementen');
+        this.validateSearchQuery();
+        if (this.validationStatus) {
+          axios({
+            method: "post",
+            url: "http://localhost:8765/api/events.json",
+            headers: { },
+            data: this.searchparams
+          })
+          .then(response => {
+            console.log(response);
+            this.events = response.data.events;
+            this.$router.push('/evenementen');
+          })
+          .catch(error => {
+              this.errors = error.response.data;
+          });
+
+          let floatLat = parseFloat(this.searchparams.location.lat);
+          let floatLng = parseFloat(this.searchparams.location.lng);
+
+          let formattedStartDate = moment(String(this.searchparams.startdate)).format('YYYY-MM-DDTHH:MM:SS');
+          let formattedEndDate = moment(String(this.searchparams.enddate)).format('YYYY-MM-DDTHH:MM:SS');
+
+          let interests = this.searchparams.interests;
+
+          for (let i = 0; i < interests.length; i++) {
+            let interest = interests[i];
+            this.$jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=' + floatLng +
+              '&page=20&radius=' + this.searchparams.radiusValue +
+              '&lat=' + floatLat +
+              '&start_date_range=' + formattedStartDate +
+              '&end_date_range=' + formattedEndDate +
+              '&fields=*, group_category' +
+              '&text=' + interest
+            )
+            .then(json => {
+              console.log(json);
+              for (let j = 0; j < json.data.events.length; j ++) {
+                this.meetupevents.push(json.data.events[j]);
+              }
+
+            }).catch(err => {
+              console.log(err);
+            })
+          }
+        }
       },
       addRow: function() {
         this.rows.push({value: this.params.interests[this.currentInputIndex], index: this.currentInputIndex});
@@ -188,6 +250,30 @@
           this.params.location.lng = place.geometry.location.lng();
           console.log(place);
         });
+      },
+      validateSearchQuery() {
+        this.validationStatus = true;
+        this.errors.location.name = false;
+        this.errors.startdate = false;
+        this.errors.enddate = false;
+        this.errors.interests = false;
+
+        if (!this.params.location.name || !this.params.location.lat || !this.params.location.lng) {
+          this.errors.location.name = "Vul een geldige locatie in";
+          this.validationStatus = false;
+        }
+        if (!this.params.startdate) {
+          this.errors.startdate = "Vul een startdatum in";
+          this.validationStatus = false;
+        }
+        if (!this.params.enddate) {
+          this.errors.enddate = "Vul een enddatum in";
+          this.validationStatus = false;
+        }
+        if (this.params.interests.length == 0) {
+          this.errors.interests = "Interesses mogen niet leeg zijn";
+          this.validationStatus = false;
+        }
       }
     }
   };

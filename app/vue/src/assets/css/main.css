@@ -642,6 +642,13 @@ form .custom-slider {
   form .custom-slider .vue-slider-piecewise-item span.vue-slider-piecewise-label {
     margin-top: 0.5rem;
     font-size: 14px; }
+form .form-error {
+  color: #FF6B6B;
+  font-size: 0.8rem;
+  display: block; }
+  form .form-error .fa {
+    color: #FF6B6B;
+    margin-right: 0.5rem; }
 
 @media (min-width: 42.5rem) {
   .inline-input {
