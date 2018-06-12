@@ -43,11 +43,13 @@
     },
     mounted() {
       console.log('Mounted Detail Vue Component');
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       if(!this.currentMeetUpEvent.id) {
         axios({
           method: "get",
-          url: "http://localhost:8765/api/events/" + this.$route.params.id + ".json",
+          url: apiurldev + "/api/events/" + this.$route.params.id + ".json",
           headers: { },
         })
         .then(response => {
@@ -73,13 +75,15 @@
     },
     methods: {
       saveEvent() {
+        const apiurldev = "http://localhost:8765";
+        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         delete this.event.created;
         if (this.currentMeetUpEvent.id) {
           this.event.meetup_id = this.event.id;
           console.log(this.event);
           axios({
             method: 'post',
-            url: "http://localhost:8765/api/events/add.json",
+            url: apiurldev + "/api/events/add.json",
             data: this.event
           })
           .then(response => {
@@ -96,10 +100,12 @@
 
       },
       saveFavorite() {
+        const apiurldev = "http://localhost:8765";
+        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         if(this.eventFavorited == false) {
           axios({
             method: "post",
-            url: "http://localhost:8765/api/favorite/add.json",
+            url: apiurldev + "/api/favorite/add.json",
             headers: { },
             data: {
               event_id: this.event.id,
@@ -116,7 +122,7 @@
         } else {
           axios({
             method: "delete",
-            url: "http://localhost:8765/api/favorite/delete.json",
+            url: apiurldev + "/api/favorite/delete.json",
             headers: { },
             data: {
               event_id: this.event.id,
@@ -135,9 +141,11 @@
 
       },
       checkIfFavorited() {
+        const apiurldev = "http://localhost:8765";
+        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         axios({
           method: "put",
-          url: "http://localhost:8765/api/favorites.json",
+          url: apiurldev + "/api/favorites.json",
           headers: { },
           data: {
             event_id: this.event.id,

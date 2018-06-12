@@ -57,12 +57,14 @@
       }
     },
     mounted () {
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       console.log("Profile Vue Component mounted");
       this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       if (this.$parent.session.profile) {
         axios({
           method: 'get',
-          url: "http://localhost:8765/api/profiles/" + this.$parent.session.profile.id + ".json",
+          url: apiurldev + "/api/profiles/" + this.$parent.session.profile.id + ".json",
         })
         .then(response => {
           console.log(response);
@@ -75,7 +77,7 @@
 
         axios({
           method: 'get',
-          url: "http://localhost:8765/api/favorites/user/" +  this.loggedInUser.id + ".json",
+          url: apiurldev + "/api/favorites/user/" +  this.loggedInUser.id + ".json",
         })
         .then(response => {
           console.log(response);
@@ -94,7 +96,7 @@
       } else if (this.$parent.session.organisation) {
         axios({
           method: 'get',
-          url: "http://localhost:8765/api/organisations/" + this.$parent.session.organisation.id + ".json",
+          url: apiurldev + "/api/organisations/" + this.$parent.session.organisation.id + ".json",
         })
         .then(response => {
           console.log(response);

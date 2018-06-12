@@ -4,7 +4,7 @@
         <div class="row">
           <div class="column column-sm-12 column-lg-6">
             <h1>Aanmelden</h1>
-            <form method="POST" action="http://localhost:8765/api/login.json" @submit.prevent="onSubmit">
+            <form @submit.prevent="onSubmit">
               <section>
                 <article v-bind:key="message.index" v-for="message in errors.flash" class="flash-message error">
                   <i class="fa fa-exclamation-triangle"></i>{{message}}
@@ -59,12 +59,14 @@ export default {
   },
   methods: {
     onSubmit() {
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       this.validateLogin();
       this.errors.flash = false
       if (this.validationStatus) {
         axios({
           method: 'post',
-          url: "http://localhost:8765/api/login.json",
+          url: apiurldev + "/api/login.json",
           data: this.user
         })
         .then((response) => {

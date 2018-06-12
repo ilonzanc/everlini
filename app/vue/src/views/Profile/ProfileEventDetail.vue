@@ -60,11 +60,13 @@
       }
     },
     mounted() {
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       console.log('Mounted Event Detail Vue Component');
       let self = this;
       axios({
         method: "get",
-        url: "http://localhost:8765/api/events/" + this.$route.params.id + ".json",
+        url: apiurldev + "/api/events/" + this.$route.params.id + ".json",
         headers: { },
       })
       .then(function(response) {
@@ -77,11 +79,12 @@
     },
     methods: {
       saveEvent() {
-        console.log('click');
+        const apiurldev = "http://localhost:8765";
+        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         let self = this;
         axios({
           method: "post",
-          url: "http://localhost:8765/api/favorite/add.json",
+          url: apiurldev + "/api/favorite/add.json",
           headers: { },
           data: {
             event_id: self.event.id,
@@ -96,12 +99,12 @@
         });
       },
       deletePost(id) {
-        var self = this;
-        console.log("click");
+        const apiurldev = "http://localhost:8765";
+        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         axios({
           method: 'put',
-          url: "http://localhost:8765/api/posts/" + id + "/delete.json",
-          data: self.event,
+          url: apiurldev + "/api/posts/" + id + "/delete.json",
+          data: this.event,
         })
         .then((response) => {
             console.log(response)

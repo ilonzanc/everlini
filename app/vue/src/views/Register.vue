@@ -105,13 +105,15 @@ export default {
   },
   methods: {
     onSubmit(role_id) {
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       this.errors.flash = false
       this.user.role_id = role_id;
       this.validateRegister();
       if (this.validationStatus) {
         axios({
           method: 'post',
-          url: "http://localhost:8765/api/register.json",
+          url: apiurldev + "/api/register.json",
           data: this.user,
         })
         .then((response) => {

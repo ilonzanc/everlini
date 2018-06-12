@@ -135,12 +135,14 @@
       }
     },
     mounted() {
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       this.params = this.searchparams;
       this.eventIsMeetup = this.meetupeventstate;
       this.$store.commit('clearMeetUpEvent', null);
       axios({
         method: "post",
-        url: "http://localhost:8765/api/events.json",
+        url: apiurldev + "/api/events.json",
         headers: { },
         data: this.searchparams
       })

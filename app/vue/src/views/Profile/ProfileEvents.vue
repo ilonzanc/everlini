@@ -38,11 +38,13 @@
     },
     mounted () {
       console.log("Profile Event Vue Component mounted");
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       axios({
         method: "get",
         url:
-          "http://localhost:8765/api/events/user/" + this.loggedInUser.id + ".json",
+          apiurldev + "/api/events/user/" + this.loggedInUser.id + ".json",
         })
         .then((response) => {
           console.log(response);
@@ -54,9 +56,11 @@
     },
     methods: {
       deleteEvent(id) {
+        const apiurldev = "http://localhost:8765";
+        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         axios({
           method: 'put',
-          url: "http://localhost:8765/api/events/" + id + "/delete.json",
+          url: apiurldev + "/api/events/" + id + "/delete.json",
           data: this.event,
         })
         .then((response) => {

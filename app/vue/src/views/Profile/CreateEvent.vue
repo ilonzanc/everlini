@@ -2,7 +2,7 @@
   <div id="create-event" class="content">
     <div class="container">
       <h1>Nieuw event toevoegen</h1>
-      <form method="POST" action="http://localhost:8765/api/events/add.json" @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit">
         <label for="name">Naam</label>
         <input type="text" id="name" name="name" required v-model="event.name" placeholder="Naam van je event...">
         <label for="description">Beschrijving</label>
@@ -56,9 +56,11 @@ export default {
   },
   methods: {
     onSubmit() {
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       axios({
         method: 'post',
-        url: "http://localhost:8765/api/events/add.json",
+        url: apiurldev + "/api/events/add.json",
         data: this.event,
       })
       .then((response) => {

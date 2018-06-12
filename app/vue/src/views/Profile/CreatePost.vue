@@ -2,7 +2,7 @@
   <div id="create-post" class="content">
     <div class="container">
       <h1>Nieuwe blogpost toevoegen</h1>
-      <form method="POST" action="http://localhost:8765/api/posts/add.json" @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit">
         <label for="title">Titel</label>
         <input type="text" id="title" name="title" required v-model="post.title" placeholder="Titel van je blogpost...">
         <label for="body">Inhoud</label>
@@ -33,10 +33,12 @@ export default {
   },
   methods: {
     onSubmit() {
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       var self = this;
       axios({
         method: 'post',
-        url: "http://localhost:8765/api/posts/add.json",
+        url: apiurldev + "/api/posts/add.json",
         data: self.post,
       })
       .then((response) => {

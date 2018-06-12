@@ -134,6 +134,8 @@
     },
     methods: {
       onSubmit() {
+        const apiurldev = "http://localhost:8765";
+        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         for (let k = 0; k < this.params.interests.length; k++) {
           if (this.params.interests[k].length < 3 ) {
             this.params.interests.splice(k);
@@ -144,7 +146,7 @@
         if (this.validationStatus) {
           axios({
             method: "post",
-            url: "http://localhost:8765/api/events.json",
+            url: apiurldev + "/api/events.json",
             headers: { },
             data: this.searchparams
           })

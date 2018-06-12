@@ -2,7 +2,7 @@
   <div id="update-event" class="content">
     <div class="container">
       <h1>Event bewerken</h1>
-      <form method="PUT" :action="'http://localhost:8765/api/events/' + this.$route.params.id + '/edit.json'" @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit">
         <label for="name">Naam</label>
         <input type="text" id="name" name="name" required v-model="event.name" placeholder="Naam van je event...">
         <label for="description">Beschrijving</label>
@@ -52,11 +52,13 @@ export default {
   },
   mounted() {
     console.log('Update Event Component Mounted');
+    const apiurldev = "http://localhost:8765";
+    const apiurlprod = "https://ilonaapi.3.web.codedor.online";
     this.loggedInUser = JSON.parse(localStorage.getItem("user"));
     this.event.user_id = this.loggedInUser.id;
       axios({
         method: 'get',
-        url: "http://localhost:8765/api/events/" + this.$route.params.id + ".json",
+        url: apiurldev + "/api/events/" + this.$route.params.id + ".json",
       })
       .then((response) => {
           console.log(response)
@@ -80,9 +82,11 @@ export default {
   },
   methods: {
     onSubmit() {
+      const apiurldev = "http://localhost:8765";
+      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       axios({
         method: 'put',
-        url: "http://localhost:8765/api/events/" + this.$route.params.id + "/edit.json",
+        url: apiurldev + "/api/events/" + this.$route.params.id + "/edit.json",
         data: this.event,
       })
       .then((response) => {
