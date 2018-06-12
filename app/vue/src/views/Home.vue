@@ -57,10 +57,6 @@
           </div>
         </div>
       </form>
-<!--       <div class="column column-sm-12 column-lg-6">
-        <button @click.prevent="getFBEventsByLocation" type="submit" class="btn primary-btn">Zoeken</button>
-        <ul class="events_list"></ul>
-      </div> -->
       <div id="map"></div>
     </div>
   </div>

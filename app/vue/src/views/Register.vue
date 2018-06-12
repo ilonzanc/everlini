@@ -6,17 +6,16 @@
           <tab name="als gebruiker" :selected="true">
             <h2>Als gebruiker</h2>
             <form @submit.prevent="onSubmit(2)">
-              <input type="text" id="profile_role_id" name="role_id" required v-model="user.role_id">
               <label for="firstname">Voornaam</label>
-              <input type="text" id="profile_firstname" name="firstname" placeholder="Jouw voornaam..." required v-model="user.firstname">
+              <input type="text" id="profile_firstname" name="firstname" placeholder="Jouw voornaam..." v-model="user.firstname">
               <label for="lastname">Naam</label>
-              <input type="text" id="profile_lastname" name="lastname" placeholder="Jouw naam..." required v-model="user.lastname">
+              <input type="text" id="profile_lastname" name="lastname" placeholder="Jouw naam..." v-model="user.lastname">
               <label for="dateofbirth">Geboortedatum</label>
-              <input type="text" id="profile_dateofbirth" name="dateofbirth" placeholder="Jouw geboortedatum..." required v-model="user.dateofbirth">
+              <input type="text" id="profile_dateofbirth" name="dateofbirth" placeholder="Jouw geboortedatum..." v-model="user.dateofbirth">
               <label for="email">Emailadres</label>
-              <input type="email" id="profile_email" name="email" placeholder="Jouw emailadres..." required v-model="user.email">
+              <input type="email" id="profile_email" name="email" placeholder="Jouw emailadres..." v-model="user.email">
               <label for="pass">Wachtwoord</label>
-              <input type="password" id="profile_pass" name="pass" placeholder="********" required v-model="user.password">
+              <input type="password" id="profile_pass" name="pass" placeholder="********" v-model="user.password">
               <button type="submit" class="btn primary-btn widebtn">Registreren</button>
             </form>
           </tab>
@@ -77,13 +76,15 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
+    onSubmit(role_id) {
+      this.role_id = role_id;
       axios({
         method: 'post',
         url: "http://localhost:8765/api/register.json",
         data: self.user,
       })
       .then((response) => {
+          console.log(response);
           self.user = response.data;
           localStorage.setItem("user", JSON.stringify(response.data));
           this.$parent.session = JSON.parse(localStorage.getItem("user"));

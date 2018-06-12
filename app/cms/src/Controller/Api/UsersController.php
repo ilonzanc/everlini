@@ -159,7 +159,11 @@ class UsersController extends AppController
             ]);
             $message = $loggedInUser;
         } else {
-            $message = 'Error. Log in failed. Please, try again.';
+            $error['errors'][] = 'Email of wachtwoord komen niet overeen';
+            $error = json_encode($error);
+            $this->response->type('json');
+            $this->response->body($error);
+            return $this->response;
         }
 
         $message = json_encode($message);

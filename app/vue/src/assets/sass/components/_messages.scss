@@ -1,0 +1,12 @@
+.flash-message {
+    &.error {
+        background: rgba($error-color, 0.2);
+        color: $error-color;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        .fa {
+            color: $error-color;
+            margin-right: 0.5rem;
+        }
+    }
+}
