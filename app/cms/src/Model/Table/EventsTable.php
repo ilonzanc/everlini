@@ -39,6 +39,12 @@ class EventsTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Chris48s/GeoDistance.GeoDistance', [
+            'latitudeColumn' => 'lat',
+            'longitudeColumn' => 'lng',
+            'units' => 'km'
+        ]);
+
         $this->addBehavior('Timestamp', [
             'events' => [
                 'Model.beforeSave' => [

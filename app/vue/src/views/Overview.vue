@@ -151,7 +151,7 @@
         console.log(error);
       });
 
-      /* let floatLat = parseFloat(this.searchparams.location.lat);
+      let floatLat = parseFloat(this.searchparams.location.lat);
       let floatLng = parseFloat(this.searchparams.location.lng);
 
       let formattedStartDate = moment(String(this.searchparams.startdate)).format('YYYY-MM-DDTHH:MM:SS');
@@ -168,7 +168,7 @@
         this.meetupevents = json.data.events;
       }).catch(err => {
         console.log(err);
-      }) */
+      })
     },
     methods: {
       getDateOfToday() {

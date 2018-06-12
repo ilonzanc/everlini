@@ -30,54 +30,18 @@ class EventsController extends AppController
 
     public function index()
     {
+
         $message = "";
 
-        $data = $this->request->data;
-
-        $conditions = array();
-
-        $radius = $data['radiusValue'];
-
-        $fields = array('*');
-        $group = false;
-        if (!empty($data['location']['name']) && !empty($data['location']['lat']) && !empty($data['location']['lng'])) {
-            $fields = '((ACOS(SIN(' . $data['location']['lat'] .
-            ' * PI() / 180) * SIN(Events.lat * PI() / 180) + COS(' .
-            $data['location']['lat'] .
-            ' * PI() / 180) * COS(Events.lat * PI() / 180) * COS((' .
-            $data['location']['lng'] .
-            ' - Events.lng) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS distance ';
-            $group = 'Events HAVING distance <= ' . $radius;
-            $message = "All fields were filled in.";
-        } elseif (!empty($data['location']['name'])) {
-            $conditions['Events.address LIKE'] = '%' . $data['location']['name'] . '%';
-            $message = "Only address was filled in";
-        } else {
-            $message = 'Nothings was filled in....';
-        }
-
-        $events = $this->Events->find('all', array(
-            'fields' => $fields,
-            'group' => $group,
-            'conditions' => $conditions,
-        ));
+        $options = [
+            'latitude' => $this->request->data['location']['lat'],
+            'longitude' => $this->request->data['location']['lng'],
+            'radius' => $this->request->data['radiusValue']
+        ];
 
 
-
-        /* $events = json_encode($events->sql());
-                        $this->response->type('json');
-                        $this->response->body($events);
-                        return $this->response; */
-
-        $this->set([
-            'message' => $message,
-            'events' => $events,
-            '_serialize' => ['message', 'events']
-        ]);
-
-        /* die;
-        $startdate = new Time($startdate);
-        $enddate = new Time($enddate);
+        $startdate = new Time($this->request->data['startdate']);
+        $enddate = new Time($this->request->data['enddate']);
         $enddate->modify('+1 days');
 
         $interests = array();
@@ -87,7 +51,6 @@ class EventsController extends AppController
         $conditions = array();
 
         $conditions[] = array('Events.startdate', $startdate, $enddate);
-        $conditions[] = array('Events.city' => $location);
 
         $search_terms = $this->request->data['interests'];
 
@@ -96,22 +59,35 @@ class EventsController extends AppController
             $interests[] = array('Events.description Like' =>'%'.$search_term.'%');
         }
 
-        $events = $this->Events->find('all', [
+        $events = $this->Events
+            ->find('bydistance', $options)
+            ->select($this->Events)
+            ->where(function($exp) use ($startdate, $enddate) {
+                return $exp->between('Events.startdate', $startdate, $enddate);
+            })
+            ->where(function($q) use ($interests) {
+                return $q->or_($interests);
+            })
+            ->contain('Users');
+
+        /* $events = $this->Events->find('all', [
             'contain' => ['Users'],
             'conditions' => array('OR' => $interests)
-        ]);
+        ]); */
 
-        $events->where(['Events.city' => $location])
+        /* $events->where(['Events.city' => $location])
         ->where(function($exp) use ($startdate, $enddate) {
             return $exp->between('Events.startdate', $startdate, $enddate);
-        });
+        }); */
+
+        $data = $this->request->data;
 
         $this->set([
-            'conditions' => $conditions,
             'events' => $events,
-            'search_terms' => $search_terms,
-            '_serialize' => ['events', 'search_terms', 'conditions']
-        ]); */
+            'startdate' => $startdate,
+            'data' => $data,
+            '_serialize' => ['events', 'data', 'startdate']
+        ]);
     }
 
     public function view($id)

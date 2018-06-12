@@ -207,6 +207,8 @@ Type::build('timestamp')
  *
  */
 
+Plugin::load('Chris48s/GeoDistance');
+
 /*
  * Only try to load DebugKit in development mode
  * Debug Kit should not be installed on a production system
