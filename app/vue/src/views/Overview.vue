@@ -59,7 +59,7 @@
             <div class="event-month">{{meetupevent.local_date | moment("MMM")}}</div>
           </div>
           <div class="event-details">
-            <h2>{{ meetupevent.name }}</h2>
+            <h3>{{ meetupevent.name }}</h3>
           </div>
         </section>
       </a>

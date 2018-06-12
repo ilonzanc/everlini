@@ -155,6 +155,7 @@ class EventsController extends AppController
                     );
 
                     $event->meetup_id = $this->request->data['meetup_id'];
+                    $event->meetup_groupname = $this->request->data['group']['urlname'];
 
                     $event->name = null;
                     $event->description = null;

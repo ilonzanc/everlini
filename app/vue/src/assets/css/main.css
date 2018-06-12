@@ -711,7 +711,8 @@ form .form-error {
 #overview__comp .event {
   overflow: auto;
   box-shadow: 0px 0px 5px rgba(66, 66, 66, 0.1);
-  background: #fff; }
+  background: #fff;
+  margin-bottom: 1rem; }
   #overview__comp .event .event-date {
     background: #FF6B6B;
     color: #fff;
@@ -731,6 +732,8 @@ form .form-error {
     color: #fff; }
   #overview__comp .event .event-details {
     padding: 0.5rem 0; }
+    #overview__comp .event .event-details h3 {
+      font-size: 1.2rem; }
 #overview__comp .aside__filter {
   position: absolute;
   top: 59px;
@@ -797,5 +800,61 @@ form .form-error {
   .dateTabs .tag {
     padding: 0.7rem 1.35rem;
     margin: 0 0.5rem; } }
+#profile .hero-image {
+  background: url("../images/art-creative-flying-17679.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  height: 230px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1; }
+#profile .container {
+  background: #fff;
+  position: relative;
+  padding-top: 50px;
+  margin-top: 100px; }
+#profile h1 {
+  text-align: center; }
+#profile .user-avatar {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 3px solid #fff;
+  border-radius: 50%; }
+  #profile .user-avatar .fa {
+    font-size: 4.5rem;
+    margin-bottom: 1rem; }
+#profile .event {
+  overflow: auto;
+  box-shadow: 0px 0px 5px rgba(66, 66, 66, 0.1);
+  background: #fff;
+  margin-bottom: 1rem; }
+  #profile .event .event-date {
+    background: #FF6B6B;
+    color: #fff;
+    font-weight: 700;
+    padding: 0.5rem;
+    text-align: center;
+    line-height: 180%;
+    width: 70px;
+    float: left;
+    text-transform: uppercase;
+    margin-right: 1rem; }
+  #profile .event .event-day {
+    font-size: 2rem;
+    color: #fff; }
+  #profile .event .event-month {
+    font-size: 1.2rem;
+    color: #fff; }
+  #profile .event .event-details {
+    padding: 0.5rem 0; }
+    #profile .event .event-details h3 {
+      font-size: 1.2rem; }
+#profile .event-schedule h2 {
+  margin-bottom: 0.5rem; }
 
 /*# sourceMappingURL=main.css.map */

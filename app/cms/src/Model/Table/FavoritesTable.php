@@ -41,6 +41,7 @@ class FavoritesTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+
         $this->belongsTo('Events', [
             'foreignKey' => 'event_id',
             'joinType' => 'INNER'

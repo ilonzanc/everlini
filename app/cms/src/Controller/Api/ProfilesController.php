@@ -22,7 +22,15 @@ class ProfilesController extends AppController
 
     public function view($id)
     {
+
         $profile = $this->Profiles->get($id);
+
+        $profile = $this->Profiles->find('all')
+        ->where(['Profiles.id' => $id])
+        ->contain('Users');
+
+        $profile = $profile->first();
+
         $this->set([
             'profile' => $profile,
             '_serialize' => ['profile']

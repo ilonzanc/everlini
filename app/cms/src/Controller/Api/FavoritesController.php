@@ -21,7 +21,7 @@ class FavoritesController extends AppController
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['add', 'index', 'delete']);
+        $this->Auth->allow(['add', 'index', 'delete', 'getFavoritesByUserId']);
 
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
@@ -131,6 +131,24 @@ class FavoritesController extends AppController
             'message' => $message,
             'errors' => $errors,
             '_serialize' => ['message', 'errors', 'favorite']
+        ]);
+    }
+
+    public function getFavoritesByUserId($userid) {
+
+        $favorites = $this->Favorites->find('all')
+            ->where(['Favorites.user_id' => $userid])
+            ->contain(['Users', 'Events']);
+
+        $favoriteEvents = [];
+
+        foreach ($favorites as $favorite) {
+            $favoriteEvents[] = $favorite->event;
+        }
+
+        $this->set([
+            'favoriteEvents' => $favoriteEvents,
+            '_serialize' => ['favoriteEvents']
         ]);
     }
 }

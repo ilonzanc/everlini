@@ -68,6 +68,7 @@ class EventsTable extends Table
         $this->hasMany('Favorites', [
             'foreignKey' => 'event_id'
         ]);
+
         $this->hasMany('Posts', [
             'foreignKey' => 'event_id'
         ]);
@@ -104,8 +105,12 @@ class EventsTable extends Table
             ->allowEmpty('enddate');
 
         $validator
-            ->dateTime('meetup_id')
+            ->scalar('meetup_id')
             ->allowEmpty('meetup_id');
+
+        $validator
+            ->scalar('meetup_groupname')
+            ->allowEmpty('meetup_groupname');
 
         return $validator;
     }
@@ -114,8 +119,12 @@ class EventsTable extends Table
     {
 
         $validator
-            ->integer('meetup_id')
+            ->scalar('meetup_id')
             ->notEmpty('meetup_id');
+
+        $validator
+            ->scalar('meetup_groupname')
+            ->notEmpty('meetup_groupname');
 
         $validator
             ->scalar('name')

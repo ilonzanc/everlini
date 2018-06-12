@@ -190,5 +190,10 @@ Router::prefix('api', function ($routes) {
         ['controller' => 'Favorites', 'action' => 'delete']
     );
 
+    $routes->connect(
+        '/favorites/user/:userid',
+        ['controller' => 'Favorites', 'action' => 'getFavoritesByUserId']
+    )->setPass(['userid']);
+
 
 });

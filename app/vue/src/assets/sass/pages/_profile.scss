@@ -1,0 +1,80 @@
+#profile {
+  .hero-image {
+    background: url("../images/art-creative-flying-17679.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height: 230px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+  }
+
+  .container {
+    background: #fff;
+    position: relative;
+    padding-top: 50px;
+    margin-top: 100px;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .user-avatar {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border: 3px solid #fff;
+    border-radius: 50%;
+
+    .fa {
+      font-size: 4.5rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .event {
+    overflow: auto;
+    box-shadow: 0px 0px 5px rgba($text-color, 0.1);
+    background: #fff;
+    margin-bottom: 1rem;
+    .event-date {
+      background: $error-color;
+      color: #fff;
+      font-weight: 700;
+      padding: 0.5rem;
+      text-align: center;
+      line-height: 180%;
+      width: 70px;
+      float: left;
+      text-transform: uppercase;
+      margin-right: 1rem;
+    }
+    .event-day {
+      font-size: 2rem;
+      color: #fff;
+    }
+    .event-month {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+    .event-details {
+      padding: 0.5rem 0;
+      h3 {
+        font-size: 1.2rem;
+      }
+
+    }
+  }
+
+  .event-schedule {
+    h2 {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+}
