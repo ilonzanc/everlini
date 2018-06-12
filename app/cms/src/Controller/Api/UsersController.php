@@ -41,13 +41,7 @@ class UsersController extends AppController
         $this->loadModel('Users');
         $user = $this->Users->newEntity();
         //check if reauest is post
-        $shortFirstName = substr($this->request->data['firstname'], 0, 4);
-        $shortLastName = substr($this->request->data['lastname'], 0, 4);
-        $dobShort = substr(
-            $this->request->data['dateofbirth'],
-            strlen($this->request->data['dateofbirth']) - 4,
-            strlen($this->request->data['dateofbirth'])
-        );
+
         $user->email = $this->request->data['email'];
         $user->password = $this->request->data['password'];
         $user->role_id = $this->request->data['role_id'];
@@ -58,7 +52,11 @@ class UsersController extends AppController
             $newuserid = $user->id;
 
         } else {
-            $message = 'The user could not be saved. Please, try again.';
+            $error['errors'][] = 'We kunnen dit profiel niet opslaan. Probeer het opnieuw';
+            $error = json_encode($error);
+            $this->response->type('json');
+            $this->response->body($error);
+            return $this->response;
         }
 
         if ($this->request->data['role_id'] == 2) {
@@ -90,7 +88,11 @@ class UsersController extends AppController
                 ]);
                 $message = $loggedInUser;
             } else {
-                $message = "The profile could not be saved. Please, try again.";
+                $error['errors'][] = 'We kunnen dit profiel niet opslaan. Probeer het opnieuw';
+                $error = json_encode($error);
+                $this->response->type('json');
+                $this->response->body($error);
+                return $this->response;
             }
 
         } elseif ($this->request->data['role_id'] == 3) {
@@ -121,7 +123,11 @@ class UsersController extends AppController
                 ]);
                 $message = $loggedInUser;
             } else {
-                $message = "The organisation could not be saved. Please, try again.";
+                $error['errors'][] = 'We kunnen de organisatie niet opslaan. Probeer het opnieuw';
+                $error = json_encode($error);
+                $this->response->type('json');
+                $this->response->body($error);
+                return $this->response;
             }
         }
 

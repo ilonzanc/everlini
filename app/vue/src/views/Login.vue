@@ -59,7 +59,8 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.validateSearchQuery();
+      this.validateLogin();
+      this.errors.flash = false
       if (this.validationStatus) {
         axios({
           method: 'post',
@@ -70,6 +71,7 @@ export default {
             console.log(response);
             if (response.data.errors) {
               this.errors.flash = response.data.errors;
+              this.validationStatus = false;
             } else {
               this.user = response.data;
               localStorage.setItem("user", JSON.stringify(response.data));
@@ -86,20 +88,20 @@ export default {
         console.log('click');
         this.$parent.session = "hey";
     },
-    validateSearchQuery() {
-        this.validationStatus = true;
-        this.errors.user.email = false;
-        this.errors.user.password = false;
+    validateLogin() {
+      this.validationStatus = true;
+      this.errors.user.email = false;
+      this.errors.user.password = false;
 
-        if (this.user.email.indexOf('@') <= 0 || this.user.email.lastIndexOf('.') < this.user.email.indexOf('@') || this.user.email.lastIndexOf('.') == this.user.email.length  ) {
-          this.errors.user.email = "Vul een geldig emailadres in";
-          this.validationStatus = false;
-        }
-        if (!this.user.password) {
-          this.errors.user.password = "Vul een wachtwoord in";
-          this.validationStatus = false;
-        }
+      if (this.user.email.indexOf('@') <= 0 || this.user.email.lastIndexOf('.') < this.user.email.indexOf('@') || this.user.email.lastIndexOf('.') == this.user.email.length  ) {
+        this.errors.user.email = "Vul een geldig emailadres in";
+        this.validationStatus = false;
       }
+      if (!this.user.password) {
+        this.errors.user.password = "Vul een wachtwoord in";
+        this.validationStatus = false;
+      }
+    }
   }
 }
 </script>
