@@ -37,11 +37,13 @@
       return {
         location: "",
         event: "",
-        eventFavorited: false
+        eventFavorited: false,
+        loggedInUser: {}
       }
     },
     mounted() {
-      //console.log('Mounted Detail Vue Component');
+      console.log('Mounted Detail Vue Component');
+      this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       if(!this.currentMeetUpEvent.id) {
         axios({
           method: "get",
@@ -101,7 +103,7 @@
             headers: { },
             data: {
               event_id: this.event.id,
-              user_id: this.$parent.session.id
+              user_id: this.loggedInUser.id
             }
           })
           .then(response => {
@@ -118,7 +120,7 @@
             headers: { },
             data: {
               event_id: this.event.id,
-              user_id: this.$parent.session.id,
+              user_id: this.loggedInUser.id,
               meetup_id: this.currentMeetUpEvent.id
             }
           })

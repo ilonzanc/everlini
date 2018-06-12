@@ -49,6 +49,10 @@ export const store = new Vuex.Store({
         },
         updateMeetUpEvent(state, newparams) {
             state.currentMeetUpEvent = newparams;
+        },
+        clearMeetUpEvent(state, newparams) {
+            state.currentMeetUpEvent.id = null;
+            state.currentMeetUpEvent.groupname = null
         }
     },
     plugins: [createPersistedState()]

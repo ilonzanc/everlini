@@ -26,7 +26,7 @@
           </tr>
           <tr>
             <td>Adres:</td>
-            <td>{{ event.street }} {{ event.housenr }}, {{ event.postal_code }} {{ event.city }}</td>
+            <td>{{ event.address }}</td>
           </tr>
         </tbody>
       </table>

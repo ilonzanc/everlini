@@ -132,12 +132,19 @@ Router::prefix('api', function ($routes) {
         ['controller' => 'Events', 'action' => 'delete']
     )->setPass(['id']);
 
-    $routes->connect(
+/*     $routes->connect(
         '/events',
         ['controller' => 'Events', 'action' => 'getEventsByUser', '?' => 'user']
-    );
+    ); */
+
+    $routes->connect(
+        '/events/user/:userid',
+        ['controller' => 'Events', 'action' => 'getEventsByUser']
+    )->setPass(['userid']);
 
     $routes->resources('Profiles');
+
+    $routes->resources('Organisations');
 
     $routes->connect(
         '/posts',

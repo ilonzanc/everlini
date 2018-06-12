@@ -41,7 +41,7 @@
             <div class="event-month">{{event.startdate | moment("MMM")}}</div>
           </div>
           <div class="event-details">
-            <h2>{{ event.name }}</h2>
+            <h3>{{ event.name }}</h3>
           </div>
         </section>
       </router-link>
@@ -137,6 +137,7 @@
     mounted() {
       this.params = this.searchparams;
       this.eventIsMeetup = this.meetupeventstate;
+      this.$store.commit('clearMeetUpEvent', null);
       axios({
         method: "post",
         url: "http://localhost:8765/api/events.json",

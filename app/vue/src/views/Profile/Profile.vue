@@ -18,6 +18,15 @@
               <h3>{{ meetup.name }}</h3>
             </div>
           </article>
+          <article class="event" v-bind:key="favevent.id" v-for="favevent in favoriteEvents">
+            <div class="event-date">
+              <div class="event-day">{{favevent.startdate | moment("DD")}}</div>
+              <div class="event-month">{{favevent.startdate | moment("MMM")}}</div>
+            </div>
+            <div class="event-details">
+              <h3>{{ favevent.name }}</h3>
+            </div>
+          </article>
         </section>
         <section class="event-feed">
         </section>
@@ -43,11 +52,13 @@
         },
         favoriteEvents: [],
         favoriteMeetUps: [],
-        meetups: []
+        meetups: [],
+        loggedInUser: {}
       }
     },
     mounted () {
       console.log("Profile Vue Component mounted");
+      this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       if (this.$parent.session.profile) {
         axios({
           method: 'get',
@@ -64,7 +75,7 @@
 
         axios({
           method: 'get',
-          url: "http://localhost:8765/api/favorites/user/" + this.$parent.session.id + ".json",
+          url: "http://localhost:8765/api/favorites/user/" +  this.loggedInUser.id + ".json",
         })
         .then(response => {
           console.log(response);

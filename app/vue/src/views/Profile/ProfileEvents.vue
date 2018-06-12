@@ -32,38 +32,36 @@
     name: 'profile-events',
     data() {
       return {
-        events: []
+        events: [],
+        loggedInUser: {}
       }
     },
     mounted () {
       console.log("Profile Event Vue Component mounted");
-      let self = this;
+      this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       axios({
-      method: "get",
-      url:
-        "http://localhost:8765/api/events?user=" + self.$parent.session.id + ".json",
-      })
-      .then(function(response) {
-        console.log(self.$parent.session.id);
-        console.log(response);
-        self.events = response.data;
-      })
-      .catch(function(error) {
-        console.log(error);
+        method: "get",
+        url:
+          "http://localhost:8765/api/events/user/" + this.loggedInUser.id + ".json",
+        })
+        .then((response) => {
+          console.log(response);
+          this.events = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
       });
     },
     methods: {
       deleteEvent(id) {
-        var self = this;
-        console.log("click");
         axios({
           method: 'put',
           url: "http://localhost:8765/api/events/" + id + "/delete.json",
-          data: self.event,
+          data: this.event,
         })
         .then((response) => {
             console.log(response)
-            //this.$router.push('/profiel/jouw-events');
+            this.$router.go();
         })
         .catch((error) => {
             console.log(error);

@@ -99,7 +99,7 @@ class EventsController extends AppController
         $message = [];
 
         if ($this->request->is('post')) {
-            if ($this->request->data['meetup_id'] == null) {
+            if (!isset($this->request->data['meetup_id'])){
                 $event = $this->Events->newEntity();
 
                 $event->user_id = $this->request->data['user_id'];
@@ -118,11 +118,15 @@ class EventsController extends AppController
                 $fullenddate = $enddate . ' ' . $endtime;
                 $event->enddate = strtotime($fullenddate);
 
+                $event->address = $this->request->data['location']['name'];
+                $event->lat = $this->request->data['location']['lat'];
+                $event->lng = $this->request->data['location']['lng'];
+
                 if ($this->Events->save($event)) {
                     $message = 'The event has been saved.';
                     $errors = $event->errors();
 
-                    if($this->request->data['meetup_id']) {
+                    if(isset($this->request->data['meetup_id'])) {
                         $event = json_encode($event);
                         $this->response->type('json');
                         $this->response->body($event);
@@ -209,11 +213,9 @@ class EventsController extends AppController
             $fullenddate = $enddate . ' ' . $endtime;
             $event->enddate = strtotime($fullenddate);
 
-            $event->street = $this->request->data['street'];
-            $event->housenr = $this->request->data['housenr'];
-            $event->postal_code = $this->request->data['postal_code'];
-            $event->city = $this->request->data['city'];
-            $event->country = $this->request->data['country'];
+            $event->address = $this->request->data['location']['name'];
+            $event->lat = $this->request->data['location']['lat'];
+            $event->lng = $this->request->data['location']['lng'];
 
             if ($this->Events->save($event)) {
                 $message = 'The event was updated.';
@@ -233,17 +235,15 @@ class EventsController extends AppController
         ]);
     }
 
-    public function getEventsByUser()
+    public function getEventsByUser($userid)
     {
         $this->autoRender = false;
         $this->viewBuilder()->setLayout(null);
 
         $message = "";
 
-        $user_id = $this->request->query('user');
-
         $events = $this->Events->find('all', [
-            'conditions' => ['Events.user_id' => $user_id, 'Events.deleted IS NULL' ]
+            'conditions' => ['Events.user_id' => $userid, 'Events.deleted IS NULL' ]
         ]);
 
         $events = json_encode($events);

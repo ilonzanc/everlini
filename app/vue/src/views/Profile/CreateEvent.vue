@@ -9,22 +9,13 @@
         <textarea id="description" name="description" required v-model="event.description" placeholder="Vertel wat meer over je event..."></textarea>
         <h2>Tijdstip  </h2>
         <label for="startdate">Start event</label>
-        <input type="text" id="startdate" name="startdate" required placeholder="dd-mm-jjjj" v-model="event.startdate.date">
+        <input type="date" id="startdate" name="startdate" required placeholder="dd-mm-jjjj" v-model="event.startdate.date">
         <input type="text" id="startdate" name="startdate" required placeholder="00:00" v-model="event.startdate.time">
         <label for="enddate">Eind event</label>
-        <input type="text" id="enddate" name="enddate" required placeholder="dd-mm-jjjj" v-model="event.enddate.date">
+        <input type="date" id="enddate" name="enddate" required placeholder="dd-mm-jjjj" v-model="event.enddate.date">
         <input type="text" id="enddate" name="enddate" required placeholder="00:00" v-model="event.enddate.time">
         <h2>Locatie</h2>
-        <label for="street">Straat</label>
-        <input type="text" id="street" name="street" required v-model="event.location.street" placeholder="Straat...">
-        <label for="housenr">Huisnr.</label>
-        <input type="text" id="housenr" name="housenr" required v-model="event.location.housenr" placeholder="Huisnr....">
-        <label for="city">Stad</label>
-        <input type="text" id="city" name="city" required v-model="event.location.city" placeholder="Stad...">
-        <label for="postal_code">Postcode</label>
-        <input type="text" id="postal_code" name="postal_code" required v-model="event.location.postal_code" placeholder="Postcode...">
-        <label for="country">Land</label>
-        <input type="text" id="country" name="country" required v-model="event.location.country" placeholder="Land...">
+        <input id="pac-input" type="text" name="location" placeholder="Locatie van je evenement..." v-model="event.location.name" @keyup="initMap">
         <button class="btn primary-btn" type="submit">Toevoegen</button>
       </form>
     </div>
@@ -38,7 +29,7 @@ export default {
   data () {
     return {
       event: {
-        user_id: this.$parent.session.id,
+        user_id: "",
         name: "",
         description: "",
         startdate: {
@@ -50,25 +41,25 @@ export default {
           date: ""
         },
         location: {
-          street: "",
-          housenr: "",
-          city: "",
-          postal_code: "",
-          country: ""
+          name: "",
+          lat: "",
+          lng: "",
         }
-      }
+      },
+      loggedInUser: {}
     }
   },
   mounted() {
     console.log('Create Event Component Mounted');
+    this.loggedInUser = JSON.parse(localStorage.getItem("user"));
+    this.event.user_id = this.loggedInUser.id
   },
   methods: {
     onSubmit() {
-      var self = this;
       axios({
         method: 'post',
         url: "http://localhost:8765/api/events/add.json",
-        data: self.event,
+        data: this.event,
       })
       .then((response) => {
           console.log(response)
@@ -77,7 +68,26 @@ export default {
       .catch((error) => {
           console.log(error);
       });
-    }
+    },
+    initMap() {
+      let input = document.getElementById('pac-input');
+      let autocomplete = new google.maps.places.Autocomplete(input);
+
+      autocomplete.addListener('place_changed', () => {
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+          // User entered the name of a Place that was not suggested and
+          // pressed the Enter key, or the Place Details request failed.
+          window.alert("No details available for input: '" + place.name + "'");
+          return;
+        }
+        console.log(this.params);
+        this.event.location.name = place.formatted_address;
+        this.event.location.lat = place.geometry.location.lat();
+        this.event.location.lng = place.geometry.location.lng();
+        console.log(place);
+      });
+    },
   }
 }
 </script>

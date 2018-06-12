@@ -15,16 +15,7 @@
         <input type="text" id="enddate" name="enddate" required placeholder="dd-mm-jjjj" v-model="event.enddate.date">
         <input type="text" id="enddate" name="enddate" required placeholder="00:00" v-model="event.enddate.time">
         <h2>Locatie</h2>
-        <label for="street">Straat</label>
-        <input type="text" id="street" name="street" required v-model="event.street" placeholder="Straat...">
-        <label for="housenr">Huisnr.</label>
-        <input type="text" id="housenr" name="housenr" required v-model="event.housenr" placeholder="Huisnr....">
-        <label for="city">Stad</label>
-        <input type="text" id="city" name="city" required v-model="event.city" placeholder="Stad...">
-        <label for="postal_code">Postcode</label>
-        <input type="text" id="postal_code" name="postal_code" required v-model="event.postal_code" placeholder="Postcode...">
-        <label for="country">Land</label>
-        <input type="text" id="country" name="country" required v-model="event.country" placeholder="Land...">
+        <input id="pac-input" type="text" name="location" placeholder="Locatie van je evenement..." v-model="event.location.name" @keyup="initMap">
         <button class="btn primary-btn" type="submit">Bewerken</button>
       </form>
     </div>
@@ -39,7 +30,7 @@ export default {
   data () {
     return {
       event: {
-        user_id: this.$parent.session.id,
+        user_id: "",
         name: "",
         description: "",
         startdate: {
@@ -50,34 +41,38 @@ export default {
           time: "",
           date: ""
         },
-        street: "",
-        housenr: "",
-        city: "",
-        postal_code: "",
-        country: ""
-      }
+        location: {
+          name: "",
+          lat: "",
+          lng: "",
+        }
+      },
+      loggedInUser: {}
     }
   },
   mounted() {
     console.log('Update Event Component Mounted');
-    var self = this;
+    this.loggedInUser = JSON.parse(localStorage.getItem("user"));
+    this.event.user_id = this.loggedInUser.id;
       axios({
         method: 'get',
         url: "http://localhost:8765/api/events/" + this.$route.params.id + ".json",
       })
       .then((response) => {
           console.log(response)
-          self.event = response.data.event[0];
+          this.event = response.data.event[0];
           moment().utcOffset(-2);
           let fullstartdate = response.data.event[0].startdate;
           let startdate = moment(String(fullstartdate)).utcOffset(0).format('DD-MM-YYYY');
           let starttime = moment(String(fullstartdate)).utcOffset(0).format('HH:mm');
-          self.event.startdate = JSON.parse('{ "time":"' + starttime + '", "date":"' + startdate + '"}');
+          this.event.startdate = JSON.parse('{ "time":"' + starttime + '", "date":"' + startdate + '"}');
 
           let fullenddate = response.data.event[0].enddate;
           let enddate = moment(String(fullenddate)).utcOffset(0).format('DD-MM-YYYY');
           let endtime = moment(String(fullenddate)).utcOffset(0).format('HH:mm');
-          self.event.enddate = JSON.parse('{ "time":"' + endtime + '", "date":"' + enddate + '"}');
+          this.event.enddate = JSON.parse('{ "time":"' + endtime + '", "date":"' + enddate + '"}');
+          this.event = Object.assign({}, this.event, { location: null });
+          this.event.location = Object.assign({}, this.event.location, {  name: response.data.event[0].address, lat: response.data.event[0].lat, lng: response.data.event[0].lng  });
       })
       .catch((error) => {
           console.log(error);
@@ -85,20 +80,38 @@ export default {
   },
   methods: {
     onSubmit() {
-      var self = this;
       axios({
         method: 'put',
         url: "http://localhost:8765/api/events/" + this.$route.params.id + "/edit.json",
-        data: self.event,
+        data: this.event,
       })
       .then((response) => {
           console.log(response)
-          //this.$router.push('/profiel/jouw-events');
+          this.$router.push('/profiel/jouw-events');
       })
       .catch((error) => {
           console.log(error);
       });
-    }
+    },
+    initMap() {
+      let input = document.getElementById('pac-input');
+      let autocomplete = new google.maps.places.Autocomplete(input);
+
+      autocomplete.addListener('place_changed', () => {
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+          // User entered the name of a Place that was not suggested and
+          // pressed the Enter key, or the Place Details request failed.
+          window.alert("No details available for input: '" + place.name + "'");
+          return;
+        }
+        console.log(this.params);
+        this.event.location.name = place.formatted_address;
+        this.event.location.lat = place.geometry.location.lat();
+        this.event.location.lng = place.geometry.location.lng();
+        console.log(place);
+      });
+    },
   }
 }
 </script>
