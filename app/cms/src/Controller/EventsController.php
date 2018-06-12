@@ -181,6 +181,16 @@ class EventsController extends AppController
             $fullenddate = $enddate . ' ' . $endtime;
             $event->enddate = strtotime($fullenddate);
 
+            $event->address = $this->request->data['address'];
+
+            $data = $this->getCoordinates($this->request->data['address']);
+
+            $lat = $data['results'][0]['geometry']['location']['lat'];
+            $lng = $data['results'][0]['geometry']['location']['lng'];
+
+            $event->lat = $lat;
+            $event->lng = $lng;
+
             $event->image_id = $newImageId;
 
             if ($this->Events->save($event)) {

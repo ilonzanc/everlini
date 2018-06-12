@@ -28,8 +28,54 @@ class EventsController extends AppController
         $this->response->send();
     }
 
-    public function index($location, $startdate, $enddate)
+    public function index()
     {
+        $message = "";
+
+        $data = $this->request->data;
+
+        $conditions = array();
+
+        $radius = $data['radiusValue'];
+
+        $fields = array('*');
+        $group = false;
+        if (!empty($data['location']['name']) && !empty($data['location']['lat']) && !empty($data['location']['lng'])) {
+            $fields = '((ACOS(SIN(' . $data['location']['lat'] .
+            ' * PI() / 180) * SIN(Events.lat * PI() / 180) + COS(' .
+            $data['location']['lat'] .
+            ' * PI() / 180) * COS(Events.lat * PI() / 180) * COS((' .
+            $data['location']['lng'] .
+            ' - Events.lng) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS distance ';
+            $group = 'Events HAVING distance <= ' . $radius;
+            $message = "All fields were filled in.";
+        } elseif (!empty($data['location']['name'])) {
+            $conditions['Events.address LIKE'] = '%' . $data['location']['name'] . '%';
+            $message = "Only address was filled in";
+        } else {
+            $message = 'Nothings was filled in....';
+        }
+
+        $events = $this->Events->find('all', array(
+            'fields' => $fields,
+            'group' => $group,
+            'conditions' => $conditions,
+        ));
+
+
+
+        /* $events = json_encode($events->sql());
+                        $this->response->type('json');
+                        $this->response->body($events);
+                        return $this->response; */
+
+        $this->set([
+            'message' => $message,
+            'events' => $events,
+            '_serialize' => ['message', 'events']
+        ]);
+
+        /* die;
         $startdate = new Time($startdate);
         $enddate = new Time($enddate);
         $enddate->modify('+1 days');
@@ -65,7 +111,7 @@ class EventsController extends AppController
             'events' => $events,
             'search_terms' => $search_terms,
             '_serialize' => ['events', 'search_terms', 'conditions']
-        ]);
+        ]); */
     }
 
     public function view($id)
@@ -256,5 +302,52 @@ class EventsController extends AppController
             'event' => $event,
             '_serialize' => ['message', 'event']
         ]);
+    }
+
+    public function getEventsWithinRadius()
+    {
+        $this->autoRender = false;
+
+        $data = $this->request->data;
+
+        $conditions = array(
+            'NOT' => array(
+                'Events.lat' => null,
+                'Events.lng' => null
+            )
+        );
+
+        $radius = $this->request->data['radiusValue'];
+
+        $fields = array('*');
+        $group = false;
+        if (!empty($data['location']['name']) && !empty($data['location']['lat']) && !empty($data['location']['lng'])) {
+            $fields[] = '(6371 * acos(
+                cos(radians(' . $data['location']['lat'] . ')) * cos(radians(Events.lat )) *
+                cos(radians(Events.lng) - radians(' . $data['location']['lng'] . ')) +
+                sin(radians(' . $data['location']['lat'] . ')) *
+                sin(radians(Events.lat))
+                )) AS `distance`';
+            $group = 'Events.id HAVING distance <= ' . $radius;
+        } elseif (!empty($data['location']['name'])) {
+            $conditions['Events.address LIKE'] = '%' . $data['location']['name'] . '%';
+        } else {
+            $message = 'tis kapot';
+        }
+
+        $data = $this->Events->find('all', array(
+            'fields' => $fields,
+            'group' => $group,
+            'conditions' => $conditions,
+        ));
+
+        return $data;
+
+        $this->set([
+            'message' => $message,
+            'data' => $data,
+            '_serialize' => ['message', 'data']
+        ]);
+
     }
 }

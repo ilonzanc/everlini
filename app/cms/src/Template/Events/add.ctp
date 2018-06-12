@@ -44,11 +44,6 @@ $today = date("Y");
             'value' => '00:00',
             'placeholder' => '00:00'
         ]);
-        echo $this->Form->control('street');
-        echo $this->Form->control('housenr');
-        echo $this->Form->control('city');
-        echo $this->Form->control('postal_code');
-        echo $this->Form->control('country');
         echo $this->Form->control('address', array(
             'id' => 'address'
         ));

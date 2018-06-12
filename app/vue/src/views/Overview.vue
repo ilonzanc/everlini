@@ -139,7 +139,7 @@
       this.eventIsMeetup = this.meetupeventstate;
       axios({
         method: "post",
-        url: "http://localhost:8765/api/events/" + this.searchparams.location + "/" + this.searchparams.startdate + "/" + this.searchparams.enddate + ".json",
+        url: "http://localhost:8765/api/events.json",
         headers: { },
         data: this.searchparams
       })
@@ -151,7 +151,7 @@
         console.log(error);
       });
 
-      let floatLat = parseFloat(this.searchparams.location.lat);
+      /* let floatLat = parseFloat(this.searchparams.location.lat);
       let floatLng = parseFloat(this.searchparams.location.lng);
 
       let formattedStartDate = moment(String(this.searchparams.startdate)).format('YYYY-MM-DDTHH:MM:SS');
@@ -168,7 +168,7 @@
         this.meetupevents = json.data.events;
       }).catch(err => {
         console.log(err);
-      })
+      }) */
     },
     methods: {
       getDateOfToday() {
