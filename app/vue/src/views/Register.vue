@@ -105,19 +105,16 @@ export default {
   },
   methods: {
     onSubmit(role_id) {
-      const apiurldev = "http://localhost:8765";
-      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       this.errors.flash = false
       this.user.role_id = role_id;
       this.validateRegister();
       if (this.validationStatus) {
         axios({
           method: 'post',
-          url: apiurldev + "/api/register.json",
+          url: apiurl + "/api/register.json",
           data: this.user,
         })
         .then((response) => {
-          console.log(response);
           if (response.data.errors) {
             this.errors.flash = response.data.errors;
             this.validationStatus = false;
@@ -129,8 +126,19 @@ export default {
           }
         })
         .catch((error) => {
-            console.log(error);
-            console.log(data);
+          if (error.response) {
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            console.log(error.response.data.message);
+
+            let errors = [];
+
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
         });
       }
     },

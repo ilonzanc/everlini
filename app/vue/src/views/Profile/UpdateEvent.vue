@@ -52,16 +52,13 @@ export default {
   },
   mounted() {
     console.log('Update Event Component Mounted');
-    const apiurldev = "http://localhost:8765";
-    const apiurlprod = "https://ilonaapi.3.web.codedor.online";
     this.loggedInUser = JSON.parse(localStorage.getItem("user"));
     this.event.user_id = this.loggedInUser.id;
       axios({
         method: 'get',
-        url: apiurldev + "/api/events/" + this.$route.params.id + ".json",
+        url: apiurl + "/api/events/" + this.$route.params.id + ".json",
       })
       .then((response) => {
-          console.log(response)
           this.event = response.data.event[0];
           moment().utcOffset(-2);
           let fullstartdate = response.data.event[0].startdate;
@@ -77,24 +74,45 @@ export default {
           this.event.location = Object.assign({}, this.event.location, {  name: response.data.event[0].address, lat: response.data.event[0].lat, lng: response.data.event[0].lng  });
       })
       .catch((error) => {
-          console.log(error);
+        if (error.response) {
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          console.log(error.response.data.message);
+
+          let errors = [];
+
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
       });
   },
   methods: {
     onSubmit() {
-      const apiurldev = "http://localhost:8765";
-      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       axios({
         method: 'put',
-        url: apiurldev + "/api/events/" + this.$route.params.id + "/edit.json",
+        url: apiurl + "/api/events/" + this.$route.params.id + "/edit.json",
         data: this.event,
       })
       .then((response) => {
-          console.log(response)
           this.$router.push('/profiel/jouw-events');
       })
       .catch((error) => {
-          console.log(error);
+        if (error.response) {
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          console.log(error.response.data.message);
+
+          let errors = [];
+
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
       });
     },
     initMap() {
@@ -109,11 +127,9 @@ export default {
           window.alert("No details available for input: '" + place.name + "'");
           return;
         }
-        console.log(this.params);
         this.event.location.name = place.formatted_address;
         this.event.location.lat = place.geometry.location.lat();
         this.event.location.lng = place.geometry.location.lng();
-        console.log(place);
       });
     },
   }

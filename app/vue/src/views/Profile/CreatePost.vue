@@ -33,20 +33,28 @@ export default {
   },
   methods: {
     onSubmit() {
-      const apiurldev = "http://localhost:8765";
-      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
-      var self = this;
       axios({
         method: 'post',
-        url: apiurldev + "/api/posts/add.json",
-        data: self.post,
+        url: apiurl + "/api/posts/add.json",
+        data: this.post,
       })
       .then((response) => {
-          console.log(response)
           this.$router.push('/profiel/jouw-events/' + this.$route.params.id);
       })
       .catch((error) => {
-          console.log(error);
+        if (error.response) {
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          console.log(error.response.data.message);
+
+          let errors = [];
+
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
       });
     }
   }

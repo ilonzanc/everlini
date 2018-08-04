@@ -5,13 +5,8 @@
  */
 ?>
 
-
-
-<?= $this->Html->link(__('Edit Organisation'), ['action' => 'edit', $organisation->id]) ?>
-<?= $this->Form->postLink(__('<i class="fa fa-trash"></i> Delete'), ['action' => 'delete', $organisation->id],['escape'=>false,'class'=>'btn small-btn', 'confirm' => __('Are you sure you want to delete # {0}?', $organisation->id)]) ?>
-
 <div class="organisations view large-9 medium-8 columns content">
-    <h3><?= h($organisation->name) ?></h3>
+    <h2><?= h($organisation->name) ?></h2>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Name') ?></th>

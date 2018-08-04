@@ -713,11 +713,14 @@ form input[type="text"],
 form input[type="email"],
 form input[type="password"],
 form select,
-form textarea {
+form textarea,
+form input[type="date"] {
   border: 1px solid #A7ADAF;
   padding: 13px;
   border-radius: 5px;
-  min-width: 350px; }
+  min-width: 350px;
+  display: block;
+  margin-bottom: 0.5rem; }
 form textarea {
   resize: vertical; }
 
@@ -753,11 +756,13 @@ form button,
   min-width: 350px;
   display: inline-block;
   border-radius: 5px;
-  border: 1px solid #48DBFB; }
+  border: 1px solid #48DBFB;
+  display: block; }
   form button.small-btn,
   .btn.small-btn {
     min-width: auto;
-    padding: 0.5rem 1rem; }
+    padding: 0.5rem 1rem;
+    display: inline-block; }
     form button.small-btn .fa,
     .btn.small-btn .fa {
       margin-right: 0.5rem; }
@@ -780,6 +785,18 @@ form button {
 .error-message {
   color: #FF6B6B;
   margin-bottom: 0.5rem; }
+
+#suggestion-box {
+  position: relative; }
+
+#country-list {
+  list-style-type: none;
+  width: 400px;
+  border: 1px solid #424242;
+  position: absolute;
+  background: #fff; }
+  #country-list li {
+    padding: 0.5rem; }
 
 .header__createbtn {
   text-align: right;

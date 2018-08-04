@@ -12,36 +12,16 @@ $today = date("Y");
     <?php
         echo $this->Form->control('name');
         echo $this->Form->control('description');
-        echo $this->Form->input( 'startdate', [
-            'templates' => ['dateWidget' => '{{day}}{{month}}{{year}}'],
-            'label' => 'Event Start Date',
-            'minYear' => $today,
-            'maxYear' => $today + 10,
-            'orderYear' => 'asc',
-            'empty' => [
-                'year' => 'Choose year...',
-                'month' => 'Choose month...',
-                'day' => 'Choose day...'
-            ]
-        ]);
+        echo $this->Form->label('startdate');
+        echo $this->Form->text('startdate', array(
+            'type' => 'date',
+        ));
         echo $this->Form->text('starttime', [
-            'value' => '00:00',
             'placeholder' => '00:00'
         ]);
-        echo $this->Form->input( 'enddate', [
-            'templates' => ['dateWidget' => '{{day}}{{month}}{{year}}'],
-            'label' => 'Event End Date',
-            'minYear' => $today,
-            'maxYear' => $today + 10,
-            'orderYear' => 'asc',
-            'empty' => [
-                'year' => 'Choose year...',
-                'month' => 'Choose month...',
-                'day' => 'Choose day...'
-            ]
-        ]);
+        echo $this->Form->label('enddate');
+        echo $this->Form->text('enddate', array('type' => 'date'));
         echo $this->Form->text('endtime', [
-            'value' => '00:00',
             'placeholder' => '00:00'
         ]);
         echo $this->Form->control('address', array(

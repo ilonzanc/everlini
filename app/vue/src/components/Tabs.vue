@@ -30,9 +30,32 @@ export default {
   },
   methods: {
     selectTab(selectedTab) {
+      console.log(selectedTab.name);
       this.tabs.forEach(tab => {
         tab.isActive = (tab.name == selectedTab.name);
       });
+
+      console.log('aaaahhhh');
+        let enddate;
+        switch(selectedTab.name) {
+          case 'vandaag':
+              console.log('today');
+              enddate = moment().format('YYYY-MM-DD');
+              break;
+          case 'deze week':
+              console.log('week');
+              enddate = moment().add(7, 'days').format('YYYY-MM-DD');
+              break;
+          case 'deze maand':
+              console.log('month');
+              enddate = moment().add(30, 'days').format('YYYY-MM-DD');
+              break;
+          default:
+              console.log('none selected');
+        }
+
+        this.$parent.params.startdate = moment().format('YYYY-MM-DD');
+        this.$parent.params.enddate = enddate;
     }
   }
 }

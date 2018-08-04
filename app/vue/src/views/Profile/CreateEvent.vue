@@ -56,19 +56,28 @@ export default {
   },
   methods: {
     onSubmit() {
-      const apiurldev = "http://localhost:8765";
-      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       axios({
         method: 'post',
-        url: apiurldev + "/api/events/add.json",
+        url: apiurl + "/api/events/add.json",
         data: this.event,
       })
       .then((response) => {
-          console.log(response)
           this.$router.push('/profiel/jouw-events/' + response.data.event.id);
       })
       .catch((error) => {
-          console.log(error);
+        if (error.response) {
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          console.log(error.response.data.message);
+
+          let errors = [];
+
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
       });
     },
     initMap() {
@@ -83,11 +92,9 @@ export default {
           window.alert("No details available for input: '" + place.name + "'");
           return;
         }
-        console.log(this.params);
         this.event.location.name = place.formatted_address;
         this.event.location.lat = place.geometry.location.lat();
         this.event.location.lng = place.geometry.location.lng();
-        console.log(place);
       });
     },
   }

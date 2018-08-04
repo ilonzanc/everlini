@@ -9,10 +9,12 @@ form button,
     display: inline-block;
     border-radius: 5px;
     border: 1px solid $primary-color;
+    display: block;
 
     &.small-btn {
         min-width: auto;
         padding: 0.5rem 1rem;
+        display: inline-block;
 
         .fa {
             margin-right: 0.5rem;

@@ -83,30 +83,6 @@ class ProfilesTable extends Table
             ->date('dateofbirth')
             ->allowEmpty('dateofbirth');
 
-        $validator
-            ->scalar('streetname')
-            ->maxLength('streetname', 255)
-            ->requirePresence('streetname', 'create')
-            ->allowEmpty('streetname');
-
-        $validator
-            ->scalar('housenr')
-            ->maxLength('housenr', 10)
-            ->requirePresence('housenr', 'create')
-            ->allowEmpty('housenr');
-
-        $validator
-            ->scalar('city')
-            ->maxLength('city', 255)
-            ->requirePresence('city', 'create')
-            ->allowEmpty('city');
-
-        $validator
-            ->scalar('country')
-            ->maxLength('country', 255)
-            ->requirePresence('country', 'create')
-            ->allowEmpty('country');
-
         return $validator;
     }
 

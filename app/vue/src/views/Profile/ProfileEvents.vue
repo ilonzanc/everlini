@@ -38,37 +38,55 @@
     },
     mounted () {
       console.log("Profile Event Vue Component mounted");
-      const apiurldev = "http://localhost:8765";
-      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       axios({
         method: "get",
         url:
-          apiurldev + "/api/events/user/" + this.loggedInUser.id + ".json",
+          apiurl + "/api/events/user/" + this.loggedInUser.id + ".json",
         })
         .then((response) => {
-          console.log(response);
           this.events = response.data;
         })
         .catch((error) => {
-          console.log(error);
+          if (error.response) {
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            console.log(error.response.data.message);
+
+            let errors = [];
+
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
       });
     },
     methods: {
       deleteEvent(id) {
-        const apiurldev = "http://localhost:8765";
-        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         axios({
           method: 'put',
-          url: apiurldev + "/api/events/" + id + "/delete.json",
+          url: apiurl + "/api/events/" + id + "/delete.json",
           data: this.event,
         })
         .then((response) => {
-            console.log(response)
             this.$router.go();
         })
         .catch((error) => {
-            console.log(error);
+          if (error.response) {
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            console.log(error.response.data.message);
+
+            let errors = [];
+
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
         });
       }
     }

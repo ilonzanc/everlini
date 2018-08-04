@@ -60,58 +60,83 @@
       }
     },
     mounted() {
-      const apiurldev = "http://localhost:8765";
-      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       console.log('Mounted Event Detail Vue Component');
-      let self = this;
       axios({
         method: "get",
-        url: apiurldev + "/api/events/" + this.$route.params.id + ".json",
+        url: apiurl + "/api/events/" + this.$route.params.id + ".json",
         headers: { },
       })
-      .then(function(response) {
-        console.log(response);
-        self.event = response.data.event[0];
+      .then((response) => {
+        this.event = response.data.event[0];
       })
-      .catch(function(error) {
-        console.log(error);
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          console.log(error.response.data.message);
+
+          let errors = [];
+
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
       });
     },
     methods: {
       saveEvent() {
-        const apiurldev = "http://localhost:8765";
-        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
-        let self = this;
         axios({
           method: "post",
-          url: apiurldev + "/api/favorite/add.json",
+          url: apiurl + "/api/favorite/add.json",
           headers: { },
           data: {
-            event_id: self.event.id,
+            event_id: this.event.id,
             user_id: this.$parent.session.id
           }
         })
-        .then(function(response) {
-          console.log(response);
+        .then((response) => {
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            console.log(error.response.data.message);
+
+            let errors = [];
+
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
         });
       },
       deletePost(id) {
-        const apiurldev = "http://localhost:8765";
-        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         axios({
           method: 'put',
-          url: apiurldev + "/api/posts/" + id + "/delete.json",
+          url: apiurl + "/api/posts/" + id + "/delete.json",
           data: this.event,
         })
         .then((response) => {
-            console.log(response)
             //this.$router.push('/profiel/jouw-events');
         })
         .catch((error) => {
-            console.log(error);
+          if (error.response) {
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            console.log(error.response.data.message);
+
+            let errors = [];
+
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
         });
       }
     }

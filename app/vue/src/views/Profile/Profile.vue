@@ -57,30 +57,24 @@
       }
     },
     mounted () {
-      const apiurldev = "http://localhost:8765";
-      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       console.log("Profile Vue Component mounted");
       this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       if (this.$parent.session.profile) {
         axios({
           method: 'get',
-          url: apiurldev + "/api/profiles/" + this.$parent.session.profile.id + ".json",
+          url: apiurl + "/api/profiles/" + this.$parent.session.profile.id + ".json",
         })
         .then(response => {
-          console.log(response);
           this.user = response.data.profile;
-          console.log(this.user);
         })
         .catch(error => {
-          console.log(error);
         });
 
         axios({
           method: 'get',
-          url: apiurldev + "/api/favorites/user/" +  this.loggedInUser.id + ".json",
+          url: apiurl + "/api/favorites/user/" +  this.loggedInUser.id + ".json",
         })
         .then(response => {
-          console.log(response);
           for (let i = 0; i < response.data.favoriteEvents.length; i++) {
             if (response.data.favoriteEvents[i].meetup_id == null) {
               this.favoriteEvents.push(response.data.favoriteEvents[i]);
@@ -91,19 +85,16 @@
           this.getMeetUps();
         })
         .catch(error => {
-          console.log(error);
         });
       } else if (this.$parent.session.organisation) {
         axios({
           method: 'get',
-          url: apiurldev + "/api/organisations/" + this.$parent.session.organisation.id + ".json",
+          url: apiurl + "/api/organisations/" + this.$parent.session.organisation.id + ".json",
         })
         .then(response => {
-          console.log(response);
           this.user = response.data.organisation;
         })
         .catch(error => {
-          console.log(error);
         });
       }
 
@@ -114,10 +105,8 @@
           this.$jsonp('https://api.meetup.com/' +
           this.favoriteMeetUps[m].meetup_groupname + '/events/' + this.favoriteMeetUps[m].meetup_id + '?key=766033144c453b4d295465e352538&sign=true&fields=*, group_category')
           .then(json => {
-            console.log(json);
             this.meetups.push(json.data);
           }).catch(err => {
-            //console.log(err);
           })
         }
       }

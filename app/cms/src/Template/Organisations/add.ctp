@@ -8,7 +8,7 @@
     <?= $this->Form->create($organisation) ?>
     <h2><?= __('Add Organisation') ?></h2>
     <?php
-        echo $this->Form->control('role_id', ['type' => 'text', 'value' => 3]);
+        echo $this->Form->control('role_id', ['type' => 'text', 'value' => 3, 'type' => 'hidden']);
         echo $this->Form->control('name');
         echo $this->Form->control('description');
         echo $this->Form->control('email');

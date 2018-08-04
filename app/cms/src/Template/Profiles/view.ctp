@@ -20,22 +20,6 @@
             <td><?= h($profile->lastname) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Streetname') ?></th>
-            <td><?= h($profile->streetname) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Housenr') ?></th>
-            <td><?= h($profile->housenr) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('City') ?></th>
-            <td><?= h($profile->city) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Country') ?></th>
-            <td><?= h($profile->country) ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($profile->id) ?></td>
         </tr>

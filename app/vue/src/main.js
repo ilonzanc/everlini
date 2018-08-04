@@ -13,12 +13,21 @@ Vue.use(VueJsonp)
 
 import { store } from './store';
 
+import './assets/sass/main.scss'
+import './assets/css/main.css'
+
 
 window.axios = axios;
 window.moment = moment;
 window.axios.defaults.headers.common = {
     //"Access-Control-Allow-Origin": "*",
 };
+
+// dev
+window.apiurl = "http://localhost:8765";
+
+// prod
+// window.apiurl = "https://ilonaapi.3.web.codedor.online";
 
 new Vue({
   el: '#app',

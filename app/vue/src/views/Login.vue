@@ -59,18 +59,15 @@ export default {
   },
   methods: {
     onSubmit() {
-      const apiurldev = "http://localhost:8765";
-      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       this.validateLogin();
       this.errors.flash = false
       if (this.validationStatus) {
         axios({
           method: 'post',
-          url: apiurldev + "/api/login.json",
+          url: apiurl + "/api/login.json",
           data: this.user
         })
         .then((response) => {
-            console.log(response);
             if (response.data.errors) {
               this.errors.flash = response.data.errors;
               this.validationStatus = false;
@@ -82,13 +79,23 @@ export default {
             }
         })
         .catch((error) => {
-            console.log(error);
+          if (error.response) {
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            console.log(error.response.data.message);
+
+            let errors = [];
+
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
         });
       }
     },
-    onLoginUser: function () {
-        console.log('click');
-        this.$parent.session = "hey";
+    onLoginUser() {
     },
     validateLogin() {
       this.validationStatus = true;

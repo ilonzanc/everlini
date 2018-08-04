@@ -15,11 +15,6 @@
         echo $this->Form->control('firstname');
         echo $this->Form->control('lastname');
         echo $this->Form->control('dateofbirth', ['empty' => true]);
-        echo $this->Form->control('streetname');
-        echo $this->Form->control('housenr');
-        echo $this->Form->control('city');
-        echo $this->Form->control('country');
-        echo $this->Form->control('organisation');
     ?>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>

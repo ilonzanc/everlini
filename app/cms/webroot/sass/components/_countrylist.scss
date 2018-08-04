@@ -1,0 +1,15 @@
+#suggestion-box {
+    position: relative;
+}
+
+#country-list {
+    list-style-type: none;
+    width: 400px;
+    border: 1px solid $text-color;
+    position: absolute;
+    background: #fff;
+
+    li {
+        padding: 0.5rem;
+    }
+}

@@ -135,23 +135,19 @@
       }
     },
     mounted() {
-      const apiurldev = "http://localhost:8765";
-      const apiurlprod = "https://ilonaapi.3.web.codedor.online";
       this.params = this.searchparams;
       this.eventIsMeetup = this.meetupeventstate;
       this.$store.commit('clearMeetUpEvent', null);
       axios({
         method: "post",
-        url: apiurldev + "/api/events.json",
+        url: apiurl + "/api/events.json",
         headers: { },
         data: this.searchparams
       })
       .then(response => {
-        console.log(response);
         this.events = response.data.events;
       })
       .catch(error => {
-        console.log(error);
       });
 
       let floatLat = parseFloat(this.searchparams.location.lat);
@@ -173,13 +169,11 @@
           '&text=' + interest
         )
         .then(json => {
-          console.log(json);
           for (let j = 0; j < json.data.events.length; j ++) {
             this.meetupevents.push(json.data.events[j]);
           }
 
         }).catch(err => {
-          console.log(err);
         })
       }
 

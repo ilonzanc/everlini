@@ -4,7 +4,7 @@
     <div class="container">
 
       <h1>Ontdek evenementen bij jou in de buurt die matchen met jouw interesses</h1>
-      <form method="POST" action="" @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit">
         <div class="row">
           <div class="column column-sm-12 column-lg-6">
             <label for="location">Locatie</label>
@@ -89,6 +89,7 @@
         currentInputIndex: 0,
         inputs: [ 'fullname', 'email'],
         rows: [],
+        test: {},
         params: {
           location: {
             name: "",
@@ -134,8 +135,6 @@
     },
     methods: {
       onSubmit() {
-        const apiurldev = "http://localhost:8765";
-        const apiurlprod = "https://ilonaapi.3.web.codedor.online";
         for (let k = 0; k < this.params.interests.length; k++) {
           if (this.params.interests[k].length < 3 ) {
             this.params.interests.splice(k);
@@ -146,12 +145,11 @@
         if (this.validationStatus) {
           axios({
             method: "post",
-            url: apiurldev + "/api/events.json",
+            url: apiurl + "/api/events.json",
             headers: { },
             data: this.searchparams
           })
           .then(response => {
-            console.log(response);
             this.events = response.data.events;
             this.$router.push('/evenementen');
           })
@@ -178,52 +176,19 @@
               '&text=' + interest
             )
             .then(json => {
-              console.log(json);
               for (let j = 0; j < json.data.events.length; j ++) {
                 this.meetupevents.push(json.data.events[j]);
               }
 
             }).catch(err => {
-              console.log(err);
             })
           }
         }
       },
-      addRow: function() {
+      addRow() {
         this.rows.push({value: this.params.interests[this.currentInputIndex], index: this.currentInputIndex});
 
         this.currentInputIndex++;
-      },
-      getFBEventsByLocation() {
-        let eventslist = document.querySelector('.events_list')
-        while (eventslist.firstChild) {
-          eventslist.removeChild(eventslist.firstChild);
-        }
-
-        let EventSearch = require("facebook-events-by-location-core");
-
-        let es = new EventSearch();
-
-        es.search({
-          "lat": 51.0535,
-          "lng": 3.7304,
-          "accessToken": this.$parent.fbAccesToken,
-          "distance": 2500
-        })
-        .then(function (response) {
-          let events = response.events;
-
-          for (i = 0; i < events.length; i++) {
-            console.log("Searching....");
-            const event = document.createElement('li');
-            const event_name = document.createTextNode(events[i].name);
-            event.appendChild(event_name);
-            eventslist.appendChild(event);
-          }
-        })
-        .catch(function (error) {
-          console.error(JSON.stringify(error));
-        });
       },
       getDateOfToday() {
         let today = new Date();
@@ -242,11 +207,9 @@
             window.alert("No details available for input: '" + place.name + "'");
             return;
           }
-          console.log(this.params);
           this.params.location.name = place.formatted_address;
           this.params.location.lat = place.geometry.location.lat();
           this.params.location.lng = place.geometry.location.lng();
-          console.log(place);
         });
       },
       validateSearchQuery() {
@@ -272,7 +235,7 @@
           this.errors.interests = "Interesses mogen niet leeg zijn";
           this.validationStatus = false;
         }
-      }
+      },
     }
   };
 </script>

@@ -121,14 +121,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     );
                     ?>
                 </li>
-                <li>
-                    <?php echo $this->Html->link(
-                        '<i class="fa fa-star-o"></i> Reviews',
-                        ['controller' => 'Reviews', 'action' => 'index'],
-                        ['escape'=>false]
-                    );
-                    ?>
-                </li>
                 <li><h3>Accounts</h3></li>
                 <li>
                     <?php echo $this->Html->link(
@@ -151,9 +143,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </aside>
     <main>
         <?= $this->Flash->render() ?>
-        <?php if ($this->request->params['action'] != "index") : ?>
-        <?= $this->Html->link(__('<i class="fa fa-angle-left"></i> Back to ' . $this->fetch('title') . ' Overview'), ['action' => 'index'], ['escape' => false]) ?>
-        <?php endif; ?>
         <h1><a href=""><?= $this->fetch('title') ?></a></h1>
         <?= $this->fetch('content') ?>
     </main>
