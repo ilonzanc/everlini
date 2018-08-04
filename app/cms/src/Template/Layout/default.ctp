@@ -107,6 +107,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 </li>
                 <li>
                     <?php echo $this->Html->link(
+                        '<i class="fa fa-user-o"></i> Admins',
+                        ['controller' => 'Admins', 'action' => 'index'],
+                        ['escape'=>false]
+                    );
+                    ?>
+                </li>
+                <li>
+                    <?php echo $this->Html->link(
                         '<i class="fa fa-picture-o"></i> Media',
                         ['controller' => 'Attachments', 'action' => 'index'],
                         ['escape'=>false]
