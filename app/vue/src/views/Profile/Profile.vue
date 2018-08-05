@@ -7,6 +7,7 @@
           <div class="user-avatar"><i class="fa fa-user-circle" aria-hidden="true"></i></div>
           {{ user.firstname + ' ' + user.lastname }}
         </h1>
+        <router-link to="/organisatie-aanmaken" class="btn primary-btn">Organisatie aanmaken</router-link>
         <section class="event-schedule">
           <h2>Aankomende events</h2>
           <article class="event" v-bind:key="meetup.id" v-for="meetup in meetups">

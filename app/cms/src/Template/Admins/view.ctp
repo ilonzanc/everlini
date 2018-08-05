@@ -8,8 +8,8 @@
     <h2><?= h($admin->username) ?></h2>
     <table class="vertical-table">
         <tr>
-            <th scope="row"><?= __('Profile') ?></th>
-            <td><?= $admin->has('profile') ? $this->Html->link($admin->profile->id, ['controller' => 'Profiles', 'action' => 'view', $admin->profile->id]) : '' ?></td>
+            <th scope="row"><?= __('User') ?></th>
+            <td><?= $admin->has('user') ? $this->Html->link($admin->user->id, ['controller' => 'Users', 'action' => 'view', $admin->user->id]) : '' ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Username') ?></th>

@@ -6,14 +6,12 @@
 ?>
 <div class="organisations form large-9 medium-8 columns content">
     <?= $this->Form->create($organisation) ?>
-    <h2><?= __('Add Organisation') ?></h2>
-    <?php
-        echo $this->Form->control('role_id', ['type' => 'text', 'value' => 3, 'type' => 'hidden']);
-        echo $this->Form->control('name');
-        echo $this->Form->control('description');
-        echo $this->Form->control('email');
-        echo $this->Form->control('password');
-    ?>
+        <h2><?= __('Add Organisation') ?></h2>
+        <?php
+            echo $this->Form->control('name');
+            echo $this->Form->control('description');
+            echo $this->Form->control('admins._ids', ['options' => $admins]);
+        ?>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>

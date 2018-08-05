@@ -95,40 +95,6 @@ class UsersController extends AppController
                 return $this->response;
             }
 
-        } elseif ($this->request->data['role_id'] == 3) {
-            $this->loadModel('Organisations');
-            $organisation = $this->Organisations->newEntity();
-
-            //create new profile with new user id as user_id
-            $data = $this->request->data;
-            $organisation->user_id = $newuserid;
-            $organisation->name = $data['name'];
-            $organisation->description = $data['description'];
-
-            if ($this->Organisations->save($organisation)) {
-                $this->Auth->setUser($user);
-                $this->loadModel('Users');
-                $id = $this->Auth->user('id');
-                $loggedInUser = $this->Users->get($id, [
-                    'fields' => array('id', 'email'),
-                    'contain' => array(
-                        'Organisations' => array(
-                            'fields' => array(
-                                'Organisations.user_id',
-                                'Organisations.id',
-                                'Organisations.name',
-                            ),
-                        )
-                    )
-                ]);
-                $message = $loggedInUser;
-            } else {
-                $error['errors'][] = 'We kunnen de organisatie niet opslaan. Probeer het opnieuw';
-                $error = json_encode($error);
-                $this->response->type('json');
-                $this->response->body($error);
-                return $this->response;
-            }
         }
 
         $message = json_encode($message);

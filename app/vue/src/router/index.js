@@ -22,6 +22,8 @@ import UpdateEvent from '../views/Profile/UpdateEvent'
 import CreatePost from '../views/Profile/CreatePost'
 import UpdatePost from '../views/Profile/UpdatePost'
 
+import CreateOrganisation from '../views/Profile/CreateOrganisation'
+
 
 
 let routes = [
@@ -85,6 +87,10 @@ let routes = [
     {
         path: '/profiel/nieuw-event',
         component: CreateEvent
+    },
+    {
+        path: '/organisatie-aanmaken',
+        component: CreateOrganisation
     },
 ]
 

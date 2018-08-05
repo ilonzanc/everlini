@@ -144,7 +144,22 @@ Router::prefix('api', function ($routes) {
 
     $routes->resources('Profiles');
 
-    $routes->resources('Organisations');
+    /*$routes->connect(
+        '/organisations',
+        ['controller' => 'Organisations', 'action' => 'index']
+    );*/
+
+    $routes->connect(
+        '/organisations',
+        ['controller' => 'Organisations', 'action' => 'getOrganisationsByUser', '?' => ['user' => '[0-9]+', 'pass' => ['user']]]
+    );
+
+
+
+    $routes->connect(
+        '/organisations/add',
+        ['controller' => 'Organisations', 'action' => 'add']
+    );
 
     $routes->connect(
         '/posts',

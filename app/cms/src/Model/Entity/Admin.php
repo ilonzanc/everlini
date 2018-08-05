@@ -7,10 +7,10 @@ use Cake\ORM\Entity;
  * Admin Entity
  *
  * @property int $id
- * @property int $profile_id
+ * @property int $user_id
  * @property string $username
  *
- * @property \App\Model\Entity\Profile $profile
+ * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Organisation[] $organisations
  */
 class Admin extends Entity
@@ -26,9 +26,9 @@ class Admin extends Entity
      * @var array
      */
     protected $_accessible = [
-        'profile_id' => true,
+        'user_id' => true,
         'username' => true,
-        'profile' => true,
+        'user' => true,
         'organisations' => true
     ];
 }

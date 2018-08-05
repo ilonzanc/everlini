@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('profile_id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('username') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -24,7 +24,7 @@
             <?php foreach ($admins as $admin): ?>
             <tr>
                 <td><?= $this->Number->format($admin->id) ?></td>
-                <td><?= $admin->has('profile') ? $this->Html->link($admin->profile->id, ['controller' => 'Profiles', 'action' => 'view', $admin->profile->id]) : '' ?></td>
+                <td><?= $admin->has('user') ? $this->Html->link($admin->user->id, ['controller' => 'Users', 'action' => 'view', $admin->user->id]) : '' ?></td>
                 <td><?= h($admin->username) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $admin->id]) ?>

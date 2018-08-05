@@ -20,6 +20,9 @@ class OrganisationsController extends AppController
      */
     public function index()
     {
+        $this->paginate = [
+            'contain' => ['Users']
+        ];
         $organisations = $this->paginate($this->Organisations);
 
         $this->set(compact('organisations'));
@@ -35,7 +38,7 @@ class OrganisationsController extends AppController
     public function view($id = null)
     {
         $organisation = $this->Organisations->get($id, [
-            'contain' => []
+            'contain' => ['Users', 'Admins']
         ]);
 
         $this->set('organisation', $organisation);
@@ -48,30 +51,10 @@ class OrganisationsController extends AppController
      */
     public function add()
     {
-        // First create a user
-        $this->loadModel('Users');
-        $username = null;
-        $user = $this->Users->newEntity();
-        $newuserid = "";
-
-        if ($this->request->is('post')) {
-            $user->role_id = (int)$this->request->data['role_id'];
-            $user->email = $this->request->data['email'];
-            $user->password = $this->request->data['password'];
-
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-                $newuserid = $user['id'];
-            } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
-            }
-
-        }
-
         $organisation = $this->Organisations->newEntity();
         if ($this->request->is('post')) {
             $organisation = $this->Organisations->patchEntity($organisation, $this->request->getData());
-            $organisation->user_id = $newuserid;
+            $organisation->creator_id =  $this->Auth->user('id');
             if ($this->Organisations->save($organisation)) {
                 $this->Flash->success(__('The organisation has been saved.'));
 
@@ -79,7 +62,9 @@ class OrganisationsController extends AppController
             }
             $this->Flash->error(__('The organisation could not be saved. Please, try again.'));
         }
-        $this->set(compact('organisation'));
+        $users = $this->Organisations->Users->find('list', ['limit' => 200]);
+        $admins = $this->Organisations->Admins->find('list', ['limit' => 200]);
+        $this->set(compact('organisation', 'users', 'admins'));
     }
 
     /**
@@ -92,7 +77,7 @@ class OrganisationsController extends AppController
     public function edit($id = null)
     {
         $organisation = $this->Organisations->get($id, [
-            'contain' => []
+            'contain' => ['Admins']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $organisation = $this->Organisations->patchEntity($organisation, $this->request->getData());
@@ -103,7 +88,9 @@ class OrganisationsController extends AppController
             }
             $this->Flash->error(__('The organisation could not be saved. Please, try again.'));
         }
-        $this->set(compact('organisation'));
+        $users = $this->Organisations->Users->find('list', ['limit' => 200]);
+        $admins = $this->Organisations->Admins->find('list', ['limit' => 200]);
+        $this->set(compact('organisation', 'users', 'admins'));
     }
 
     /**

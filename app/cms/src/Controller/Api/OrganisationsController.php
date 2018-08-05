@@ -3,12 +3,28 @@
 namespace App\Controller\Api;
 use App\Controller\AppController;
 
+use Cake\Event\Event;
+
 class OrganisationsController extends AppController
 {
     public function initialize()
     {
         parent::initialize();
         $this->loadComponent('RequestHandler');
+    }
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['index', 'add', 'edit', 'view', 'delete', 'getOrganisationsByUser']);
+
+        $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
+            withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
+            withHeader('Access-Control-Allow-Headers',
+                       'Accept, Authorization, Cache-Control, Content-Type, X-Requested-With, x-csrf-token')->
+            withHeader('Access-Control-Allow-Credentials', 'true')->
+            withHeader('Access-Control-Max-Age', '3600');
+
+        $this->response->send();
     }
 
     public function index()
@@ -34,6 +50,39 @@ class OrganisationsController extends AppController
         $this->set([
             'organisation' => $organisation,
             '_serialize' => ['organisation']
+        ]);
+    }
+
+    public function add() {
+        $organisation = $this->Organisations->newEntity();
+        if ($this->request->is('post')) {
+            $organisation = $this->Organisations->patchEntity($organisation, $this->request->getData());
+            $organisation->creator_id =  $this->request->data['user_id'];
+            if ($this->Organisations->save($organisation)) {
+                $message = 'Saved the organisation';
+
+                $admin = $this->Admins->newEntity();
+                if ($this->request->is('post')) {
+                    $admin = $this->Admins->patchEntity($admin, $this->request->getData());
+                    if ($this->Admins->save($admin)) {
+                        $this->Flash->success(__('The admin has been saved.'));
+
+                        return $this->redirect(['action' => 'index']);
+                    }
+                    $this->Flash->error(__('The admin could not be saved. Please, try again.'));
+                }
+                $profiles = $this->Admins->Profiles->find('list', ['limit' => 200]);
+                $organisations = $this->Admins->Organisations->find('list', ['limit' => 200]);
+                $this->set(compact('admin', 'profiles', 'organisations'));
+            }
+            else {
+                $message = 'Error. Could not save the post';
+            }
+        }
+        $this->set([
+            'message' => $message,
+            'organisation' => $organisation,
+            '_serialize' => ['message', 'organisation']
         ]);
     }
 
@@ -65,5 +114,26 @@ class OrganisationsController extends AppController
             'message' => $message,
             '_serialize' => ['message']
         ]);
+    }
+
+    public function getOrganisationsByUser()
+    {
+
+        //return 'hey';
+        $userid = $this->request->getQuery('user');
+
+        $this->autoRender = false;
+        $this->viewBuilder()->setLayout(null);
+
+        $message = "aaaahh";
+
+        $organisations = $this->Organisations->find('all', [
+            'conditions' => ['Organisations.creator_id' => $userid]
+        ]);
+
+        $organisations = json_encode($organisations);
+        $this->response->type('json');
+        $this->response->body($organisations);
+        return $this->response;
     }
 }

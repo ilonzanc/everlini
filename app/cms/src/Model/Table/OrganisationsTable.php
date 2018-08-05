@@ -9,6 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Organisations Model
  *
+ * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\AdminsTable|\Cake\ORM\Association\BelongsToMany $Admins
+ *
  * @method \App\Model\Entity\Organisation get($primaryKey, $options = [])
  * @method \App\Model\Entity\Organisation newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Organisation[] newEntities(array $data, array $options = [])
@@ -35,8 +38,13 @@ class OrganisationsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
+            'foreignKey' => 'creator_id',
             'joinType' => 'INNER'
+        ]);
+        $this->belongsToMany('Admins', [
+            'foreignKey' => 'organisation_id',
+            'targetForeignKey' => 'admin_id',
+            'joinTable' => 'organisations_admins'
         ]);
     }
 
@@ -76,7 +84,7 @@ class OrganisationsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['name']));
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
+        $rules->add($rules->existsIn(['creator_id'], 'Users'));
 
         return $rules;
     }

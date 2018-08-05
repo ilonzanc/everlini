@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Admins Model
  *
- * @property \App\Model\Table\ProfilesTable|\Cake\ORM\Association\BelongsTo $Profiles
+ * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\OrganisationsTable|\Cake\ORM\Association\BelongsToMany $Organisations
  *
  * @method \App\Model\Entity\Admin get($primaryKey, $options = [])
@@ -37,8 +37,8 @@ class AdminsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Profiles', [
-            'foreignKey' => 'profile_id',
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
         $this->belongsToMany('Organisations', [
@@ -79,7 +79,7 @@ class AdminsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['username']));
-        $rules->add($rules->existsIn(['profile_id'], 'Profiles'));
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
     }

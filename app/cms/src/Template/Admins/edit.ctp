@@ -8,7 +8,7 @@
     <?= $this->Form->create($admin) ?>
         <h2><?= __('Edit Admin') ?></h2>
         <?php
-            echo $this->Form->control('profile_id', ['options' => $profiles]);
+            echo $this->Form->control('user_id', ['options' => $users]);
             echo $this->Form->control('username');
             echo $this->Form->control('organisations._ids', ['options' => $organisations]);
         ?>
