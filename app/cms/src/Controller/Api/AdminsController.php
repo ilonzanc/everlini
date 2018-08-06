@@ -1,11 +1,11 @@
 <?php
-// src/Api/Controller/OrganisationsController.php
+// src/Api/Controller/AdminsController.php
 namespace App\Controller\Api;
 use App\Controller\AppController;
 
 use Cake\Event\Event;
 
-class OrganisationsController extends AppController
+class AdminsController extends AppController
 {
     public function initialize()
     {
@@ -15,7 +15,7 @@ class OrganisationsController extends AppController
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index', 'add', 'edit', 'view', 'delete', 'getOrganisationsByUser']);
+        $this->Auth->allow(['index', 'add', 'edit', 'view', 'delete']);
 
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
@@ -56,49 +56,29 @@ class OrganisationsController extends AppController
     public function add() {
         $organisation = $this->Organisations->newEntity();
         if ($this->request->is('post')) {
-            $data = $this->request->getData();
             $organisation = $this->Organisations->patchEntity($organisation, $this->request->getData());
             $organisation->creator_id =  $this->request->data['user_id'];
-
             if ($this->Organisations->save($organisation)) {
                 $message = 'Saved the organisation';
 
-                $this->loadModel('Admins');
-
                 $admin = $this->Admins->newEntity();
                 if ($this->request->is('post')) {
-                    $data = [
-                        'user_id' => $this->request->data['user_id'],
-                        'username' => $this->request->data['username'],
-                        'organisations' => [
-                            [
-                                'id' => $organisation->id,
-                                '_joinData' => [
-                                    'main_admin' =>1,
-                                ]
-                            ],
-                        ]
-                    ];
-                    $admin = $this->Admins->newEntity($data, [
-                        'associated' => ['Organisations']
-                    ]);
-
+                    $admin = $this->Admins->patchEntity($admin, $this->request->getData());
                     if ($this->Admins->save($admin)) {
                         $message = 'The admin has been saved.';
-
                     } else {
                         $message = 'The admin could not be saved. Please, try again.';
                     }
                 }
             }
             else {
-                $message = 'Error. Could not save the organisation';
+                $message = 'Error. Could not save the post';
             }
         }
         $this->set([
             'message' => $message,
-            'admin' => $admin,
-            '_serialize' => ['message', 'admin']
+            'organisation' => $organisation,
+            '_serialize' => ['message', 'organisation']
         ]);
     }
 

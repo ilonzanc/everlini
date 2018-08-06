@@ -4,9 +4,9 @@
       <h1>Nieuwe organisatie toevoegen</h1>
       <form @submit.prevent="onSubmit">
         <label for="name">Naam organisatie</label>
-        <input type="text" id="name" name="name" v-model="event.name" placeholder="Naam van je organisatie...">
+        <input type="text" id="name" name="name" v-model="organisation.name" placeholder="Naam van je organisatie...">
         <label for="description">Beschrijving</label>
-        <textarea id="description" name="description" v-model="event.description" placeholder="Vertel wat meer over je organisatie..."></textarea>
+        <textarea id="description" name="description" v-model="organisation.description" placeholder="Vertel wat meer over je organisatie..."></textarea>
         <button class="btn primary-btn" type="submit">Toevoegen</button>
       </form>
     </div>
@@ -19,23 +19,11 @@ export default {
   name: "create-organisation",
   data () {
     return {
-      event: {
+      organisation: {
         user_id: "",
         name: "",
         description: "",
-        startdate: {
-          time: "",
-          date: ""
-        },
-        enddate: {
-          time: "",
-          date: ""
-        },
-        location: {
-          name: "",
-          lat: "",
-          lng: "",
-        }
+        username: "newuser2"
       },
       loggedInUser: {}
     }
@@ -43,14 +31,15 @@ export default {
   mounted() {
     console.log('Create Organisation Component Mounted');
     this.loggedInUser = JSON.parse(localStorage.getItem("user"));
-    this.event.user_id = this.loggedInUser.id
+    this.organisation.user_id = this.loggedInUser.id
+    this.organisation.username = this.$parent.session.profile.firstname.substr(0,4) + this.$parent.session.profile.lastname.substr(0,4)
   },
   methods: {
     onSubmit() {
       axios({
         method: 'post',
         url: apiurl + "/api/organisations/add.json",
-        data: this.event,
+        data: this.organisation,
       })
       .then((response) => {
         console.log(response);

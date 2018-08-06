@@ -41,10 +41,14 @@ class OrganisationsTable extends Table
             'foreignKey' => 'creator_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsToMany('Admins', [
+        /* $this->belongsToMany('Admins', [
             'foreignKey' => 'organisation_id',
             'targetForeignKey' => 'admin_id',
             'joinTable' => 'organisations_admins'
+        ]); */
+
+        $this->belongsToMany('Admins', [
+            'through' => 'AdminsOrganisations',
         ]);
     }
 

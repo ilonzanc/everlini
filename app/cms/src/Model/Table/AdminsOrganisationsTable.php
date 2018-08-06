@@ -7,7 +7,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Admins Model
+ * AdminsOrganisations Model
  *
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\OrganisationsTable|\Cake\ORM\Association\BelongsToMany $Organisations
@@ -20,7 +20,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Admin[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Admin findOrCreate($search, callable $callback = null, $options = [])
  */
-class AdminsTable extends Table
+class AdminsOrganisationsTable extends Table
 {
 
     /**
@@ -33,23 +33,8 @@ class AdminsTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('admins');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
-
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-            'joinType' => 'INNER'
-        ]);
-        /* $this->belongsToMany('Organisations', [
-            'foreignKey' => 'admin_id',
-            'targetForeignKey' => 'organisation_id',
-            'joinTable' => 'organisations_admins'
-        ]); */
-
-        $this->belongsToMany('Organisations', [
-            'through' => 'AdminsOrganisations',
-        ]);
+        $this->belongsTo('Admins');
+        $this->belongsTo('Organisations');
     }
 
     /**
@@ -64,27 +49,6 @@ class AdminsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
-            ->scalar('username')
-            ->maxLength('username', 45)
-            ->allowEmpty('username')
-            ->add('username', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
-
         return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->isUnique(['username']));
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
-
-        return $rules;
     }
 }

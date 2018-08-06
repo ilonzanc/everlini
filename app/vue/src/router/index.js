@@ -12,17 +12,19 @@ import PrivacyPolicy from '../views/PrivacyPolicy'
 import Overview from '../views/Overview'
 import EventDetail from '../views/EventDetail'
 
-import Profile from '../views/Profile/Profile'
-import ProfileEvents from '../views/Profile/ProfileEvents'
-import ProfileEventDetail from '../views/Profile/ProfileEventDetail'
+import Profile from '../views/Profile'
+import ProfileEvents from '../views/Dashboard/ProfileEvents'
+import ProfileEventDetail from '../views/Dashboard/ProfileEventDetail'
 
-import CreateEvent from '../views/Profile/CreateEvent'
-import UpdateEvent from '../views/Profile/UpdateEvent'
+import CreateEvent from '../views/Dashboard/CreateEvent'
+import UpdateEvent from '../views/Dashboard/UpdateEvent'
 
-import CreatePost from '../views/Profile/CreatePost'
-import UpdatePost from '../views/Profile/UpdatePost'
+import CreatePost from '../views/Dashboard/CreatePost'
+import UpdatePost from '../views/Dashboard/UpdatePost'
 
-import CreateOrganisation from '../views/Profile/CreateOrganisation'
+import CreateOrganisation from '../views/Dashboard/CreateOrganisation'
+
+import Dashboard from '../views/Dashboard/Dashboard'
 
 
 
@@ -91,6 +93,10 @@ let routes = [
     {
         path: '/organisatie-aanmaken',
         component: CreateOrganisation
+    },
+    {
+        path: '/organisatie-dashboard',
+        component: Dashboard
     },
 ]
 
