@@ -20,6 +20,7 @@
 
   h1 {
     text-align: center;
+    font-size: 1.2rem;
   }
 
   .user-avatar {
@@ -30,11 +31,44 @@
     background: #fff;
     border: 3px solid #fff;
     border-radius: 50%;
+    margin-bottom: 1rem;
 
     .fa {
       font-size: 4.5rem;
-      margin-bottom: 1rem;
     }
+  }
+
+  .profile-actions {
+    position: fixed;
+    top: 200px;
+    right: -105px;
+    a {
+      position: relative;
+      right: 0;
+      display: block;
+      text-align: left;
+      margin-bottom: 0.5rem;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      transition: all 0.175s ease-out 0.120s;
+
+      &.open {
+        right: 105px;
+      }
+
+      i {
+        padding: 0.8rem;
+        padding-right: 0;
+      }
+    }
+    .btn {
+      padding: 0;
+      padding-right: 0.8rem;
+    }
+  }
+
+  .event-newsfeed {
+    padding: 0 1rem;
   }
 
   .event {
@@ -64,14 +98,16 @@
     }
     .event-details {
       padding: 0.5rem 0;
-      h3 {
+      p {
         font-size: 1.2rem;
+        font-weight: 700;
       }
 
     }
   }
 
   .event-schedule {
+    padding: 0 1rem;
     h2 {
       margin-bottom: 0.5rem;
     }
@@ -83,11 +119,30 @@
 
 @media (min-width: 42.5rem) {
   #profile {
+    .event-newsfeed {
+      float: left;
+      width: 70%;
+      padding: 0 0.5rem;
+    }
     .event-schedule {
-      width: 20%;
-      float: right;
+      width: 30%;
+      float: left;
+      padding: 0 0.5rem;
+
+      .event {
+        .event-date {
+          margin: 0.5rem;
+          padding: 8px 0;
+          width: 50px;
+          line-height: 120%;
+        }
+        .event-day {
+          font-size: 1.4rem;
+        }
+        .event-month {
+          font-size: 1rem;
+        }
+      }
     }
   }
-
-
 }

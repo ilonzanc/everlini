@@ -52,9 +52,7 @@ export default {
   name: 'app',
   data () {
     return {
-      session: {
-        id: ""
-      },
+      session: { },
       fbAccesToken: "",
       navOpen: false,
       isHome: false
