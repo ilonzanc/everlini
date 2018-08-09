@@ -3,13 +3,18 @@
     <div class="hero-image"></div>
     <div class="container">
       <section class="profile-actions">
-        <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, '/organisatie-dashboard')"><i class="fa fa-dashboard"></i> Dashboard</a>
+        <div v-if="profile.user_id == $parent.session.id">
+        <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, '/dashboard')"><i class="fa fa-dashboard"></i> Dashboard</a>
         <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, '/profiel-aanpassen')"><i class="fa fa-pencil"></i> Wijzig</a>
+        </div>
+        <div v-if="profile.user_id != $parent.session.id">
+        <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, profile.user.username + '/uitnodigen-als-admin/')"><i class="fa fa-envelope"></i> Maak admin</a>
+        </div>
       </section>
       <section class="profile-card">
         <h1>
           <div class="user-avatar"><i class="fa fa-user-circle" aria-hidden="true"></i></div>
-          {{ user.firstname + ' ' + user.lastname }}
+          {{ profile.firstname + ' ' + profile.lastname }}
         </h1>
       </section>
       <div class="row">
@@ -47,11 +52,7 @@
     name: 'profile',
     data() {
       return {
-        user: {
-          firstname: "",
-          lastname: "",
-          name: ""
-        },
+        profile: { },
         favoriteEvents: [],
         favoriteMeetUps: [],
         meetups: [],
@@ -61,13 +62,12 @@
     },
     mounted () {
       console.log("Profile Vue Component mounted");
-      this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       axios({
         method: 'get',
-        url: apiurl + "/api/profiles/" + this.loggedInUser.profile.id + ".json",
+        url: apiurl + "/api/profiles/" + this.$route.params.username + ".json",
       })
       .then(response => {
-        this.user = response.data.profile;
+        this.profile = response.data.profile;
       })
       .catch(error => {
       });
@@ -135,8 +135,6 @@
             eventElement.classList.remove('open');
           }
         }
-
-
       },
     }
   }

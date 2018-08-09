@@ -1,6 +1,7 @@
 <template>
   <div id="create-event" class="content">
     <div class="container">
+      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
       <h1>Nieuw event toevoegen</h1>
       <form @submit.prevent="onSubmit">
         <label for="name">Naam</label>
@@ -29,7 +30,7 @@ export default {
   data () {
     return {
       event: {
-        user_id: "",
+        organisation_id: "",
         name: "",
         description: "",
         startdate: {
@@ -51,8 +52,7 @@ export default {
   },
   mounted() {
     console.log('Create Event Component Mounted');
-    this.loggedInUser = JSON.parse(localStorage.getItem("user"));
-    this.event.user_id = this.loggedInUser.id
+    this.event.organisation_id = this.$route.params.id;
   },
   methods: {
     onSubmit() {

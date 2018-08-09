@@ -51,7 +51,6 @@ export default {
     }
   },
   mounted () {
-    let loggedInUser = JSON.parse(localStorage.getItem("user"));
     if (loggedInUser) {
       this.$router.push('/profiel');
     }
@@ -72,10 +71,9 @@ export default {
               this.errors.flash = response.data.errors;
               this.validationStatus = false;
             } else {
-              this.user = response.data;
+              console.log(response.data);
               localStorage.setItem("user", JSON.stringify(response.data));
-              this.$parent.session = JSON.parse(localStorage.getItem("user"));
-              this.$router.push('/profiel');
+              location.href = '/' + response.data.username;
             }
         })
         .catch((error) => {

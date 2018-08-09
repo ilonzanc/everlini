@@ -41,10 +41,11 @@
   .profile-actions {
     position: fixed;
     top: 200px;
-    right: -105px;
+    right: 0;
     a {
+      min-width: 145px;
       position: relative;
-      right: 0;
+      left: 105px;
       display: block;
       text-align: left;
       margin-bottom: 0.5rem;
@@ -53,7 +54,7 @@
       transition: all 0.175s ease-out 0.120s;
 
       &.open {
-        right: 105px;
+        left: 0;
       }
 
       i {

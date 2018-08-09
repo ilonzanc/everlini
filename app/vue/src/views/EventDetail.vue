@@ -43,7 +43,6 @@
     },
     mounted() {
       console.log('Mounted Detail Vue Component');
-      this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       if(!this.currentMeetUpEvent.id) {
         axios({
           method: "get",
@@ -96,7 +95,7 @@
             headers: { },
             data: {
               event_id: this.event.id,
-              user_id: this.loggedInUser.id
+              user_id: this.parent.id
             }
           })
           .then(response => {

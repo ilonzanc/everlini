@@ -1,6 +1,7 @@
 <template>
   <div id="profile-event-detail" class="content">
     <div class="container">
+      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
       <h1>{{ event.name }}</h1>
       <section class="action-btns">
         <router-link :to="'/profiel/jouw-events/' + event.id + '/bewerken'" class="btn primary-btn small-btn"><i class="fa fa-pencil"></i><span> Bewerken</span></router-link>
@@ -63,7 +64,7 @@
       console.log('Mounted Event Detail Vue Component');
       axios({
         method: "get",
-        url: apiurl + "/api/events/" + this.$route.params.id + ".json",
+        url: apiurl + "/api/events/" + this.$route.params.eventid + ".json",
         headers: { },
       })
       .then((response) => {

@@ -29,65 +29,71 @@ class AdminsController extends AppController
 
     public function index()
     {
-        $organisations = $this->Organisations->find('all');
+        $admins = $this->Admins->find('all');
         $this->set([
-            'organisations' => $organisations,
-            '_serialize' => ['organisations']
+            'admins' => $admins,
+            '_serialize' => ['admins']
         ]);
     }
 
     public function view($id)
     {
 
-        $organisation = $this->Organisations->get($id);
+        $admin = $this->Admins->get($id);
 
-        $organisation = $this->Organisations->find('all')
-        ->where(['Organisations.id' => $id])
+        $admin = $this->Admins->find('all')
+        ->where(['Admins.id' => $id])
         ->contain('Users');
 
-        $organisation = $organisation->first();
+        $admin = $admin->first();
 
         $this->set([
-            'organisation' => $organisation,
-            '_serialize' => ['organisation']
+            'admin' => $admin,
+            '_serialize' => ['admin']
         ]);
     }
 
     public function add() {
-        $organisation = $this->Organisations->newEntity();
+        $admin = $this->Admins->newEntity();
         if ($this->request->is('post')) {
-            $organisation = $this->Organisations->patchEntity($organisation, $this->request->getData());
-            $organisation->creator_id =  $this->request->data['user_id'];
-            if ($this->Organisations->save($organisation)) {
-                $message = 'Saved the organisation';
+            $data = [
+                'user_id' => $this->request->data['user_id'],
+                'username' => $this->request->data['username'],
+                'organisations' => [
+                    [
+                        'id' => $this->request->data['organisation_id'],
+                        '_joinData' => [
+                            'main_admin' => 0,
+                        ]
+                    ],
+                ]
+            ];
+            $admin = $this->Admins->newEntity($data, [
+                'associated' => ['Organisations']
+            ]);
 
-                $admin = $this->Admins->newEntity();
-                if ($this->request->is('post')) {
-                    $admin = $this->Admins->patchEntity($admin, $this->request->getData());
-                    if ($this->Admins->save($admin)) {
-                        $message = 'The admin has been saved.';
-                    } else {
-                        $message = 'The admin could not be saved. Please, try again.';
-                    }
-                }
+            if ($this->Admins->save($admin)) {
+                $message = 'The admin has been saved.';
+
+            } else {
+                $message = 'The admin could not be saved. Please, try again.';
             }
-            else {
-                $message = 'Error. Could not save the post';
-            }
+        } else {
+            $message = "This isn't a POST request. Please try again.";
         }
         $this->set([
             'message' => $message,
-            'organisation' => $organisation,
-            '_serialize' => ['message', 'organisation']
+            'admin' => $admin,
+            '_serialize' => ['message', 'admin']
         ]);
     }
 
     public function edit($id)
     {
-        $profile = $this->Profiles->get($id);
+        $admin = $this->Admins->get($id);
         if ($this->request->is(['post', 'put'])) {
-            $profile = $this->Profiles->patchEntity($profile, $this->request->getData());
-            if ($this->Profiles->save($profile)) {
+            $admin = $this->Admins->patchEntity($admin, $this->request->getData());
+            if ($this->Admins->save($admin)) {
                 $message = 'Saved';
             } else {
                 $message = 'Error';
@@ -101,35 +107,14 @@ class AdminsController extends AppController
 
     public function delete($id)
     {
-        $profile = $this->Profiles->get($id);
+        $admin = $this->Admins->get($id);
         $message = 'Deleted';
-        if (!$this->Profiles->delete($profile)) {
+        if (!$this->Admins->delete($admin)) {
             $message = 'Error';
         }
         $this->set([
             'message' => $message,
             '_serialize' => ['message']
         ]);
-    }
-
-    public function getOrganisationsByUser()
-    {
-
-        //return 'hey';
-        $userid = $this->request->getQuery('user');
-
-        $this->autoRender = false;
-        $this->viewBuilder()->setLayout(null);
-
-        $message = "aaaahh";
-
-        $organisations = $this->Organisations->find('all', [
-            'conditions' => ['Organisations.creator_id' => $userid]
-        ]);
-
-        $organisations = json_encode($organisations);
-        $this->response->type('json');
-        $this->response->body($organisations);
-        return $this->response;
     }
 }

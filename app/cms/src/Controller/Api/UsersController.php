@@ -45,6 +45,7 @@ class UsersController extends AppController
         $user->email = $this->request->data['email'];
         $user->password = $this->request->data['password'];
         $user->role_id = $this->request->data['role_id'];
+        $user->username = $this->request->data['username'];
         $newuserid = "";
 
         if ($this->Users->save($user)) {
@@ -117,7 +118,7 @@ class UsersController extends AppController
             $this->loadModel('Users');
             $id = $this->Auth->user('id');
             $loggedInUser = $this->Users->get($id, [
-                'fields' => array('id', 'email'),
+                'fields' => array('id', 'email', 'username'),
                 'contain' => array(
                     'Profiles' => array(
                         'fields' => array(
@@ -129,7 +130,11 @@ class UsersController extends AppController
                     )
                 )
             ]);
-            $message = $loggedInUser;
+            $loggedInUser = json_encode($loggedInUser);
+            $this->response->type('json');
+            $this->response->body($loggedInUser);
+            return $this->response;
+
         } else {
             $error['errors'][] = 'Email of wachtwoord komen niet overeen';
             $error = json_encode($error);
@@ -138,10 +143,7 @@ class UsersController extends AppController
             return $this->response;
         }
 
-        $message = json_encode($message);
-        $this->response->type('json');
-        $this->response->body($message);
-        return $this->response;
+
     }
 
 

@@ -3,12 +3,28 @@
 namespace App\Controller\Api;
 use App\Controller\AppController;
 
+use Cake\Event\Event;
+
 class ProfilesController extends AppController
 {
     public function initialize()
     {
         parent::initialize();
         $this->loadComponent('RequestHandler');
+    }
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['add', 'getProfileByUsername', 'edit', 'view', 'delete']);
+
+        $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
+            withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
+            withHeader('Access-Control-Allow-Headers',
+                       'Accept, Authorization, Cache-Control, Content-Type, X-Requested-With, x-csrf-token')->
+            withHeader('Access-Control-Allow-Credentials', 'true')->
+            withHeader('Access-Control-Max-Age', '3600');
+
+        $this->response->send();
     }
 
     public function index()
@@ -44,22 +60,16 @@ class ProfilesController extends AppController
         $user = $this->Users->newEntity();
 
         //TODO: check if reauest is post
-        $shortFirstName = substr($this->request->data['firstname'], 0, 3);
-        $shortLastName = substr($this->request->data['lastname'], 0, 3);
         $dobShort = substr(
             $this->request->data['dateofbirth'],
             strlen($this->request->data['dateofbirth']) - 2,
             strlen($this->request->data['dateofbirth'])
         );
 
-        $newusername = $shortFirstName . $shortLastName .$dobShort;
-
         $user->role_id = (int)$this->request->data['role_id'];
-        $user->username = $newusername;
+        $user->username = $this->request->data['username'];
         $user->email = $this->request->data['email'];
         $user->password = $this->request->data['password'];
-
-        $username = $user->username;
 
         if ($this->Users->save($user)) {
             $message = 'The user has been saved.';
@@ -131,6 +141,28 @@ class ProfilesController extends AppController
         $this->set([
             'message' => $message,
             '_serialize' => ['message']
+        ]);
+    }
+
+    public function getProfileByUsername($username)
+    {
+
+        $this->loadModel('Users');
+
+        $users = $this->Users->find('all')
+        ->where(['Users.username' => $username]);
+
+        $user = $users->first();
+
+        $profile = $this->Profiles->find('all')
+        ->where(['Profiles.user_id' => $user->id])
+        ->contain('Users');
+
+        $profile = $profile->first();
+
+        $this->set([
+            'profile' => $profile,
+            '_serialize' => ['profile']
         ]);
     }
 }

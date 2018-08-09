@@ -1,6 +1,7 @@
 <template>
   <div id="create-event" class="content">
     <div class="container">
+      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
       <h1>Nieuwe organisatie toevoegen</h1>
       <form @submit.prevent="onSubmit">
         <label for="name">Naam organisatie</label>
@@ -25,14 +26,13 @@ export default {
         description: "",
         username: "newuser2"
       },
-      loggedInUser: {}
     }
   },
   mounted() {
     console.log('Create Organisation Component Mounted');
-    this.loggedInUser = JSON.parse(localStorage.getItem("user"));
-    this.organisation.user_id = this.loggedInUser.id
-    this.organisation.username = this.$parent.session.profile.firstname.substr(0,4) + this.$parent.session.profile.lastname.substr(0,4)
+
+    this.organisation.user_id = this.$parent.session.id;
+    this.organisation.username = this.$parent.session.username;
   },
   methods: {
     onSubmit() {
@@ -43,7 +43,7 @@ export default {
       })
       .then((response) => {
         console.log(response);
-          //this.$router.push('/profiel/jouw-events/' + response.data.event.id);
+          this.$router.push('/dashboard/' + response.data.organisation.slug + '/' + response.data.organisation.id );
       })
       .catch((error) => {
         if (error.response) {

@@ -13,6 +13,7 @@ import Overview from '../views/Overview'
 import EventDetail from '../views/EventDetail'
 
 import Profile from '../views/Profile'
+import ProfileAdminInvite from '../views/ProfileAdminInvite'
 import ProfileEvents from '../views/Dashboard/ProfileEvents'
 import ProfileEventDetail from '../views/Dashboard/ProfileEventDetail'
 
@@ -25,6 +26,8 @@ import UpdatePost from '../views/Dashboard/UpdatePost'
 import CreateOrganisation from '../views/Dashboard/CreateOrganisation'
 
 import Dashboard from '../views/Dashboard/Dashboard'
+
+import OrganisationDashboard from '../views/Dashboard/OrganisationDashboard'
 
 
 
@@ -63,17 +66,18 @@ let routes = [
         component: EventDetail
     },
     {
-        path: '/profiel',
+        path: '/profiel/:username',
         component: Profile
+    },
+    {
+        path: '/profiel/:username/uitnodigen-als-admin',
+        component: ProfileAdminInvite
     },
     {
         path: '/profiel/jouw-events',
         component: ProfileEvents
     },
-    {
-        path: '/profiel/jouw-events/:id',
-        component: ProfileEventDetail
-    },
+
     {
         path: '/profiel/jouw-events/:id/bewerken',
         component: UpdateEvent
@@ -87,16 +91,28 @@ let routes = [
         component: UpdatePost
     },
     {
-        path: '/profiel/nieuw-event',
-        component: CreateEvent
-    },
-    {
-        path: '/organisatie-aanmaken',
+        path: 'dashboard/organisatie-aanmaken',
         component: CreateOrganisation
     },
     {
-        path: '/organisatie-dashboard',
+        path: '/dashboard',
         component: Dashboard
+    },
+    {
+        path: '/dashboard/organisatie-aanmaken',
+        component: CreateOrganisation
+    },
+    {
+        path: '/dashboard/:name/:id',
+        component: OrganisationDashboard
+    },
+    {
+        path: '/dashboard/:name/:id/nieuw-event',
+        component: CreateEvent
+    },
+    {
+        path: '/dashboard/:name/:id/events/:eventid',
+        component: ProfileEventDetail
     },
 ]
 

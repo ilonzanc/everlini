@@ -1,6 +1,7 @@
 <template>
   <div id="profile-events" class="content">
     <div class="container">
+      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
       <h1>Jouw events</h1>
       <router-link to="/profiel/nieuw-event" class="btn primary-btn"><i class="fa fa-plus"></i> Nieuw event</router-link>
       <router-link v-bind:key="event.id" v-for="event in events" :to="'/profiel/jouw-events/' + event.id">
@@ -38,7 +39,6 @@
     },
     mounted () {
       console.log("Profile Event Vue Component mounted");
-      this.loggedInUser = JSON.parse(localStorage.getItem("user"));
       axios({
         method: "get",
         url:

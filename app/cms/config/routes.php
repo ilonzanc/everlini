@@ -106,7 +106,16 @@ Router::prefix('api', function ($routes) {
     // you do not need to include the /api prefix
     // or the api route element.
     $routes->setExtensions(['json']);
-    //$routes->resources('Events');
+
+    //Admins Routes
+
+    $routes->connect(
+        '/admins/add',
+        ['controller' => 'Admins', 'action' => 'add']
+    );
+
+    //Events Routes
+
     $routes->connect(
         '/events',
         ['controller' => 'Events', 'action' => 'index']
@@ -132,34 +141,55 @@ Router::prefix('api', function ($routes) {
         ['controller' => 'Events', 'action' => 'delete']
     )->setPass(['id']);
 
-/*     $routes->connect(
-        '/events',
-        ['controller' => 'Events', 'action' => 'getEventsByUser', '?' => 'user']
-    ); */
+    $routes->connect(
+        '/events/organisation/:organisationid',
+        ['controller' => 'Events', 'action' => 'getEventsByOrganisationId']
+    )->setPass(['organisationid']);
+
+    //Favorites Routes
 
     $routes->connect(
-        '/events/user/:userid',
-        ['controller' => 'Events', 'action' => 'getEventsByUser']
+        '/favorite/add',
+        ['controller' => 'Favorites', 'action' => 'add']
+    );
+
+    $routes->connect(
+        '/favorites',
+        ['controller' => 'Favorites', 'action' => 'index']
+    );
+
+    $routes->connect(
+        '/favorite/delete',
+        ['controller' => 'Favorites', 'action' => 'delete']
+    );
+
+    $routes->connect(
+        '/favorites/user/:userid',
+        ['controller' => 'Favorites', 'action' => 'getFavoritesByUserId']
     )->setPass(['userid']);
 
-    $routes->resources('Profiles');
+    //Interests Routes
 
-    /*$routes->connect(
-        '/organisations',
-        ['controller' => 'Organisations', 'action' => 'index']
-    );*/
+    $routes->resources('Interests');
+
+    //Organisations Routes
 
     $routes->connect(
         '/organisations',
         ['controller' => 'Organisations', 'action' => 'getOrganisationsByUser', '?' => ['user' => '[0-9]+', 'pass' => ['user']]]
     );
 
-
+    $routes->connect(
+        '/organisations/:id',
+        ['controller' => 'Organisations', 'action' => 'view']
+    )->setPass(['id']);
 
     $routes->connect(
         '/organisations/add',
         ['controller' => 'Organisations', 'action' => 'add']
     );
+
+    //Posts Routes
 
     $routes->connect(
         '/posts',
@@ -186,8 +216,21 @@ Router::prefix('api', function ($routes) {
         ['controller' => 'Posts', 'action' => 'delete']
     )->setPass(['id']);
 
-    $routes->resources('Interests');
+    //Profiles Routes
+
+    $routes->resources('Profiles');
+
+    $routes->connect(
+        '/profiles/:username',
+        ['controller' => 'Profiles', 'action' => 'getProfileByUsername']
+    )->setPass(['username']);
+
+    //Reviews Routes
+
     $routes->resources('Reviews');
+
+    //Users Routes
+
     $routes->connect(
         '/register',
         ['controller' => 'Users', 'action' => 'register']
@@ -196,26 +239,6 @@ Router::prefix('api', function ($routes) {
         '/login',
         ['controller' => 'Users', 'action' => 'login']
     );
-
-    $routes->connect(
-        '/favorite/add',
-        ['controller' => 'Favorites', 'action' => 'add']
-    );
-
-    $routes->connect(
-        '/favorites',
-        ['controller' => 'Favorites', 'action' => 'index']
-    );
-
-    $routes->connect(
-        '/favorite/delete',
-        ['controller' => 'Favorites', 'action' => 'delete']
-    );
-
-    $routes->connect(
-        '/favorites/user/:userid',
-        ['controller' => 'Favorites', 'action' => 'getFavoritesByUserId']
-    )->setPass(['userid']);
 
 
 });

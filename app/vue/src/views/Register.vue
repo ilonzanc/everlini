@@ -8,6 +8,9 @@
               <i class="fa fa-exclamation-triangle"></i>{{message}}
             </article>
           </section>
+          <label class="required" for="username">Gebruikersnaam</label>
+          <input type="text" id="profile_username" name="username" placeholder="Jouw gebruikersnaam..." v-model="user.username">
+          <span v-if="errors.user.username" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.user.username}}</span>
           <label for="firstname">Voornaam</label>
           <input type="text" id="profile_firstname" name="firstname" placeholder="Jouw voornaam..." v-model="user.firstname">
           <span v-if="errors.user.firstname" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.user.firstname}}</span>
@@ -17,12 +20,15 @@
           <label for="dateofbirth">Geboortedatum</label>
           <input type="date" id="profile_dateofbirth" name="dateofbirth" placeholder="Jouw geboortedatum..." v-model="user.dateofbirth">
           <span v-if="errors.user.dateofbirth" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.user.dateofbirth}}</span>
-          <label for="email">Emailadres</label>
+          <label class="required" for="email">Emailadres</label>
           <input type="email" id="profile_email" name="email" placeholder="Jouw emailadres..." v-model="user.email">
           <span v-if="errors.user.email" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.user.email}}</span>
-          <label for="pass">Wachtwoord</label>
+          <label class="required" for="pass">Wachtwoord</label>
           <input type="password" id="profile_pass" name="pass" placeholder="********" v-model="user.password">
           <span v-if="errors.user.password" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.user.password}}</span>
+          <label class="required" for="confirm_pass">Bevestig wachtwoord</label>
+          <input type="password" id="profile_confirm_pass" name="confirm_pass" placeholder="********" v-model="user.confirm_password">
+          <span v-if="errors.user.confirm_password" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.user.confirm_password}}</span>
           <button type="submit" class="btn primary-btn widebtn">Registreren</button>
         </form>
 	  	</div>
@@ -51,6 +57,7 @@ export default {
         dateofbirth: "",
         name: "",
         description: "",
+        confirm_password: ""
       },
       validationStatus: true,
       errors: {
@@ -71,7 +78,6 @@ export default {
   watch: {
   },
   mounted () {
-    let loggedInUser = JSON.parse(localStorage.getItem("user"));
     if (loggedInUser) {
       this.$router.push('/profiel');
     }
@@ -94,7 +100,6 @@ export default {
           } else {
             this.user = response.data;
             localStorage.setItem("user", JSON.stringify(response.data));
-            this.$parent.session = JSON.parse(localStorage.getItem("user"));
             this.$router.push('/profiel');
           }
         })

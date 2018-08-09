@@ -1,6 +1,7 @@
 <template>
   <div id="create-post" class="content">
     <div class="container">
+      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
       <h1>Nieuwe blogpost toevoegen</h1>
       <form @submit.prevent="onSubmit">
         <label for="title">Titel</label>

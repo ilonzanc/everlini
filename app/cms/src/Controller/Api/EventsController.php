@@ -16,7 +16,7 @@ class EventsController extends AppController
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['add', 'getEventsByUser', 'edit', 'view', 'delete']);
+        $this->Auth->allow(['add', 'getEventsByOrganisationId', 'edit', 'view', 'delete']);
 
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
@@ -68,7 +68,7 @@ class EventsController extends AppController
             ->where(function($q) use ($interests) {
                 return $q->or_($interests);
             })
-            ->contain('Users');
+            ->contain('Organisations');
 
         $data = $this->request->data;
 
@@ -102,7 +102,7 @@ class EventsController extends AppController
             if (!isset($this->request->data['meetup_id'])){
                 $event = $this->Events->newEntity();
 
-                $event->user_id = $this->request->data['user_id'];
+                $event->organisation_id = $this->request->data['organisation_id'];
                 $event->name = $this->request->data['name'];
                 $event->description = $this->request->data['description'];
 
@@ -197,7 +197,7 @@ class EventsController extends AppController
         $event = $this->Events->get($id);
         $message = "Couldn't update event";
         if ($this->request->is(['post', 'put'])) {
-            $event->user_id = $this->request->data['user_id'];
+            $event->organisation_id = $this->request->data['organisation_id'];
             $event->name = $this->request->data['name'];
             $event->description = $this->request->data['description'];
 
@@ -235,7 +235,7 @@ class EventsController extends AppController
         ]);
     }
 
-    public function getEventsByUser($userid)
+    public function getEventsByOrganisationId($organisationid)
     {
         $this->autoRender = false;
         $this->viewBuilder()->setLayout(null);
@@ -243,7 +243,7 @@ class EventsController extends AppController
         $message = "";
 
         $events = $this->Events->find('all', [
-            'conditions' => ['Events.user_id' => $userid, 'Events.deleted IS NULL' ]
+            'conditions' => ['Events.organisation_id' => $organisationid, 'Events.deleted IS NULL' ]
         ]);
 
         $events = json_encode($events);

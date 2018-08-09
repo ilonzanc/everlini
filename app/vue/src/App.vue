@@ -8,7 +8,7 @@
       <nav :class="['main-nav ', { 'nav-open': navOpen }]">
         <ul>
           <li><router-link to="/">Home</router-link></li>
-          <li v-if="session != null"><router-link to="/profiel">Jouw profiel</router-link></li>
+          <li v-if="session != null"><router-link :to="'/profiel/' + session.username">Jouw profiel</router-link></li>
           <li><router-link to="/about">About</router-link></li>
           <li><router-link to="/contact">Contact</router-link></li>
           <li v-if="session != null"><a href="#" class="btn secundary-btn" @click.prevent="logOut">Uitloggen</a></li>
@@ -52,7 +52,7 @@ export default {
   name: 'app',
   data () {
     return {
-      session: { },
+      session: JSON.parse(localStorage.getItem("user")),
       fbAccesToken: "",
       navOpen: false,
       isHome: false
@@ -65,7 +65,6 @@ export default {
     }
   },
   mounted () {
-    this.session = JSON.parse(localStorage.getItem("user"));
     this.checkIfHome();
   },
   methods: {
