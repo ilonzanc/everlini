@@ -114,6 +114,11 @@ Router::prefix('api', function ($routes) {
         ['controller' => 'Admins', 'action' => 'add']
     );
 
+    $routes->connect(
+        '/admins',
+        ['controller' => 'Admins', 'action' => 'getAdminsByOrganisationId', '?' => ['organisation' => '[0-9]+', 'pass' => ['organisation']]]
+    );
+
     //Events Routes
 
     $routes->connect(

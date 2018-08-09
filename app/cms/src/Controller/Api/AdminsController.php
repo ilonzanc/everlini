@@ -15,7 +15,7 @@ class AdminsController extends AppController
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index', 'add', 'edit', 'view', 'delete']);
+        $this->Auth->allow(['add', 'edit', 'view', 'delete', 'getAdminsByOrganisationId']);
 
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
@@ -27,15 +27,6 @@ class AdminsController extends AppController
         $this->response->send();
     }
 
-    public function index()
-    {
-        $admins = $this->Admins->find('all');
-        $this->set([
-            'admins' => $admins,
-            '_serialize' => ['admins']
-        ]);
-    }
-
     public function view($id)
     {
 
@@ -43,7 +34,7 @@ class AdminsController extends AppController
 
         $admin = $this->Admins->find('all')
         ->where(['Admins.id' => $id])
-        ->contain('Users');
+        ->contain('Organisations');
 
         $admin = $admin->first();
 
@@ -115,6 +106,21 @@ class AdminsController extends AppController
         $this->set([
             'message' => $message,
             '_serialize' => ['message']
+        ]);
+    }
+
+    public function getAdminsByOrganisationId()
+    {
+        $organisationid = $this->request->getQuery('organisation');
+
+        $admins = $this->Admins->find()->contain('Organisations', function ($q) use ($organisationid) {
+            return $q
+                ->where(['Organisations.id' => $organisationid]);
+        });
+
+        $this->set([
+            'admins' => $admins,
+            '_serialize' => ['admins']
         ]);
     }
 }
