@@ -15,7 +15,8 @@
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('title') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('parent_id') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -23,7 +24,8 @@
             <?php foreach ($interests as $interest): ?>
             <tr>
                 <td><?= $this->Number->format($interest->id) ?></td>
-                <td><?= h($interest->title) ?></td>
+                <td><?= h($interest->name) ?></td>
+                <td><?= $interest->has('parent_interest') ? $this->Html->link($interest->parent_interest->name, ['controller' => 'Interests', 'action' => 'view', $interest->parent_interest->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $interest->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $interest->id]) ?>
@@ -33,5 +35,14 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-    <?php echo $this->element('pagination', []);?>
+    <div class="paginator">
+        <ul class="pagination">
+            <?= $this->Paginator->first('<< ' . __('first')) ?>
+            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+            <?= $this->Paginator->numbers() ?>
+            <?= $this->Paginator->next(__('next') . ' >') ?>
+            <?= $this->Paginator->last(__('last') . ' >>') ?>
+        </ul>
+        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+    </div>
 </div>

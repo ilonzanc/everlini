@@ -22,7 +22,7 @@ export default {
   data () {
     return {
       post: {
-        event_id: this.$route.params.id,
+        event_id: this.$route.params.eventid,
         title: "",
         body: "",
         published: ""
@@ -40,7 +40,7 @@ export default {
         data: this.post,
       })
       .then((response) => {
-          this.$router.push('/profiel/jouw-events/' + this.$route.params.id);
+          this.$router.push('/dashboard/' + this.$route.params.name + '/' + this.$route.params.id  + '/events/' + response.data.event.id);
       })
       .catch((error) => {
         if (error.response) {

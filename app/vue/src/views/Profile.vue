@@ -20,6 +20,11 @@
       <div class="row">
       <section class="event-newsfeed">
         <h2>Newsfeed</h2>
+        <article v-for="post in posts" v-bind:key="post.id">
+          <span v-if="posts.length > 0">{{ post.created | moment("DD MMM") }}</span>
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.body }}</p>
+        </article>
       </section>
         <aside class="event-schedule">
           <h2>Aankomende events</h2>
@@ -57,7 +62,8 @@
         favoriteMeetUps: [],
         meetups: [],
         loggedInUser: {},
-        organisations: []
+        organisations: [],
+        posts: []
       }
     },
     mounted () {
@@ -84,9 +90,10 @@
 
       axios({
         method: 'get',
-        url: apiurl + "/api/favorites/user/" +  this.loggedInUser.id + ".json",
+        url: apiurl + "/api/favorites/user/" +  this.$parent.session.id + ".json",
       })
       .then(response => {
+        console.log(response);
         for (let i = 0; i < response.data.favoriteEvents.length; i++) {
           if (response.data.favoriteEvents[i].meetup_id == null) {
             this.favoriteEvents.push(response.data.favoriteEvents[i]);
@@ -95,6 +102,7 @@
           }
         }
         this.getMeetUps();
+        this.buildNewsfeed();
       })
       .catch(error => {
       });
@@ -136,6 +144,19 @@
           }
         }
       },
+      buildNewsfeed() {
+        this.favoriteEvents.forEach(event => {
+          if (event.posts.length > 0) {
+            event.posts.forEach(post => {
+              this.posts.push(post);
+            })
+          }
+        });
+
+        this.posts.sort(function(a,b){
+          return new Date(b.created) - new Date(a.created);
+        });
+      }
     }
   }
 </script>

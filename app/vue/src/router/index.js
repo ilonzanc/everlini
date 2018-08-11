@@ -83,10 +83,6 @@ let routes = [
         component: UpdateEvent
     },
     {
-        path: '/profiel/jouw-events/:id/nieuwe-blogpost',
-        component: CreatePost
-    },
-    {
         path: '/profiel/jouw-events/:id/posts/:postid/bewerken',
         component: UpdatePost
     },
@@ -113,6 +109,10 @@ let routes = [
     {
         path: '/dashboard/:name/:id/events/:eventid',
         component: ProfileEventDetail
+    },
+    {
+        path: '/dashboard/:name/:id/events/:eventid/nieuwe-blogpost',
+        component: CreatePost
     },
 ]
 

@@ -154,17 +154,17 @@ Router::prefix('api', function ($routes) {
     //Favorites Routes
 
     $routes->connect(
-        '/favorite/add',
-        ['controller' => 'Favorites', 'action' => 'add']
-    );
-
-    $routes->connect(
         '/favorites',
         ['controller' => 'Favorites', 'action' => 'index']
     );
 
     $routes->connect(
-        '/favorite/delete',
+        '/favorites/add',
+        ['controller' => 'Favorites', 'action' => 'add']
+    );
+
+    $routes->connect(
+        '/favorites/delete',
         ['controller' => 'Favorites', 'action' => 'delete']
     );
 

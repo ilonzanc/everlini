@@ -32,7 +32,7 @@
         </tbody>
       </table>
       <section class="event-blog">
-        <router-link :to="'/profiel/jouw-events/' + this.$route.params.id + '/nieuwe-blogpost'" class="btn primary-btn new-blog-btn"><i class="fa fa-plus"></i><span>Nieuwe blogpost</span></router-link>
+        <router-link :to="'/dashboard/' + this.$route.params.name + '/' + this.$route.params.id  + '/events/' + event.id + '/nieuwe-blogpost'" class="btn primary-btn new-blog-btn"><i class="fa fa-plus"></i><span>Nieuwe blogpost</span></router-link>
         <h2>Blog</h2>
         <article class="event-blog-post" v-for="post in event.posts" :key="post.id" v-if="post.published == true">
           <h3>{{ post.title }}</h3>

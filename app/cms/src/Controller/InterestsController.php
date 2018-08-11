@@ -20,7 +20,13 @@ class InterestsController extends AppController
      */
     public function index()
     {
-        $interests = $this->paginate($this->Interests);
+        /* $interests = $this->paginate($this->Interests);
+
+        $this->set(compact('interests')); */
+
+        $this->paginate['contain'] = ['ParentInterests'];
+        $this->set('interests', $this->paginate($this->Interests));
+        //$this->set('_serialize', ['interests']);
 
         $this->set(compact('interests'));
     }
@@ -35,10 +41,16 @@ class InterestsController extends AppController
     public function view($id = null)
     {
         $interest = $this->Interests->get($id, [
-            'contain' => []
+            'contain' => ['ParentInterests']
         ]);
 
-        $this->set('interest', $interest);
+        $parent_id = $interest->parent_interest->id;
+
+        $descendants = $this->Interests->find('children', ['for' => $id]);
+
+        $relatives = $this->Interests->find('children', ['for' => $parent_id]);
+
+        $this->set(compact('interest', 'descendants', 'relatives'));
     }
 
     /**
@@ -50,15 +62,18 @@ class InterestsController extends AppController
     {
         $interest = $this->Interests->newEntity();
         if ($this->request->is('post')) {
-            $interest = $this->Interests->patchEntity($interest, $this->request->getData());
+            $interest = $this->Interests->patchEntity($interest, $this->request->data);
             if ($this->Interests->save($interest)) {
                 $this->Flash->success(__('The interest has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The interest could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The interest could not be saved. Please, try again.'));
         }
-        $this->set(compact('interest'));
+        $parentInterests = $this->Interests->ParentInterests->find('list', ['limit' => 200]);
+        $list = $this->Interests->find('treeList');
+        $this->set(compact('interest', 'list'));
+        $this->set('_serialize', ['interest']);
     }
 
     /**

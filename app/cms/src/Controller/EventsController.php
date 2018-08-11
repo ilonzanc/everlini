@@ -24,7 +24,7 @@ class EventsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Users']
+            'contain' => ['Organisations']
         ];
         $events = $this->paginate($this->Events);
 
@@ -41,7 +41,7 @@ class EventsController extends AppController
     public function view($id = null)
     {
         $event = $this->Events->get($id, [
-            'contain' => ['Users', 'Favorites', 'Posts', 'Attachments']
+            'contain' => ['Organisations', 'Favorites', 'Posts', 'Attachments']
         ]);
 
         $this->set('event', $event);
@@ -83,7 +83,7 @@ class EventsController extends AppController
                 $this->Flash->error(__('Could not move image. Please, try again.'));
             }
 
-            $event->user_id =  $this->Auth->user('id');
+            $event->organisation_id =  $this->Auth->organisation('id');
             $event->name = $this->request->data['name'];
             $event->description = $this->request->data['description'];
 
@@ -118,8 +118,8 @@ class EventsController extends AppController
             }
             $this->Flash->error(__('The event could not be saved. Please, try again.'));
         }
-        $users = $this->Events->Users->find('list', ['limit' => 200]);
-        $this->set(compact('event', 'users'));
+        $organisations = $this->Events->Organisations->find('list', ['limit' => 200]);
+        $this->set(compact('event', 'organisations'));
     }
 
     /**
@@ -193,8 +193,8 @@ class EventsController extends AppController
             $this->Flash->error(__('The event could not be saved. Please, try again.'));
         }
 
-        $users = $this->Events->Users->find('list', ['limit' => 200]);
-        $this->set(compact('event', 'users'));
+        $organisations = $this->Events->Organisations->find('list', ['limit' => 200]);
+        $this->set(compact('event', 'organisations'));
     }
 
     /**

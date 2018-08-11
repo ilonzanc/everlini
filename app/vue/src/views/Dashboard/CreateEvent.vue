@@ -62,7 +62,7 @@ export default {
         data: this.event,
       })
       .then((response) => {
-          this.$router.push('/profiel/jouw-events/' + response.data.event.id);
+          this.$router.push('/dashboard/' + this.$route.params.name + '/' + this.$route.params.id  + '/events/' + response.data.event.id);
       })
       .catch((error) => {
         if (error.response) {

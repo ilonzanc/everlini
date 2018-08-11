@@ -21,7 +21,10 @@
     <fieldset>
         <legend><?= __('Edit Interest') ?></legend>
         <?php
-            echo $this->Form->control('title');
+            echo $this->Form->control('name');
+            echo $this->Form->control('parent_id');
+            echo $this->Form->control('lft');
+            echo $this->Form->control('rght');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

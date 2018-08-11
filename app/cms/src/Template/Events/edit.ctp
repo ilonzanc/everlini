@@ -14,7 +14,7 @@ $today = date("Y");
 
     <h2><?= __('Edit Event') ?></h2>
     <?php
-        echo $this->Form->control('user_id', ['options' => $users, 'empty' => true, 'type' => 'hidden']);
+        echo $this->Form->control('organisation_id', ['options' => $organisations, 'empty' => true, 'type' => 'hidden']);
         echo $this->Form->control('name');
         echo $this->Form->control('description');
         echo $this->Form->label('startdate');

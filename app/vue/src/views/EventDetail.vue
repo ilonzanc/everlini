@@ -37,8 +37,7 @@
       return {
         location: "",
         event: "",
-        eventFavorited: false,
-        loggedInUser: {}
+        eventFavorited: false
       }
     },
     mounted() {
@@ -51,6 +50,7 @@
         })
         .then(response => {
           this.event = response.data.event[0];
+          this.checkIfFavorited();
         })
         .catch(error => {
         });
@@ -91,11 +91,11 @@
         if(this.eventFavorited == false) {
           axios({
             method: "post",
-            url: apiurl + "/api/favorite/add.json",
+            url: apiurl + "/api/favorites/add.json",
             headers: { },
             data: {
               event_id: this.event.id,
-              user_id: this.parent.id
+              user_id: this.$parent.session.id
             }
           })
           .then(response => {
@@ -110,7 +110,7 @@
             headers: { },
             data: {
               event_id: this.event.id,
-              user_id: this.loggedInUser.id,
+              user_id: this.$parent.session.id,
               meetup_id: this.currentMeetUpEvent.id
             }
           })
@@ -126,7 +126,6 @@
         axios({
           method: "put",
           url: apiurl + "/api/favorites.json",
-          headers: { },
           data: {
             event_id: this.event.id,
             user_id: this.$parent.session.id,
@@ -134,6 +133,7 @@
           }
         })
         .then(response => {
+          console.log(response);
           if(response.data.favorites.length >= 1 ) {
             this.eventFavorited = true;
           }

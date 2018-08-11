@@ -8,8 +8,8 @@
     <h3><?= h($event->name) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th scope="row"><?= __('User') ?></th>
-            <td><?= $event->has('user') ? $this->Html->link($event->user->id, ['controller' => 'Users', 'action' => 'view', $event->user->id]) : '' ?></td>
+            <th scope="row"><?= __('Organisation') ?></th>
+            <td><?= $event->has('organisation') ? $this->Html->link($event->organisation->id, ['controller' => 'Organisations', 'action' => 'view', $event->organisation->id]) : '' ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Name') ?></th>
@@ -45,18 +45,18 @@
         <?php if (!empty($event->favorites)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th scope="col"><?= __('User Id') ?></th>
+                <th scope="col"><?= __('Organisation Id') ?></th>
                 <th scope="col"><?= __('Event Id') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($event->favorites as $favorites): ?>
             <tr>
-                <td><?= h($favorites->user_id) ?></td>
+                <td><?= h($favorites->organisation_id) ?></td>
                 <td><?= h($favorites->event_id) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Favorites', 'action' => 'view', $favorites->user_id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Favorites', 'action' => 'edit', $favorites->user_id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Favorites', 'action' => 'delete', $favorites->user_id], ['confirm' => __('Are you sure you want to delete # {0}?', $favorites->user_id)]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Favorites', 'action' => 'view', $favorites->organisation_id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Favorites', 'action' => 'edit', $favorites->organisation_id]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Favorites', 'action' => 'delete', $favorites->organisation_id], ['confirm' => __('Are you sure you want to delete # {0}?', $favorites->organisation_id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

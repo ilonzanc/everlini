@@ -32,7 +32,7 @@
             <tr>
                 <td><?= $this->Number->format($event->id) ?></td>
                 <td><?= (isset($event['image_id'])) ? $this->Html->link($event['image_id'], ['controller' => 'Attachments', 'action' => 'view', $event['image_id']]) : '' ?></td>
-                <!-- <td><?php /*$event->has('user') ? $this->Html->link($event->user->id, ['controller' => 'Users', 'action' => 'view', $event->user->id]) : '' */ ?></td>-->
+                <!-- <td><?php /*$event->has('organisation') ? $this->Html->link($event->organisation->id, ['controller' => 'Organisations', 'action' => 'view', $event->organisation->id]) : '' */ ?></td>-->
 
                 <td><?= h($event->name) ?></td>
 

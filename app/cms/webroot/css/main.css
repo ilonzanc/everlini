@@ -712,6 +712,7 @@ form label {
 form input[type="text"],
 form input[type="email"],
 form input[type="password"],
+form input[type="number"],
 form select,
 form textarea,
 form input[type="date"] {

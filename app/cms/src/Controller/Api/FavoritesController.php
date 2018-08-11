@@ -50,13 +50,14 @@ class FavoritesController extends AppController
             $eventId = $event['id'];
         }
 
+        $data = $this->request->getData();
+
         $favorites = $this->Favorites->find('all')
             ->where(['event_id' => $eventId, 'user_id' => $this->request->data('user_id')]);
 
         $this->set([
-            'event' => $event,
             'favorites' => $favorites,
-            '_serialize' => ['favorites', 'event']
+            '_serialize' => ['favorites']
         ]);
 
     }
@@ -138,7 +139,7 @@ class FavoritesController extends AppController
 
         $favorites = $this->Favorites->find('all')
             ->where(['Favorites.user_id' => $userid])
-            ->contain(['Users', 'Events']);
+            ->contain(['Users', 'Events', 'Events.Posts']);
 
         $favoriteEvents = [];
 

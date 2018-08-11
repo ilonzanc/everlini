@@ -7,7 +7,10 @@ use Cake\ORM\Entity;
  * Interest Entity
  *
  * @property int $id
- * @property string $title
+ * @property string $name
+ * @property int $parent_id
+ * @property int $lft
+ * @property int $rght
  */
 class Interest extends Entity
 {
@@ -22,6 +25,9 @@ class Interest extends Entity
      * @var array
      */
     protected $_accessible = [
-        'title' => true
+        'name' => true,
+        'parent_id' => true,
+        'lft' => true,
+        'rght' => true
     ];
 }
