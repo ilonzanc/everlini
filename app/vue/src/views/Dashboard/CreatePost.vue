@@ -36,7 +36,7 @@ export default {
     onSubmit() {
       axios({
         method: 'post',
-        url: apiurl + "/api/posts/add.json",
+        url: apiurl + "posts/add.json",
         data: this.post,
       })
       .then((response) => {

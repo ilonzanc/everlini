@@ -24,7 +24,7 @@ window.axios.defaults.headers.common = {
 };
 
 // dev
-window.apiurl = "http://localhost:8765";
+window.apiurl = "http://localhost:8765/api/";
 
 // prod
 // window.apiurl = "https://ilonaapi.3.web.codedor.online";

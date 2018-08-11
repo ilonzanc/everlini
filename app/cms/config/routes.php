@@ -175,7 +175,15 @@ Router::prefix('api', function ($routes) {
 
     //Interests Routes
 
-    $routes->resources('Interests');
+    $routes->connect(
+        '/interests',
+        ['controller' => 'Interests', 'action' => 'index']
+    );
+
+    $routes->connect(
+        '/interests',
+        ['controller' => 'Interests', 'action' => 'getParentInterests', '?' => ['parent' => 'true', 'pass' => ['parent']]]
+    );
 
     //Organisations Routes
 

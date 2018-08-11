@@ -45,7 +45,7 @@ export default {
     console.log("Profile Vue Component mounted");
     axios({
       method: 'get',
-      url: apiurl + "/api/organisations/" + this.$route.params.id + ".json",
+      url: apiurl + "organisations/" + this.$route.params.id + ".json",
     })
     .then(response => {
       this.organisation = response.data.organisation;
@@ -55,7 +55,7 @@ export default {
 
     axios({
       method: 'get',
-      url: apiurl + "/api/events/organisation/" + this.$route.params.id + ".json",
+      url: apiurl + "events/organisation/" + this.$route.params.id + ".json",
     })
     .then(response => {
       this.events = response.data;
@@ -65,7 +65,7 @@ export default {
 
     axios({
       method: 'get',
-      url: apiurl + "/api/admins.json?organisation=" + this.$route.params.id ,
+      url: apiurl + "admins.json?organisation=" + this.$route.params.id ,
     })
     .then(response => {
       console.log(response);

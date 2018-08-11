@@ -6,6 +6,7 @@
     padding: 0.8rem;
     border: 1px solid #fff;
     text-transform: lowercase;
+    outline: none;
 
     span {
         color: #fff;
@@ -36,6 +37,19 @@
         text-align: center;
         span {
             display: none;
+            color: #fff;
+        }
+    }
+
+    &.interest-btn {
+        background: none;
+        color: $primary-color;
+        border-color: $primary-color;
+        &:hover {
+            background: rgba($primary-color, 0.2);
+        }
+        &.selected {
+            background: $primary-color;
             color: #fff;
         }
     }

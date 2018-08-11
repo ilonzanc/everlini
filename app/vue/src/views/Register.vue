@@ -90,7 +90,7 @@ export default {
       if (this.validationStatus) {
         axios({
           method: 'post',
-          url: apiurl + "/api/register.json",
+          url: apiurl + "register.json",
           data: this.user,
         })
         .then((response) => {

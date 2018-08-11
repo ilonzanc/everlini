@@ -45,7 +45,7 @@
       if(!this.currentMeetUpEvent.id) {
         axios({
           method: "get",
-          url: apiurl + "/api/events/" + this.$route.params.id + ".json",
+          url: apiurl + "events/" + this.$route.params.id + ".json",
           headers: { },
         })
         .then(response => {
@@ -73,7 +73,7 @@
           this.event.meetup_id = this.event.id;
           axios({
             method: 'post',
-            url: apiurl + "/api/events/add.json",
+            url: apiurl + "events/add.json",
             data: this.event
           })
           .then(response => {
@@ -91,7 +91,7 @@
         if(this.eventFavorited == false) {
           axios({
             method: "post",
-            url: apiurl + "/api/favorites/add.json",
+            url: apiurl + "favorites/add.json",
             headers: { },
             data: {
               event_id: this.event.id,
@@ -106,7 +106,7 @@
         } else {
           axios({
             method: "delete",
-            url: apiurl + "/api/favorite/delete.json",
+            url: apiurl + "favorite/delete.json",
             headers: { },
             data: {
               event_id: this.event.id,
@@ -125,7 +125,7 @@
       checkIfFavorited() {
         axios({
           method: "put",
-          url: apiurl + "/api/favorites.json",
+          url: apiurl + "favorites.json",
           data: {
             event_id: this.event.id,
             user_id: this.$parent.session.id,

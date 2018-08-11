@@ -140,7 +140,7 @@
       this.$store.commit('clearMeetUpEvent', null);
       axios({
         method: "post",
-        url: apiurl + "/api/events.json",
+        url: apiurl + "events.json",
         headers: { },
         data: this.searchparams
       })

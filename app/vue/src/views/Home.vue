@@ -2,7 +2,6 @@
   <div id="home" class="content">
     <div class="hero-image"></div>
     <div class="container">
-
       <h1>Ontdek evenementen bij jou in de buurt die matchen met jouw interesses</h1>
       <form @submit.prevent="onSubmit">
         <div class="row">
@@ -29,15 +28,19 @@
             <div class="time-inputs">
                 <label for="startdate">Van</label>
                 <input class="inline-input" type="date" :min="getDateOfToday()" id="startdate" name="startdate" placeholder="dd-mm-jjjj" v-model="params.startdate">
-                <span v-if="errors.startdate" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.startdate}}</span>
                 <label for="enddate">Tot</label>
                 <input class="inline-input" type="date" id="enddate" name="enddate" placeholder="dd-mm-jjjj" v-model="params.enddate">
-                <span v-if="errors.enddate" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.enddate}}</span>
+            </div>
+            <div class="time-inputs-errors">
+              <span v-if="errors.startdate" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.startdate}}</span>
+              <span v-if="errors.enddate" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.enddate}}</span>
             </div>
           </div>
         </div>
         <label>Interesses</label>
-        <div class="row"></div>
+        <section class="default-interest-section">
+          <button v-if="defaultInterests.length > 0" v-for="(interest, key) in defaultInterests" v-bind:key="key" @click.prevent="toggleInterest($event, key)" v-bind:class="['btn interest-btn', {'selected': interest.selected}]">{{ interest.name }}</button>
+        </section>
         <div class="row">
           <div class="column column-sm-12 column-lg-6">
             <div class="interests_input">
@@ -101,6 +104,7 @@
           interests: [],
           radiusValue: 5,
         },
+        defaultInterests: [ ],
         slider_options: {
           min: 5,
           max: 30,
@@ -127,11 +131,13 @@
           enddate: false,
           interests: false
         },
-        validationStatus: true
+        validationStatus: true,
+        interests: []
       };
     },
     mounted() {
       this.params = this.searchparams;
+      this.getInterests();
     },
     methods: {
       onSubmit() {
@@ -145,7 +151,7 @@
         if (this.validationStatus) {
           axios({
             method: "post",
-            url: apiurl + "/api/events.json",
+            url: apiurl + "events.json",
             headers: { },
             data: this.searchparams
           })
@@ -180,7 +186,8 @@
                 this.meetupevents.push(json.data.events[j]);
               }
 
-            }).catch(err => {
+            })
+            .catch(err => {
             })
           }
         }
@@ -236,6 +243,69 @@
           this.validationStatus = false;
         }
       },
+      getInterests() {
+        axios({
+          method: 'get',
+          url: apiurl + "interests.json"
+        })
+        .then(response => {
+          this.interests = response.data.interests;
+          response.data.interests.forEach(interest => {
+            let defaultInterest = {};
+            defaultInterest.name = interest.name;
+            defaultInterest.selected = false;
+            this.defaultInterests.push(defaultInterest);
+          });
+        })
+        .catch(error => {
+
+        })
+      },
+      toggleInterest(event, index) {
+        if (event) {
+          if (this.defaultInterests[index].selected == true) {
+            this.defaultInterests[index].selected = false;
+            this.deleteInterests(this.defaultInterests[index].name);
+          } else {
+            this.defaultInterests[index].selected = true;
+            this.addInterests(this.defaultInterests[index].name);
+          }
+        }
+      },
+      addInterests(interestname){
+        this.interests.forEach(interest => {
+          if(interest.name == interestname) {
+            this.params.interests.push(interest.name);
+            this.addChildInterests(interest);
+          }
+        });
+      },
+      addChildInterests(parent) {
+        if(parent.children.length > 0) {
+          parent.children.forEach(child => {
+            this.params.interests.push(child.name);
+            this.addChildInterests(child);
+          });
+        }
+      },
+      deleteInterests(interestname){
+        this.interests.forEach(interest => {
+          if(interest.name == interestname) {
+            let interestIndex = this.interests.indexOf(interest.name);
+            this.params.interests.splice(interestIndex, 1);
+            this.deleteChildInterests(interest);
+          }
+        });
+      },
+      deleteChildInterests(parent) {
+        if(parent.children.length > 0) {
+          parent.children.forEach(child => {
+            let childIndex = this.interests.indexOf(child.name);
+            this.params.interests.splice(childIndex, 1);
+            this.deleteChildInterests(child);
+          });
+        }
+      }
     }
   };
 </script>

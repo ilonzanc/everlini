@@ -64,7 +64,7 @@
       console.log('Mounted Event Detail Vue Component');
       axios({
         method: "get",
-        url: apiurl + "/api/events/" + this.$route.params.eventid + ".json",
+        url: apiurl + "events/" + this.$route.params.eventid + ".json",
         headers: { },
       })
       .then((response) => {
@@ -90,7 +90,7 @@
       saveEvent() {
         axios({
           method: "post",
-          url: apiurl + "/api/favorite/add.json",
+          url: apiurl + "favorite/add.json",
           headers: { },
           data: {
             event_id: this.event.id,
@@ -118,7 +118,7 @@
       deletePost(id) {
         axios({
           method: 'put',
-          url: apiurl + "/api/posts/" + id + "/delete.json",
+          url: apiurl + "posts/" + id + "/delete.json",
           data: this.event,
         })
         .then((response) => {

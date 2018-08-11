@@ -56,7 +56,7 @@ export default {
     this.event.user_id = this.loggedInUser.id;
       axios({
         method: 'get',
-        url: apiurl + "/api/events/" + this.$route.params.id + ".json",
+        url: apiurl + "events/" + this.$route.params.id + ".json",
       })
       .then((response) => {
           this.event = response.data.event[0];
@@ -93,7 +93,7 @@ export default {
     onSubmit() {
       axios({
         method: 'put',
-        url: apiurl + "/api/events/" + this.$route.params.id + "/edit.json",
+        url: apiurl + "events/" + this.$route.params.id + "/edit.json",
         data: this.event,
       })
       .then((response) => {

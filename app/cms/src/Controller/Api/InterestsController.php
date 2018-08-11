@@ -3,6 +3,8 @@
 namespace App\Controller\Api;
 use App\Controller\AppController;
 
+use Cake\Event\Event;
+
 class InterestsController extends AppController
 {
     public function initialize()
@@ -11,9 +13,24 @@ class InterestsController extends AppController
         $this->loadComponent('RequestHandler');
     }
 
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['index', 'add', 'edit', 'view', 'delete', 'getParentInterests']);
+
+        $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
+            withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
+            withHeader('Access-Control-Allow-Headers',
+                       'Accept, Authorization, Cache-Control, Content-Type, X-Requested-With, x-csrf-token')->
+            withHeader('Access-Control-Allow-Credentials', 'true')->
+            withHeader('Access-Control-Max-Age', '3600');
+
+        $this->response->send();
+    }
+
     public function index()
     {
-        $interests = $this->Interests->find('all');
+        $interests = $this->Interests->find('threaded');
+
         $this->set([
             'interests' => $interests,
             '_serialize' => ['interests']
@@ -41,6 +58,20 @@ class InterestsController extends AppController
             'message' => $message,
             'interest' => $interest,
             '_serialize' => ['message', 'interest']
+        ]);
+    }
+
+    public function getParentInterests()
+    {
+        $interests = $this->Interests->find('all')
+        ->contain(['ChildInterests'])
+        ->where(['Interests.parent_id IS NULL']);
+
+        $interests = $this->Interests->find('threaded');
+
+        $this->set([
+            'interests' => $interests,
+            '_serialize' => ['interests']
         ]);
     }
 }

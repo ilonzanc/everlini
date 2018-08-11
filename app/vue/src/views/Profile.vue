@@ -70,7 +70,7 @@
       console.log("Profile Vue Component mounted");
       axios({
         method: 'get',
-        url: apiurl + "/api/profiles/" + this.$route.params.username + ".json",
+        url: apiurl + "profiles/" + this.$route.params.username + ".json",
       })
       .then(response => {
         this.profile = response.data.profile;
@@ -80,7 +80,7 @@
 
       axios({
         method: 'get',
-        url: apiurl + "/api/organisations.json?user=" + this.$parent.session.id,
+        url: apiurl + "organisations.json?user=" + this.$parent.session.id,
       })
       .then(response => {
         this.organisations = response.data;
@@ -90,7 +90,7 @@
 
       axios({
         method: 'get',
-        url: apiurl + "/api/favorites/user/" +  this.$parent.session.id + ".json",
+        url: apiurl + "favorites/user/" +  this.$parent.session.id + ".json",
       })
       .then(response => {
         console.log(response);

@@ -49,6 +49,13 @@
             }
         }
     }
+
+    .default-interest-section {
+        margin: 0 -1rem;
+        .interest-btn {
+            margin: 1rem;
+        }
+    }
 }
 
 @media (min-width: 42.5rem) {
@@ -73,6 +80,16 @@
             transform: translate(-50%, -50%);
             width: 960px;
             background: #fff;
+        }
+        .default-interest-section {
+            display: flex;
+            flex-wrap: wrap;
+
+            .interest-btn {
+                flex: 1;
+                flex-basis: 200px;
+                margin-top: 0;
+            }
         }
     }
 

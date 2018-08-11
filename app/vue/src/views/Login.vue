@@ -63,7 +63,7 @@ export default {
       if (this.validationStatus) {
         axios({
           method: 'post',
-          url: apiurl + "/api/login.json",
+          url: apiurl + "login.json",
           data: this.user
         })
         .then((response) => {

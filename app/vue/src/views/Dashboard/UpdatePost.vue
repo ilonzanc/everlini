@@ -33,7 +33,7 @@ export default {
     console.log('Update Event Component Mounted');
       axios({
         method: 'get',
-        url: apiurl + "/api/posts/" + this.$route.params.postid + ".json",
+        url: apiurl + "posts/" + this.$route.params.postid + ".json",
       })
       .then((response) => {
           this.post = response.data.post;
@@ -58,7 +58,7 @@ export default {
     onSubmit() {
       axios({
         method: 'put',
-        url: apiurl + "/api/posts/" + this.$route.params.postid + "/edit.json",
+        url: apiurl + "posts/" + this.$route.params.postid + "/edit.json",
         data: this.post,
       })
       .then((response) => {

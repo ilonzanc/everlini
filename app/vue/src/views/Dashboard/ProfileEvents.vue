@@ -42,7 +42,7 @@
       axios({
         method: "get",
         url:
-          apiurl + "/api/events/user/" + this.loggedInUser.id + ".json",
+          apiurl + "events/user/" + this.loggedInUser.id + ".json",
         })
         .then((response) => {
           this.events = response.data;
@@ -67,7 +67,7 @@
       deleteEvent(id) {
         axios({
           method: 'put',
-          url: apiurl + "/api/events/" + id + "/delete.json",
+          url: apiurl + "events/" + id + "/delete.json",
           data: this.event,
         })
         .then((response) => {

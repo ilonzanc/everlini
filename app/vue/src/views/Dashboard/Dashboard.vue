@@ -40,7 +40,7 @@
 
       axios({
         method: 'get',
-        url: apiurl + "/api/organisations.json?user=" + this.$parent.session.id,
+        url: apiurl + "organisations.json?user=" + this.$parent.session.id,
       })
       .then(response => {
         console.log(response.data);
