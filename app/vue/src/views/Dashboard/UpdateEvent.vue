@@ -1,7 +1,7 @@
 <template>
   <div id="update-event" class="content">
     <div class="container">
-      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
+      <router-link :to='"/dashboard/" + $route.params.name + "/" + $route.params.id + "/events/" + $route.params.eventid' class="breadcrumb"><i class="fa fa-caret-left"></i> terug naar dashboard</router-link>
       <h1>Event bewerken</h1>
       <form @submit.prevent="onSubmit">
         <label for="name">Naam</label>

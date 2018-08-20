@@ -13,6 +13,7 @@ import Overview from '../views/Overview'
 import EventDetail from '../views/EventDetail'
 
 import Profile from '../views/Profile'
+import ProfileEdit from '../views/ProfileEdit'
 import ProfileAdminInvite from '../views/ProfileAdminInvite'
 import ProfileEvents from '../views/Dashboard/ProfileEvents'
 import ProfileEventDetail from '../views/Dashboard/ProfileEventDetail'
@@ -68,6 +69,10 @@ let routes = [
     {
         path: '/profiel/:username',
         component: Profile
+    },
+    {
+        path: '/profiel/:username/profiel-aanpassen',
+        component: ProfileEdit
     },
     {
         path: '/profiel/:username/uitnodigen-als-admin',

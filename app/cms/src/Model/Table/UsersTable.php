@@ -57,6 +57,10 @@ class UsersTable extends Table
         $this->belongsTo('Attachments', [
             'foreignKey' => 'image_id',
         ]);
+
+        $this->belongsToMany('Interests', [
+            'joinTable' => 'interests_users',
+        ]);
     }
 
     /**

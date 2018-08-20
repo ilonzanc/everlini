@@ -171,7 +171,7 @@
 
           let interests = this.searchparams.interests;
 
-          for (let i = 0; i < interests.length; i++) {
+          /* for (let i = 0; i < interests.length; i++) {
             let interest = interests[i];
             this.$jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=' + floatLng +
               '&page=20&radius=' + this.searchparams.radiusValue +
@@ -189,7 +189,7 @@
             })
             .catch(err => {
             })
-          }
+          } */
         }
       },
       addRow() {

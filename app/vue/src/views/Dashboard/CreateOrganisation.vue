@@ -1,7 +1,7 @@
 <template>
   <div id="create-event" class="content">
     <div class="container">
-      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
+      <router-link to="/dashboard" class="breadcrumb"><i class="fa fa-caret-left"></i> terug naar dashboard</router-link>
       <h1>Nieuwe organisatie toevoegen</h1>
       <form @submit.prevent="onSubmit">
         <label for="name">Naam organisatie</label>
@@ -24,7 +24,7 @@ export default {
         user_id: "",
         name: "",
         description: "",
-        username: "newuser2"
+        username: ""
       },
     }
   },

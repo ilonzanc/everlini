@@ -46,6 +46,8 @@ class EventsController extends AppController
 
         $interests = array();
 
+        $tags = array();
+
         $events = array();
 
         $conditions = array();
@@ -57,6 +59,7 @@ class EventsController extends AppController
         foreach($search_terms as $search_term){
             $interests[] = array('Events.name Like' =>'%'.$search_term.'%');
             $interests[] = array('Events.description Like' =>'%'.$search_term.'%');
+            $tags[] = array('Interests.name Like' =>'%'.$search_term.'%');
         }
 
         $events = $this->Events
@@ -70,11 +73,20 @@ class EventsController extends AppController
             })
             ->contain('Organisations');
 
+        $additionalEvents = $this->Events->find('all')
+            ->contain('Interests', function ($q) use ($tags) {
+                return $q->where(function($t) use ($tags){
+                    return $t->or_($tags);
+                });
+            });
+
         $data = $this->request->data;
 
         $this->set([
+            'additionalEvents' => $additionalEvents,
             'events' => $events,
-            '_serialize' => ['events']
+            'additionalEvents' => $additionalEvents,
+            '_serialize' => ['events', 'additionalEvents', 'additionalEvents']
         ]);
     }
 
@@ -86,6 +98,7 @@ class EventsController extends AppController
                 return $q
                     ->where(['Posts.deleted IS NULL']);
         })
+        ->contain('Interests')
         ->where(['Events.id' => $id]);
 
         $this->set([
@@ -100,6 +113,7 @@ class EventsController extends AppController
 
         if ($this->request->is('post')) {
             if (!isset($this->request->data['meetup_id'])){
+
                 $event = $this->Events->newEntity();
 
                 $event->organisation_id = $this->request->data['organisation_id'];
@@ -132,6 +146,33 @@ class EventsController extends AppController
                         $this->response->body($event);
                         return $this->response;
                     }
+
+                    $this->loadModel('Interests');
+
+                    foreach($this->request->data['tags'] as $tag) {
+                        $existInterest = $this->Interests->find('all')
+                        ->where(['Interests.name' => $tag]);
+                        $existInterest = $existInterest->first();
+                        if ($existInterest == null) {
+                            $data = [
+                                'name' => $tag,
+                                'parent_id' => null,
+                                'events' => [
+                                    [
+                                        'id' => $event->id,
+                                    ],
+                                ]
+                            ];
+                            $interest = $this->Interests->newEntity($data, [
+                                'associated' => ['Events']
+                            ]);
+                            if ($this->Interests->save($interest)) {
+                                $message = 'Saved interests with event';
+                            } else {
+                                $message = 'Error: somethign went wroing with the interests';
+                            }
+                        }
+                    }
                 }
                 else {
                     $message = 'The event could not be saved. Please, try again.';
@@ -139,11 +180,12 @@ class EventsController extends AppController
                 }
 
                 $this->set([
-                    'data' => $event,
+                    'existInterest' => $existInterest,
+                    'data' => $data,
                     'message' => $message,
                     'event' => $event,
                     'errors' => $errors,
-                    '_serialize' => ['query', 'data', 'message', 'event', 'errors']
+                    '_serialize' => ['query', 'data', 'message', 'event', 'errors', 'existInterest']
                 ]);
 
             } else {

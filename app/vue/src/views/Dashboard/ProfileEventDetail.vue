@@ -1,12 +1,16 @@
 <template>
   <div id="profile-event-detail" class="content">
     <div class="container">
-      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
-      <h1>{{ event.name }}</h1>
+      <router-link :to='"/dashboard/" + $route.params.name + "/" + $route.params.id' class="breadcrumb"><i class="fa fa-caret-left"></i> terug naar dashboard</router-link>
       <section class="action-btns">
         <router-link :to="'/profiel/jouw-events/' + event.id + '/bewerken'" class="btn primary-btn small-btn"><i class="fa fa-pencil"></i><span> Bewerken</span></router-link>
         <a href="#" @click.prevent="deleteEvent(event.id)" class="btn small-btn delete-btn"><i class="fa fa-trash"></i><span> Verwijderen</span></a>
       </section>
+      <h1>{{ event.name }}</h1>
+      <p>{{ event.description }}</p>
+      <ul class="event-tag-list">
+        <li class="event-tag" v-for="tag in event.interests" v-bind:key="tag.id">{{tag.name}}</li>
+      </ul>
       <table>
         <tbody>
           <tr>
@@ -146,42 +150,52 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-.save-btn {
-  background: #FECA57;
-  transition: all 0.3s ease-in-out;
+  #profile-event-detail {
+    .save-btn {
+      background: #FECA57;
+      transition: all 0.3s ease-in-out;
 
-  &:active {
-    border: none;
-    background: #FF6B6B;
-  }
-}
+      &:active {
+        border: none;
+        background: #FF6B6B;
+      }
+    }
 
-.action-btns {
-  text-align: right;
+    .action-btns {
+      text-align: right;
 
-  a {
-    //float: right;
+      a {
+        //float: right;
 
-    &:first-child {
-      margin-bottom: 0.5rem;
+        &:first-child {
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+
+    article {
+      clear: right;
+    }
+
+    .new-blog-btn {
+      float: right;
+    }
+
+    table td {
+      padding: 0.5rem 0;
+    }
+
+    table td:first-child {
+      padding-right: 1rem;
+      vertical-align: top;
     }
   }
-}
+  @media (min-width: 42.5rem) {
+    #profile-event-detail {
+      .action-btns {
+        float: right;
+      }
+    }
+  }
 
-article {
-  clear: right;
-}
-
-.new-blog-btn {
-  float: right;
-}
-
-table td {
-  padding: 0.5rem 0;
-}
-
-table td:first-child {
-  padding-right: 1rem;
-  vertical-align: top;
-}
 </style>

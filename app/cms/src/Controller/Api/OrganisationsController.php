@@ -60,45 +60,75 @@ class OrganisationsController extends AppController
             $organisation = $this->Organisations->patchEntity($organisation, $this->request->getData());
             $organisation->creator_id =  $this->request->data['user_id'];
 
-            if ($this->Organisations->save($organisation)) {
-                $message = 'Saved the organisation';
+            $organisation->slug = $this->seoUrl($this->request->data['name']);
 
-                $this->loadModel('Admins');
+            $existingOrganisation = $this->Organisations->find('all')
+            ->where(['Organisations.name' => $this->request->data['name']]);
 
-                $admin = $this->Admins->newEntity();
-                if ($this->request->is('post')) {
-                    $data = [
-                        'user_id' => $this->request->data['user_id'],
-                        'username' => $this->request->data['username'],
-                        'organisations' => [
-                            [
-                                'id' => $organisation->id,
-                                '_joinData' => [
-                                    'main_admin' =>1,
-                                ]
-                            ],
-                        ]
-                    ];
-                    $admin = $this->Admins->newEntity($data, [
-                        'associated' => ['Organisations']
-                    ]);
+            $organisationNumber = $existingOrganisation->count();
 
-                    if ($this->Admins->save($admin)) {
-                        $message = 'The admin has been saved.';
+            if ($organisationNumber != null) {
+                $message = 'This organisation already exists. Choose a different name.';
+            } else {
+                if ($this->Organisations->save($organisation)) {
+                    $message = 'Saved the organisation';
 
+                    $this->loadModel('Admins');
+
+                    $existingAdmin = $this->Admins->find('all')
+                    ->where(['Admins.user_id' => $this->request->data['user_id']]);
+
+                    $adminNumber = $existingAdmin->count();
+
+                    if ($adminNumber != 0) {
+                        $organisation = $this->Organisations->get($organisation->id);
+                        $admin = $this->Admins->find('all')
+                        ->where(['Admins.user_id' => $this->request->data['user_id']]);
+                        $admin = $admin->first();
+
+                        $admin->_joinData = new Entity(['main_admin' => 1]);
+                        $this->Organisations->Admins->link($organisation, [$admin]);
                     } else {
-                        $message = 'The admin could not be saved. Please, try again.';
+                        $admin = $this->Admins->newEntity();
+                        if ($this->request->is('post')) {
+                            $data = [
+                                'user_id' => $this->request->data['user_id'],
+                                'username' => $this->request->data['username'],
+                                'organisations' => [
+                                    [
+                                        'id' => $organisation->id,
+                                        '_joinData' => [
+                                            'main_admin' =>1,
+                                        ]
+                                    ],
+                                ]
+                            ];
+                            $admin = $this->Admins->newEntity($data, [
+                                'associated' => ['Organisations']
+                            ]);
+
+                            if ($this->Admins->save($admin)) {
+                                $message = 'The admin has been saved.';
+
+                            } else {
+                                $message = 'The admin could not be saved. Please, try again.';
+                            }
+                        }
                     }
+
+                }
+                else {
+                    $message = 'Error. Could not save the organisation';
                 }
             }
-            else {
-                $message = 'Error. Could not save the organisation';
-            }
+
+
         }
         $this->set([
             'message' => $message,
             'admin' => $admin,
-            '_serialize' => ['message', 'admin']
+            'organisationNumber' => $organisationNumber,
+            '_serialize' => ['message', 'admin', 'organisationNumber']
         ]);
     }
 
@@ -151,5 +181,13 @@ class OrganisationsController extends AppController
         $this->response->type('json');
         $this->response->body($organisations);
         return $this->response;
+    }
+
+    public function seoUrl($string) {
+        $string = strtolower($string);
+        $string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
+        $string = preg_replace("/[\s-]+/", " ", $string);
+        $string = preg_replace("/[\s_]/", "-", $string);
+        return $string;
     }
 }

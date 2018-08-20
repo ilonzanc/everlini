@@ -43,7 +43,9 @@ class ProfilesController extends AppController
 
         $profile = $this->Profiles->find('all')
         ->where(['Profiles.id' => $id])
-        ->contain('Users');
+        ->contain([
+            'Users' => ['Interests']
+        ]);
 
         $profile = $profile->first();
 
@@ -156,7 +158,11 @@ class ProfilesController extends AppController
 
         $profile = $this->Profiles->find('all')
         ->where(['Profiles.user_id' => $user->id])
-        ->contain('Users');
+        ->contain('Users')
+        ->contain('Users.Interests', function ($q) {
+            return $q
+                ->select(['name']);
+        });
 
         $profile = $profile->first();
 

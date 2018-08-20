@@ -30,6 +30,7 @@ class Organisation extends Entity
         'creator_id' => true,
         'name' => true,
         'description' => true,
+        'slug' => true,
         'user' => true,
         'admins' => true
     ];

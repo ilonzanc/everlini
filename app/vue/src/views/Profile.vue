@@ -5,7 +5,7 @@
       <section class="profile-actions">
         <div v-if="profile.user_id == $parent.session.id">
         <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, '/dashboard')"><i class="fa fa-dashboard"></i> Dashboard</a>
-        <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, '/profiel-aanpassen')"><i class="fa fa-pencil"></i> Wijzig</a>
+        <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, '/profiel/' + $route.params.username + '/profiel-aanpassen')"><i class="fa fa-pencil"></i> Wijzig</a>
         </div>
         <div v-if="profile.user_id != $parent.session.id">
         <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, profile.user.username + '/uitnodigen-als-admin/')"><i class="fa fa-envelope"></i> Maak admin</a>
@@ -61,7 +61,6 @@
         favoriteEvents: [],
         favoriteMeetUps: [],
         meetups: [],
-        loggedInUser: {},
         organisations: [],
         posts: []
       }

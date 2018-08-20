@@ -47,6 +47,7 @@ class Event extends Entity
         'organisation' => true,
         'image' => true,
         'favorites' => true,
-        'posts' => true
+        'posts' => true,
+        'interests' => true
     ];
 }

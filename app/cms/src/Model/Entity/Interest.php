@@ -28,6 +28,8 @@ class Interest extends Entity
         'name' => true,
         'parent_id' => true,
         'lft' => true,
-        'rght' => true
+        'rght' => true,
+        'events' => true,
+        'users' => true
     ];
 }

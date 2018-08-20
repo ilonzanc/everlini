@@ -73,7 +73,7 @@ export default {
             } else {
               console.log(response.data);
               localStorage.setItem("user", JSON.stringify(response.data));
-              location.href = '/' + response.data.username;
+              location.href = '/profiel/' + response.data.username;
             }
         })
         .catch((error) => {

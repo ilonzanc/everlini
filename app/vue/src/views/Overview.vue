@@ -146,8 +146,22 @@
       })
       .then(response => {
         this.events = response.data.events;
+        //this.events.push(response.data.additionalEvents);
       })
       .catch(error => {
+        if (error.response) {
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          console.log(error.response.data.message);
+
+          let errors = [];
+
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
       });
 
       let floatLat = parseFloat(this.searchparams.location.lat);

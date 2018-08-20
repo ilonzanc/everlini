@@ -61,6 +61,32 @@ class UsersController extends AppController
         }
 
         if ($this->request->data['role_id'] == 2) {
+            $this->loadModel('Interests');
+
+            foreach($this->request->data['interests'] as $interest) {
+                $existInterest = $this->Interests->find('all')
+                ->where(['Interests.name' => $interest]);
+                $existInterest = $existInterest->first();
+                if ($existInterest == null) {
+                    $data = [
+                        'name' => $interest,
+                        'parent_id' => null,
+                        'users' => [
+                            [
+                                'id' => $user->id,
+                            ],
+                        ]
+                    ];
+                    $interest = $this->Interests->newEntity($data, [
+                        'associated' => ['Users']
+                    ]);
+                    if ($this->Interests->save($interest)) {
+                        $message = 'Saved interests with user';
+                    } else {
+                        $message = 'Error: somethign went wroing with the interests';
+                    }
+                }
+            }
             $this->loadModel('Profiles');
             $profile = $this->Profiles->newEntity();
 
@@ -75,7 +101,7 @@ class UsersController extends AppController
                 $this->loadModel('Users');
                 $id = $this->Auth->user('id');
                 $loggedInUser = $this->Users->get($id, [
-                    'fields' => array('id', 'email'),
+                    'fields' => array('id', 'email', 'username'),
                     'contain' => array(
                         'Profiles' => array(
                             'fields' => array(

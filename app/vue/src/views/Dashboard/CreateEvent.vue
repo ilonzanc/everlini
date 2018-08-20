@@ -1,7 +1,7 @@
 <template>
   <div id="create-event" class="content">
     <div class="container">
-      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
+      <router-link :to='"/dashboard/" + $route.params.name + "/" + $route.params.id' class="breadcrumb"><i class="fa fa-caret-left"></i> terug naar dashboard</router-link>
       <h1>Nieuw event toevoegen</h1>
       <form @submit.prevent="onSubmit">
         <label for="name">Naam</label>
@@ -17,6 +17,21 @@
         <input type="text" id="enddate" name="enddate" required placeholder="00:00" v-model="event.enddate.time">
         <h2>Locatie</h2>
         <input id="pac-input" type="text" name="location" placeholder="Locatie van je evenement..." v-model="event.location.name" @keyup="initMap">
+        <h2>Tags</h2>
+        <div class="row">
+          <div class="column column-sm-12 column-lg-6">
+            <div class="interests_input">
+              <input type="text" name="0" v-model="event.tags[0]" placeholder="eten & drinken, sport, vrije tijd, ...">
+              <i class="fa fa-plus" @click.prevent="addRow"></i>
+            </div>
+            <div class="additional_interests" v-bind:key="row.index" v-for="row in rows">
+              <div class="interests_input">
+                <input type="text" :name="currentInputIndex" v-model="event.tags[row.index + 1]" placeholder="Eten & Drinken, sport, vrije tijd, ...">
+                <i class="fa fa-plus" @click.prevent="addRow"></i>
+              </div>
+            </div>
+          </div>
+        </div>
         <button class="btn primary-btn" type="submit">Toevoegen</button>
       </form>
     </div>
@@ -29,6 +44,9 @@ export default {
   name: "create-event",
   data () {
     return {
+      currentInputIndex: 0,
+      inputs: [ 'fullname', 'email'],
+      rows: [],
       event: {
         organisation_id: "",
         name: "",
@@ -45,7 +63,8 @@ export default {
           name: "",
           lat: "",
           lng: "",
-        }
+        },
+        tags: []
       },
       loggedInUser: {}
     }
@@ -97,9 +116,27 @@ export default {
         this.event.location.lng = place.geometry.location.lng();
       });
     },
+    addRow() {
+        this.rows.push({value: this.event.tags[this.currentInputIndex], index: this.currentInputIndex});
+        this.currentInputIndex++;
+      },
   }
 }
 </script>
 
 <style lang="scss">
+  .interests_input {
+    position: relative;
+    .fa-plus {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 15px 17px 16px;
+      background: #FECA57;
+      color: #fff;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      cursor: pointer;
+    }
+  }
 </style>

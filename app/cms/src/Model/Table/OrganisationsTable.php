@@ -72,6 +72,13 @@ class OrganisationsTable extends Table
             ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
+            ->scalar('slug')
+            ->maxLength('slug', 255)
+            ->requirePresence('slug', 'create')
+            ->notEmpty('slug')
+            ->add('slug', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+
+        $validator
             ->scalar('description')
             ->allowEmpty('description');
 
@@ -88,6 +95,7 @@ class OrganisationsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['name']));
+        $rules->add($rules->isUnique(['slug']));
         $rules->add($rules->existsIn(['creator_id'], 'Users'));
 
         return $rules;

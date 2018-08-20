@@ -72,6 +72,10 @@ class EventsTable extends Table
         $this->hasMany('Posts', [
             'foreignKey' => 'event_id'
         ]);
+
+        $this->belongsToMany('Interests', [
+            'joinTable' => 'events_interests',
+        ]);
     }
 
     /**

@@ -49,6 +49,13 @@ class InterestsTable extends Table
             'className' => 'Interests',
             'foreignKey' => 'parent_id'
         ]);
+
+        $this->belongsToMany('Events', [
+            'joinTable' => 'events_interests',
+        ]);
+        $this->belongsToMany('Users', [
+            'joinTable' => 'interests_users',
+        ]);
     }
 
     /**

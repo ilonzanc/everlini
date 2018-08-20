@@ -1,7 +1,7 @@
 <template>
   <div id="dashboard" class="content">
     <div class="container">
-      <router-link to="/dashboard" class="breadcrumb">terug naar dashboard</router-link>
+      <router-link to="/dashboard" class="breadcrumb"><i class="fa fa-caret-left"></i> terug naar dashboard</router-link>
       <section class="dashboard-actions">
         <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, $route.params.id + '/wijzig/')"><i class="fa fa-pencil"></i> Wijzig info</a>
         <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, $route.params.id + '/nieuw-event/')"><i class="fa fa-plus"></i> nieuw event</a>
@@ -16,7 +16,7 @@
       </section>
       <section class="organisation-events">
         <h3>Events</h3>
-        <ul class="organisation-events-list">
+        <ul v-if="events.length > 0" class="organisation-events-list">
           <li class="organisation-event" v-bind:key="event.id" v-for="event in events">
             <router-link :to="{ path: 'events/' + event.id }" append>
               <article class="card">
@@ -25,6 +25,7 @@
             </router-link>
           </li>
         </ul>
+        <p v-else>De organisatie heeft nog geen evenementen. <router-link :to='$route.params.id + "/nieuw-event/"'>Event aanmaken</router-link></p>
       </section>
     </div>
   </div>
