@@ -17,6 +17,8 @@ class ProfilesController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['add', 'getProfileByUsername', 'edit', 'view', 'delete']);
 
+        //TODO: clean this up. Avoid repetitive code.s
+
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
             withHeader('Access-Control-Allow-Headers',
@@ -120,16 +122,58 @@ class ProfilesController extends AppController
     {
         $profile = $this->Profiles->get($id);
         if ($this->request->is(['post', 'put'])) {
-            $profile = $this->Profiles->patchEntity($profile, $this->request->getData());
+            $profile->firstname = $this->request->data['firstname'];
+            $profile->lastname = $this->request->data['lastname'];
+            $profile->dateofbirth = strtotime($this->request->data['dateofbirth']);
             if ($this->Profiles->save($profile)) {
-                $message = 'Saved';
+                $message = 'Saved the profile';
+                $this->loadModel('Users');
+                $users = $this->Users->find('all')
+                    ->where(['Users.id' => $this->request->data['user_id']]);
+                $user = $users->first();
+                $user->username = $this->request->data['user']['username'];
+                $user->email = $this->request->data['user']['email'];
+
+                if ($this->Users->save($user)) {
+                    $message = 'The user has been saved.';
+
+                    $this->loadModel('Interests');
+
+                    foreach($this->request->data['user']['interests'] as $interest) {
+                        $existInterest = $this->Interests->find('all')
+                        ->where(['Interests.name' => $interest]);
+                        $existInterest = $existInterest->first();
+                        if ($existInterest == null) {
+                            $data = [
+                                'name' => $interest,
+                                'parent_id' => null,
+                                'users' => [
+                                    [
+                                        'id' => $user->id,
+                                    ],
+                                ]
+                            ];
+                            $interest = $this->Interests->newEntity($data, [
+                                'associated' => ['Users']
+                            ]);
+                            if ($this->Interests->save($interest)) {
+                                $message = 'Saved interests with event';
+                            } else {
+                                $message = 'Error: somethign went wroing with the interests';
+                            }
+                        }
+                    }
+                } else {
+                    $message = "The user could not be saved. Please, try again.";
+                }
             } else {
                 $message = 'Error';
             }
         }
         $this->set([
+            'user' => $user,
             'message' => $message,
-            '_serialize' => ['message']
+            '_serialize' => ['message', 'user']
         ]);
     }
 

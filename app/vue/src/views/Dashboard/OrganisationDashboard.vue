@@ -1,7 +1,7 @@
 <template>
   <div id="dashboard" class="content">
     <div class="container">
-      <router-link to="/dashboard" class="breadcrumb"><i class="fa fa-caret-left"></i> terug naar dashboard</router-link>
+      <router-link to="/dashboard" class="breadcrumbs">terug naar dashboard</router-link>
       <section class="dashboard-actions">
         <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, $route.params.id + '/wijzig/')"><i class="fa fa-pencil"></i> Wijzig info</a>
         <a href="#" class="btn primary-btn small-btn" @click.prevent="showAction($event, $route.params.id + '/nieuw-event/')"><i class="fa fa-plus"></i> nieuw event</a>

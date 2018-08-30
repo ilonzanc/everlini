@@ -51,7 +51,7 @@ export default {
     }
   },
   mounted () {
-    if (loggedInUser) {
+    if (this.$parent.session != null) {
       this.$router.push('/profiel');
     }
     console.log('Login Component Mounted');
@@ -73,7 +73,8 @@ export default {
             } else {
               console.log(response.data);
               localStorage.setItem("user", JSON.stringify(response.data));
-              location.href = '/profiel/' + response.data.username;
+              this.$parent.session = response.data;
+              this.$router.push('/profiel/' + response.data.username);
             }
         })
         .catch((error) => {

@@ -481,6 +481,9 @@ p a {
   .column-lg-7 {
     width: 58.33333%; }
 
+  .column-lg-8 {
+    width: 66.66666%; }
+
   .column-lg-9 {
     width: 75%; }
 
@@ -501,6 +504,18 @@ header {
       cursor: pointer; }
   header.transparent-header {
     background: rgba(66, 66, 66, 0.3); }
+  .breadcrumbs {
+      color: #FECA57;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: block;
+  }
+  .breadcrumbs:before {
+    content: "\F0A8";
+    font-family: 'FontAwesome';
+    font-size: 1.2rem;
+    margin-right: 8px;
+  }
 
 @media (min-width: 42.5rem) {
   header {
@@ -592,18 +607,24 @@ footer {
 form label {
   display: inline-block;
   margin-bottom: 0.5rem; }
+  form label.required:after {
+    content: "*";
+    margin-left: 3px;
+    color: #FECA57; }
 form input[type="text"],
 form input[type="date"],
 form button.btn,
 form textarea,
-form .form-input {
+form .form-input,
+form select {
   display: block;
   width: 100%; }
 form input[type="text"],
 form input[type="email"],
 form input[type="password"],
 form input[type="date"],
-form textarea {
+form textarea,
+form select {
   border: 1px solid rgba(66, 66, 66, 0.5);
   border-radius: 5px;
   color: rgba(66, 66, 66, 0.5);
@@ -614,7 +635,8 @@ form textarea {
   form input[type="email"]:focus,
   form input[type="password"]:focus,
   form input[type="date"]:focus,
-  form textarea:focus {
+  form textarea:focus,
+  form select:focus {
     border: 1px solid rgba(66, 66, 66, 0.5);
     color: #424242; }
 form input[type="date"] {
@@ -671,7 +693,8 @@ form .form-error {
   border-radius: 5px;
   padding: 0.8rem;
   border: 1px solid #fff;
-  text-transform: lowercase; }
+  text-transform: lowercase;
+  outline: none; }
   .btn span {
     color: #fff;
     margin-left: 0.5rem; }
@@ -692,6 +715,15 @@ form .form-error {
     .btn.small-btn span {
       display: none;
       color: #fff; }
+  .btn.interest-btn {
+    background: none;
+    color: #48DBFB;
+    border-color: #48DBFB; }
+    .btn.interest-btn:hover {
+      background: rgba(72, 219, 251, 0.2); }
+    .btn.interest-btn.selected {
+      background: #48DBFB;
+      color: #fff; }
   .btn.delete-btn {
     border-color: #FF6B6B;
     background: #FF6B6B; }
@@ -699,6 +731,14 @@ form .form-error {
 @media (min-width: 42.5rem) {
   .btn.small-btn span {
     display: inline; } }
+.event-tag {
+  border: 1px solid #48DBFB;
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  min-width: 50px;
+  text-align: center; }
+
 .flash-message.error {
   background: rgba(255, 107, 107, 0.2);
   color: #FF6B6B;
@@ -707,6 +747,23 @@ form .form-error {
   .flash-message.error .fa {
     color: #FF6B6B;
     margin-right: 0.5rem; }
+
+.card {
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0px 0px 2px rgba(66, 66, 66, 0.1);
+  margin-bottom: 1rem; }
+
+.admin-card:nth-of-type(1) {
+  border: 1px solid #FECA57; }
+  .admin-card:nth-of-type(1):before {
+    content: "\f005";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #FECA57;
+    margin-right: 5px; }
 
 #overview__comp .event {
   overflow: auto;
@@ -734,10 +791,6 @@ form .form-error {
     padding: 0.5rem 0; }
     #overview__comp .event .event-details h3 {
       font-size: 1.2rem; }
-#overview__comp .aside__filter {
-  position: absolute;
-  top: 59px;
-  left: 100%; }
   #overview__comp .aside__filter.open-aside {
     left: 0; }
 
@@ -776,10 +829,33 @@ form .form-error {
     #home .dateTabs li.is-active a {
       background: #48DBFB;
       color: #fff; }
+  #home .default-interest-section {
+    margin: 0 -1rem; }
+    #home .default-interest-section .interest-btn {
+      margin: 1rem; }
 
 @media (min-width: 42.5rem) {
   #home {
-    min-height: calc(100vh - 72px); }
+    min-height: calc(100vh - 75px); }
+    #home .refresh-params-button {
+      color: #fff;
+      background: #48DBFB;
+      padding: 7px 8px;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      cursor: pointer;
+      z-index: 50; }
+    #home form {
+      position: relative; }
+    #home .container {
+      position: absolute;
+      left: 50%;
+      top: 30%;
+      transform: translate(-50%, -30%); }
     #home h1 {
       font-size: 2.5rem;
       padding: 3rem;
@@ -790,18 +866,20 @@ form .form-error {
     #home form {
       padding: 2rem;
       border-radius: 5px;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
       width: 960px;
       background: #fff; }
+    #home .default-interest-section {
+      display: flex;
+      flex-wrap: wrap; }
+      #home .default-interest-section .interest-btn {
+        flex: 1;
+        flex-basis: 200px;
+        margin-top: 0; }
 
   .dateTabs .tag {
     padding: 0.7rem 1.35rem;
     margin: 0 0.5rem; } }
 #profile .hero-image {
-  background: url("../images/art-creative-flying-17679.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -816,7 +894,8 @@ form .form-error {
   padding-top: 50px;
   margin-top: 100px; }
 #profile h1 {
-  text-align: center; }
+  text-align: center;
+  font-size: 1.2rem; }
 #profile .user-avatar {
   position: absolute;
   left: 50%;
@@ -824,10 +903,34 @@ form .form-error {
   transform: translate(-50%, -50%);
   background: #fff;
   border: 3px solid #fff;
-  border-radius: 50%; }
+  border-radius: 50%;
+  margin-bottom: 1rem; }
   #profile .user-avatar .fa {
-    font-size: 4.5rem;
-    margin-bottom: 1rem; }
+    font-size: 4.5rem; }
+#profile .profile-actions {
+  position: fixed;
+  top: 200px;
+  right: 0; }
+  #profile .profile-actions a {
+    min-width: 145px;
+    position: relative;
+    left: 105px;
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    transition: all 0.175s ease-out 0.120s; }
+    #profile .profile-actions a.open {
+      left: 0; }
+    #profile .profile-actions a i {
+      padding: 0.8rem;
+      padding-right: 0; }
+  #profile .profile-actions .btn {
+    padding: 0;
+    padding-right: 0.8rem; }
+#profile .event-newsfeed {
+  padding: 0 1rem; }
 #profile .event {
   overflow: auto;
   box-shadow: 0px 0px 5px rgba(66, 66, 66, 0.1);
@@ -852,9 +955,55 @@ form .form-error {
     color: #fff; }
   #profile .event .event-details {
     padding: 0.5rem 0; }
-    #profile .event .event-details h3 {
-      font-size: 1.2rem; }
-#profile .event-schedule h2 {
-  margin-bottom: 0.5rem; }
+    #profile .event .event-details p {
+      font-size: 1.2rem;
+      font-weight: 700; }
+#profile .event-schedule {
+  padding: 0 1rem; }
+  #profile .event-schedule h2 {
+    margin-bottom: 0.5rem; }
+
+@media (min-width: 42.5rem) {
+  #profile .event-newsfeed {
+    float: left;
+    width: 70%;
+    padding: 0 0.5rem; }
+  #profile .event-schedule {
+    width: 30%;
+    float: left;
+    padding: 0 0.5rem; }
+    #profile .event-schedule .event .event-date {
+      margin: 0.5rem;
+      padding: 8px 0;
+      width: 50px;
+      line-height: 120%; }
+    #profile .event-schedule .event .event-day {
+      font-size: 1.4rem; }
+    #profile .event-schedule .event .event-month {
+      font-size: 1rem; } }
+#dashboard .your-organisations-list,
+#dashboard .organisation-events-list {
+  list-style-type: none; }
+#dashboard .dashboard-actions {
+  position: fixed;
+  top: 100px;
+  right: -115px; }
+  #dashboard .dashboard-actions a {
+    position: relative;
+    right: 0;
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    transition: all 0.175s ease-out 0.120s; }
+    #dashboard .dashboard-actions a.open {
+      right: 115px; }
+    #dashboard .dashboard-actions a i {
+      padding: 0.8rem;
+      padding-right: 0; }
+  #dashboard .dashboard-actions .btn {
+    padding: 0;
+    padding-right: 0.8rem; }
 
 /*# sourceMappingURL=main.css.map */

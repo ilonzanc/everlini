@@ -10,6 +10,7 @@ $today = date("Y");
     <?= $this->Form->create($event, ['enctype' => 'multipart/form-data']) ?>
     <h3><?= __('Add Event') ?></h3>
     <?php
+        echo $this->Form->control('organisation_id', ['options' => $organisations, 'empty' => true]);
         echo $this->Form->control('name');
         echo $this->Form->control('description');
         echo $this->Form->label('startdate');

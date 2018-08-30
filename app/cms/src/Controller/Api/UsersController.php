@@ -26,6 +26,8 @@ class UsersController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['login', 'register', 'logout']);
 
+        //TODO: clean this up. Avoid repetitive code.
+
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
             withHeader('Access-Control-Allow-Headers',
@@ -38,13 +40,21 @@ class UsersController extends AppController
 
     public function register()
     {
-        $this->loadModel('Users');
+        $this->loadModel('Roles');
         $user = $this->Users->newEntity();
         //check if reauest is post
 
         $user->email = $this->request->data['email'];
         $user->password = $this->request->data['password'];
-        $user->role_id = $this->request->data['role_id'];
+
+        $roles = $this->Roles->find('all')
+        ->where(["Roles.name" => $this->request->data['role_name']]);
+
+        $role = $roles->first();
+
+        $role_id = $role->id;
+
+        $user->role_id = $role_id;
         $user->username = $this->request->data['username'];
         $newuserid = "";
 
@@ -54,74 +64,75 @@ class UsersController extends AppController
 
         } else {
             $error['errors'][] = 'We kunnen dit profiel niet opslaan. Probeer het opnieuw';
+           /*  $error = json_encode($error);
+            $this->response->type('json');
+            $this->response->body($error);
+            return $this->response; */
+            $this->set([
+                'user' => $user,
+                'errors' => $error,
+                '_serialize' => ['errors', 'user']
+            ]);
+        }
+        $this->loadModel('Interests');
+
+        foreach($this->request->data['interests'] as $interest) {
+            $existInterest = $this->Interests->find('all')
+            ->where(['Interests.name' => $interest]);
+            $existInterest = $existInterest->first();
+            if ($existInterest == null) {
+                $data = [
+                    'name' => $interest,
+                    'parent_id' => null,
+                    'users' => [
+                        [
+                            'id' => $user->id,
+                        ],
+                    ]
+                ];
+                $interest = $this->Interests->newEntity($data, [
+                    'associated' => ['Users']
+                ]);
+                if ($this->Interests->save($interest)) {
+                    $message = 'Saved interests with user';
+                } else {
+                    $message = 'Error: somethign went wrong with the interests';
+                }
+            }
+        }
+        $this->loadModel('Profiles');
+        $profile = $this->Profiles->newEntity();
+
+        //create new profile with new user id as user_id
+        $data = $this->request->data;
+        $profile->user_id = $newuserid;
+        $profile->firstname = $data['firstname'];
+        $profile->lastname = $data['lastname'];
+        $profile->dateofbirth = strtotime($data['dateofbirth']);
+        if ($this->Profiles->save($profile)) {
+            $this->Auth->setUser($user);
+            $this->loadModel('Users');
+            $id = $this->Auth->user('id');
+            $loggedInUser = $this->Users->get($id, [
+                'fields' => array('id', 'email', 'username'),
+                'contain' => array(
+                    'Profiles' => array(
+                        'fields' => array(
+                            'Profiles.user_id',
+                            'Profiles.id',
+                            'Profiles.firstname',
+                            'Profiles.lastname'
+                        ),
+                    )
+                )
+            ]);
+            $message = $loggedInUser;
+        } else {
+            $error['errors'][] = 'We kunnen dit profiel niet opslaan. Probeer het opnieuw';
             $error = json_encode($error);
             $this->response->type('json');
             $this->response->body($error);
             return $this->response;
-        }
-
-        if ($this->request->data['role_id'] == 2) {
-            $this->loadModel('Interests');
-
-            foreach($this->request->data['interests'] as $interest) {
-                $existInterest = $this->Interests->find('all')
-                ->where(['Interests.name' => $interest]);
-                $existInterest = $existInterest->first();
-                if ($existInterest == null) {
-                    $data = [
-                        'name' => $interest,
-                        'parent_id' => null,
-                        'users' => [
-                            [
-                                'id' => $user->id,
-                            ],
-                        ]
-                    ];
-                    $interest = $this->Interests->newEntity($data, [
-                        'associated' => ['Users']
-                    ]);
-                    if ($this->Interests->save($interest)) {
-                        $message = 'Saved interests with user';
-                    } else {
-                        $message = 'Error: somethign went wroing with the interests';
-                    }
-                }
-            }
-            $this->loadModel('Profiles');
-            $profile = $this->Profiles->newEntity();
-
-            //create new profile with new user id as user_id
-            $data = $this->request->data;
-            $profile->user_id = $newuserid;
-            $profile->firstname = $data['firstname'];
-            $profile->lastname = $data['lastname'];
-            $profile->dateofbirth = strtotime($data['dateofbirth']);
-            if ($this->Profiles->save($profile)) {
-                $this->Auth->setUser($user);
-                $this->loadModel('Users');
-                $id = $this->Auth->user('id');
-                $loggedInUser = $this->Users->get($id, [
-                    'fields' => array('id', 'email', 'username'),
-                    'contain' => array(
-                        'Profiles' => array(
-                            'fields' => array(
-                                'Profiles.user_id',
-                                'Profiles.id',
-                                'Profiles.firstname',
-                                'Profiles.lastname'
-                            ),
-                        )
-                    )
-                ]);
-                $message = $loggedInUser;
-            } else {
-                $error['errors'][] = 'We kunnen dit profiel niet opslaan. Probeer het opnieuw';
-                $error = json_encode($error);
-                $this->response->type('json');
-                $this->response->body($error);
-                return $this->response;
-            }
-
         }
 
         $message = json_encode($message);

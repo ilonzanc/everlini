@@ -14,8 +14,9 @@ export const store = new Vuex.Store({
             },
             startdate: "",
             enddate: "",
-            interests: [],
-            radiusValue : ""
+            userInterests: [],
+            defaultInterests: [],
+            radiusValue : "",
         },
         eventIsMeetup: false,
         currentMeetUpEvent: {
@@ -42,7 +43,19 @@ export const store = new Vuex.Store({
             state.searchparams.radiusValue = newparams.radiusValue;
             state.searchparams.startdate = newparams.startdate;
             state.searchparams.enddate = newparams.enddate;
-            state.searchparams.interests = newparams.interests;
+            state.searchparams.userInterests = newparams.userInterests;
+            state.searchparams.defaultInterests = newparams.defaultInterests;
+        },
+        clearSearchValues(state) {
+            state.searchparams.location.name = null;
+            state.searchparams.location.lat = null;
+            state.searchparams.location.lng = null;
+            state.searchparams.radiusValue = null;
+            state.searchparams.startdate = null;
+            state.searchparams.enddate = null;
+            state.searchparams.userInterests = [];
+            state.searchparams.defaultInterests = [];
+            state.searchparams.interests = [];
         },
         updateEventIsMeetup(state, newparams) {
             state.eventIsMeetup = newparams;

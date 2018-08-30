@@ -1,39 +1,42 @@
 <template>
   <div id="create-event" class="content">
     <div class="container">
-      <router-link :to='"/dashboard/" + $route.params.name + "/" + $route.params.id' class="breadcrumb"><i class="fa fa-caret-left"></i> terug naar dashboard</router-link>
+      <router-link :to='"/dashboard/" + $route.params.name + "/" + $route.params.id' class="breadcrumbs">terug naar dashboard</router-link>
       <h1>Nieuw event toevoegen</h1>
-      <form @submit.prevent="onSubmit">
-        <label for="name">Naam</label>
-        <input type="text" id="name" name="name" required v-model="event.name" placeholder="Naam van je event...">
-        <label for="description">Beschrijving</label>
-        <textarea id="description" name="description" required v-model="event.description" placeholder="Vertel wat meer over je event..."></textarea>
-        <h2>Tijdstip  </h2>
-        <label for="startdate">Start event</label>
-        <input type="date" id="startdate" name="startdate" required placeholder="dd-mm-jjjj" v-model="event.startdate.date">
-        <input type="text" id="startdate" name="startdate" required placeholder="00:00" v-model="event.startdate.time">
-        <label for="enddate">Eind event</label>
-        <input type="date" id="enddate" name="enddate" required placeholder="dd-mm-jjjj" v-model="event.enddate.date">
-        <input type="text" id="enddate" name="enddate" required placeholder="00:00" v-model="event.enddate.time">
-        <h2>Locatie</h2>
-        <input id="pac-input" type="text" name="location" placeholder="Locatie van je evenement..." v-model="event.location.name" @keyup="initMap">
-        <h2>Tags</h2>
-        <div class="row">
-          <div class="column column-sm-12 column-lg-6">
+      <div class="row">
+        <div class="column column-sm-12 column-lg-6">
+          <form @submit.prevent="onSubmit">
+            <label for="name">Naam</label>
+            <input type="text" id="name" name="name" required v-model="event.name" placeholder="Naam van je event...">
+            <label for="description">Beschrijving</label>
+            <textarea id="description" name="description" required v-model="event.description" placeholder="Vertel wat meer over je event..."></textarea>
+            <h2>Tijdstip  </h2>
+            <label for="startdate">Start event</label>
+            <input type="date" id="startdate" name="startdate" required placeholder="dd-mm-jjjj" v-model="event.startdate.date">
+            <input type="text" id="startdate" name="startdate" required placeholder="00:00" v-model="event.startdate.time">
+            <label for="enddate">Eind event</label>
+            <input type="date" id="enddate" name="enddate" required placeholder="dd-mm-jjjj" v-model="event.enddate.date">
+            <input type="text" id="enddate" name="enddate" required placeholder="00:00" v-model="event.enddate.time">
+            <h2>Locatie</h2>
+            <input id="pac-input" type="text" name="location" placeholder="Locatie van je evenement..." v-model="event.location.name" @keyup="initMap">
+            <h2>Tags</h2>
+            <label class="required" for="interests">Tags</label>
+            <ul v-if="event.tags.length > 0">
+              <li v-for="tag in event.tags" v-bind:key="tag.index" class="tag removable-tag" @click.prevent="deleteInterest($event)">{{ tag }}</li>
+            </ul>
             <div class="interests_input">
-              <input type="text" name="0" v-model="event.tags[0]" placeholder="eten & drinken, sport, vrije tijd, ...">
-              <i class="fa fa-plus" @click.prevent="addRow"></i>
+              <input type="text" name="0" id="interest_input" v-model="currentInterest" placeholder="Eigen interesse toevoegen...">
+              <i class="fa fa-plus" @click.prevent="addInterest"></i>
             </div>
-            <div class="additional_interests" v-bind:key="row.index" v-for="row in rows">
-              <div class="interests_input">
-                <input type="text" :name="currentInputIndex" v-model="event.tags[row.index + 1]" placeholder="Eten & Drinken, sport, vrije tijd, ...">
-                <i class="fa fa-plus" @click.prevent="addRow"></i>
-              </div>
+            <h2>Header</h2>
+            <div class="upload-btn-wrapper">
+              <button class="btn upload-btn ghost">Upload a file</button>
+              <input id="header_image" ref="file" type="file" @change="uploadImage()">
             </div>
-          </div>
+            <button class="btn primary-btn" type="submit">Toevoegen</button>
+          </form>
         </div>
-        <button class="btn primary-btn" type="submit">Toevoegen</button>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +47,7 @@ export default {
   name: "create-event",
   data () {
     return {
+      currentInterest: null,
       currentInputIndex: 0,
       inputs: [ 'fullname', 'email'],
       rows: [],
@@ -64,9 +68,11 @@ export default {
           lat: "",
           lng: "",
         },
-        tags: []
+        tags: [],
+        image_id: null
       },
-      loggedInUser: {}
+      loggedInUser: {},
+      file: ''
     }
   },
   mounted() {
@@ -74,30 +80,62 @@ export default {
     this.event.organisation_id = this.$route.params.id;
   },
   methods: {
+    uploadImage() {
+      console.log();
+      this.file = this.$refs.file.files[0];
+    },
     onSubmit() {
-      axios({
-        method: 'post',
-        url: apiurl + "events/add.json",
-        data: this.event,
-      })
-      .then((response) => {
-          this.$router.push('/dashboard/' + this.$route.params.name + '/' + this.$route.params.id  + '/events/' + response.data.event.id);
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response.status);
-          console.log(error.response.headers);
-          console.log(error.response.data.message);
+      let formData = new FormData();
+      formData.append('file', document.getElementById('header_image').files[0]);
+        axios({
+          method: 'post',
+          url: apiurl + "attachments/add.json",
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          data: formData
+        })
+        .then((response) => {
+            this.event.image_id = response.data.image.id;
+            axios({
+              method: 'post',
+              url: apiurl + "events/add.json",
+              data: this.event
+            })
+            .then((response) => {
+                this.$router.push('/dashboard/' + this.$route.params.name + '/' + this.$route.params.id  + '/events/' + response.data.event.id);
+            })
+            .catch((error) => {
+              if (error.response) {
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                console.log(error.response.data.message);
 
-          let errors = [];
+                let errors = [];
 
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log('Error', error.message);
-        }
-        console.log(error.config);
-      });
+              } else if (error.request) {
+                console.log(error.request);
+              } else {
+                console.log('Error', error.message);
+              }
+              console.log(error.config);
+            });
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            console.log(error.response.data.message);
+
+            let errors = [];
+
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
+        });
     },
     initMap() {
       let input = document.getElementById('pac-input');
@@ -120,6 +158,14 @@ export default {
         this.rows.push({value: this.event.tags[this.currentInputIndex], index: this.currentInputIndex});
         this.currentInputIndex++;
       },
+      addInterest() {
+        this.event.tags.push(this.currentInterest);
+        this.currentInterest = null;
+      },
+      deleteInterest(event) {
+        let interestIndex = this.event.tags.indexOf(event.target.innerHTML);
+        this.event.tags.splice(interestIndex, 1);
+      }
   }
 }
 </script>

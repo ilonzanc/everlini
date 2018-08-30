@@ -16,6 +16,8 @@ import { store } from './store';
 import './assets/sass/main.scss'
 import './assets/css/main.css'
 
+Vue.config.productionTip = false
+
 
 window.axios = axios;
 window.moment = moment;
@@ -27,7 +29,7 @@ window.axios.defaults.headers.common = {
 window.apiurl = "http://localhost:8765/api/";
 
 // prod
-// window.apiurl = "https://ilonaapi.3.web.codedor.online";
+//window.apiurl = "http://ilonazancaner.be/everlini/admin/api/";
 
 new Vue({
   el: '#app',

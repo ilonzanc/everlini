@@ -18,6 +18,7 @@ use Cake\Core\Configure;
 use Cake\Network\Exception\ForbiddenException;
 use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
+use App\Model\Entity\User;
 
 /**
  * Static content controller
@@ -28,6 +29,8 @@ use Cake\View\Exception\MissingTemplateException;
  */
 class PagesController extends AppController
 {
+
+    public $uses = array('Users');
 
     /**
      * Displays a view
@@ -68,6 +71,14 @@ class PagesController extends AppController
     }
 
     public function home() {
+        $this->loadModel('Users');
+        $usersCount = $this->Users->find('all')->count();
+
+        $this->loadModel('Events');
+        $eventsCount = $this->Events->find('all')
+        ->where(['Events.startdate >=' => date('Y-m-d')])
+        ->count();
         $this->viewBuilder()->setLayout('home');
+        $this->set(compact('usersCount', 'eventsCount'));
     }
 }

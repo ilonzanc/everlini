@@ -17,6 +17,8 @@ class AdminsController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['add', 'edit', 'view', 'delete', 'getAdminsByOrganisationId']);
 
+        //TODO: clean this up. Avoid repetitive code.
+
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
             withHeader('Access-Control-Allow-Headers',

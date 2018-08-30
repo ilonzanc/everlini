@@ -23,6 +23,8 @@ class FavoritesController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['add', 'index', 'delete', 'getFavoritesByUserId']);
 
+        //TODO: clean this up. Avoid repetitive code.
+
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
             withHeader('Access-Control-Allow-Headers',
@@ -139,7 +141,15 @@ class FavoritesController extends AppController
 
         $favorites = $this->Favorites->find('all')
             ->where(['Favorites.user_id' => $userid])
-            ->contain(['Users', 'Events', 'Events.Posts']);
+            ->contain([
+                'Users',
+                'Events',
+                'Events.Posts' => function ($q) {
+                    return $q
+                        ->where(['Posts.deleted IS NULL'])
+                        ->contain('Events');
+                }
+            ]);
 
         $favoriteEvents = [];
 

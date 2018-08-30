@@ -17,6 +17,20 @@ header {
         background: rgba($text-color, 0.3);
     }
 
+    .breadcrumbs {
+        color: $secundary-color;
+        font-weight: 700;
+        margin-bottom: 8px;
+        display: block;
+        &:before {
+            content: "\F0A8";
+            font-family: 'FontAwesome';
+            font-size: 1.2rem;
+            margin-right: 8px;
+
+        }
+    }
+
 }
 
 @media (min-width: 42.5rem) {

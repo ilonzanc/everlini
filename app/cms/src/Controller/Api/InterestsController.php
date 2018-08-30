@@ -17,6 +17,8 @@ class InterestsController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['index', 'add', 'edit', 'view', 'delete', 'getParentInterests']);
 
+        //TODO: clean this up. Avoid repetitive code.
+
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
             withHeader('Access-Control-Allow-Headers',
@@ -29,7 +31,9 @@ class InterestsController extends AppController
 
     public function index()
     {
-        $interests = $this->Interests->find('threaded');
+        $interests = $this->Interests->find('threaded', array(
+            'order' => 'rand()'
+        ));
 
         $this->set([
             'interests' => $interests,

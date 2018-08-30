@@ -8,6 +8,7 @@
       <nav :class="['main-nav ', { 'nav-open': navOpen }]">
         <ul>
           <li><router-link to="/">Home</router-link></li>
+          <li v-if="searchParamsExist == true"><router-link :to="'/evenementen/'">Overview</router-link></li>
           <li v-if="session != null"><router-link :to="'/profiel/' + session.username">Jouw profiel</router-link></li>
           <li><router-link to="/about">About</router-link></li>
           <li><router-link to="/contact">Contact</router-link></li>
@@ -31,6 +32,7 @@
         </nav>
       </div>
     </footer>
+    <div class="overlay"></div>
   </div>
 </template>
 
@@ -50,22 +52,34 @@ Vue.use(VueResource);
 
 export default {
   name: 'app',
+  computed: {
+    searchparams() {
+      return this.$store.getters.getSearchValues;
+    }
+  },
   data () {
     return {
       session: JSON.parse(localStorage.getItem("user")),
       fbAccesToken: "",
       navOpen: false,
-      isHome: false
+      isHome: false,
+      searchParamsExist: false
     }
   },
   watch: {
     $route() {
       this.navOpen = false;
       this.checkIfHome();
+      if (this.searchparams.defaultInterests.length == 0 && this.searchparams.userInterests.length == 0) {
+        this.searchParamsExist = false;
+      } else {
+        this.searchParamsExist = true;
+      }
     }
   },
   mounted () {
     this.checkIfHome();
+
   },
   methods: {
     onSaveSession: function (user) {
@@ -103,6 +117,6 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "./assets/sass/main";
+  //@import "./assets/sass/main";
 
 </style>

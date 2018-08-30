@@ -2,7 +2,7 @@
   <div id="register" class="content">
 	  <div class="container">
       <h1>Registreren</h1>
-      <form @submit.prevent="onSubmit(2)">
+      <form @submit.prevent="onSubmit()">
         <div class="row">
           <div class="column column-sm-12 column-lg-6">
             <section>
@@ -31,21 +31,18 @@
             <label class="required" for="confirm_pass">Bevestig wachtwoord</label>
             <input type="password" id="profile_confirm_pass" name="confirm_pass" placeholder="********" v-model="user.confirm_password">
             <span v-if="errors.user.confirm_password" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.user.confirm_password}}</span>
-            <button type="submit" class="btn primary-btn widebtn">Registreren</button>
           </div>
           <div class="column column-sm-12 column-lg-6">
             <label class="required" for="interests">Interesses</label>
+            <ul v-if="profile.user.interests.length > 0">
+              <li v-for="interest in profile.user.interests" v-bind:key="interest.index" class="tag removable-tag" @click.prevent="deleteInterest($event)">{{ interest }}</li>
+            </ul>
             <div class="interests_input">
-              <input type="text" name="0" v-model="user.interests[0]" placeholder="Wat zijn je interesses?">
-              <i class="fa fa-plus" @click.prevent="addRow"></i>
+              <input type="text" name="0" id="interest_input" v-model="currentInterest" placeholder="Eigen interesse toevoegen...">
+              <i class="fa fa-plus" @click.prevent="addInterest"></i>
             </div>
-            <div class="additional_interests" v-bind:key="row.index" v-for="row in rows">
-              <div class="interests_input">
-                <input type="text" :name="currentInputIndex" v-model="user.interests[row.index + 1]" placeholder="Wat zijn je interesses?">
-                <i class="fa fa-plus" @click.prevent="addRow"></i>
-              </div>
-            </div>
-            <span v-if="errors.interests" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.interests}}</span>
+            <span v-if="errors.interests" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.profile.user.interests}}</span>
+            <button type="submit" class="btn primary-btn widebtn">Registreren</button>
           </div>
         </div>
       </form>
@@ -70,14 +67,12 @@ export default {
       inputs: [ 'fullname', 'email'],
       rows: [],
       user: {
-        role_id: "",
+        role_name: 'user',
         email: "",
         password: "",
         firstname: "",
         lastname: "",
         dateofbirth: "",
-        name: "",
-        description: "",
         confirm_password: "",
         interests: []
       },
@@ -89,7 +84,6 @@ export default {
           firstname: "",
           lastname: "",
           dateofbirth: "",
-          name: "",
         },
         flash: {
 
@@ -105,9 +99,8 @@ export default {
     }
   },
   methods: {
-    onSubmit(role_id) {
+    onSubmit() {
       this.errors.flash = false
-      this.user.role_id = role_id;
       this.validateRegister();
       if (this.validationStatus) {
         axios({
@@ -122,7 +115,8 @@ export default {
           } else {
             this.user = response.data;
             localStorage.setItem("user", JSON.stringify(response.data));
-            location.href = '/profiel/' + response.data.username;
+            this.$parent.session = response.data;
+            this.$router.push('/profiel/' + response.data.username);
           }
         })
         .catch((error) => {
@@ -151,24 +145,17 @@ export default {
       this.errors.user.dateofbirth = false;
       this.errors.user.name = false;
 
-      if (this.user.role_id == 2) {
-        if (!this.user.firstname) {
-          this.errors.user.firstname = "Vul je voornaam in";
-          this.validationStatus = false;
-        }
-        if (!this.user.lastname) {
-          this.errors.user.lastname = "Vul je familienaam in";
-          this.validationStatus = false;
-        }
-        if (!this.user.dateofbirth) {
-          this.errors.user.lastname = "Vul je geboortedatum in";
-          this.validationStatus = false;
-        }
-      } else if (this.user.role_id == 3) {
-        if (!this.user.name) {
-          this.errors.user.name = "Vul de naam van je organisatie in";
-          this.validationStatus = false;
-        }
+      if (!this.user.firstname) {
+        this.errors.user.firstname = "Vul je voornaam in";
+        this.validationStatus = false;
+      }
+      if (!this.user.lastname) {
+        this.errors.user.lastname = "Vul je familienaam in";
+        this.validationStatus = false;
+      }
+      if (!this.user.dateofbirth) {
+        this.errors.user.lastname = "Vul je geboortedatum in";
+        this.validationStatus = false;
       }
       if (this.user.email.indexOf('@') <= 0 || this.user.email.lastIndexOf('.') < this.user.email.indexOf('@') || this.user.email.lastIndexOf('.') == this.user.email.length  ) {
         this.errors.user.email = "Vul een geldig emailadres in";

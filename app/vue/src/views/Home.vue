@@ -4,6 +4,7 @@
     <div class="container">
       <h1>Ontdek evenementen bij jou in de buurt die matchen met jouw interesses</h1>
       <form @submit.prevent="onSubmit">
+        <i class="fa fa-refresh refresh-params-button" @click.prevent="refreshParams()" aria-hidden="true"></i>
         <div class="row">
           <div class="column column-sm-12 column-lg-6">
             <label for="location">Locatie</label>
@@ -42,16 +43,17 @@
           <button v-if="defaultInterests.length > 0" v-for="(interest, key) in defaultInterests" v-bind:key="key" @click.prevent="toggleInterest($event, key)" v-bind:class="['btn interest-btn', {'selected': interest.selected}]">{{ interest.name }}</button>
         </section>
         <div class="row">
+          <div class="column column-sm-12 column-lg-12">
+            <ul v-if="params.userInterests.length > 0">
+              <li v-for="interest in params.userInterests" v-bind:key="interest.index" class="tag removable-tag" @click.prevent="deleteInterest($event)">{{ interest }}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="row">
           <div class="column column-sm-12 column-lg-6">
             <div class="interests_input">
-              <input type="text" name="0" v-model="params.interests[0]" placeholder="Eigen interesse toevoegen...">
-              <i class="fa fa-plus" @click.prevent="addRow"></i>
-            </div>
-            <div class="additional_interests" v-bind:key="row.index" v-for="row in rows">
-              <div class="interests_input">
-                <input type="text" :name="currentInputIndex" v-model="params.interests[row.index + 1]" placeholder="Nog eentje...">
-                <i class="fa fa-plus" @click.prevent="addRow"></i>
-              </div>
+              <input type="text" name="0" id="interest_input" v-model="currentInterest" placeholder="Eigen interesse toevoegen...">
+              <i class="fa fa-plus" @click.prevent="addInterest"></i>
             </div>
             <span v-if="errors.interests" class="form-error"><i class="fa fa-exclamation-triangle"></i>{{errors.interests}}</span>
           </div>
@@ -89,10 +91,7 @@
     },
     data() {
       return {
-        currentInputIndex: 0,
-        inputs: [ 'fullname', 'email'],
-        rows: [],
-        test: {},
+        currentInterest: null,
         params: {
           location: {
             name: "",
@@ -101,7 +100,8 @@
           },
           startdate: "",
           enddate: "",
-          interests: [],
+          userInterests: [],
+          defaultInterests: [],
           radiusValue: 5,
         },
         defaultInterests: [ ],
@@ -141,59 +141,20 @@
     },
     methods: {
       onSubmit() {
-        for (let k = 0; k < this.params.interests.length; k++) {
-          if (this.params.interests[k].length < 3 ) {
-            this.params.interests.splice(k);
+        // TODO save selected default interests and filled in user interests in 1 interests variable
+        for (let k = 0; k < this.params.defaultInterests.length; k++) {
+          if (this.params.defaultInterests[k].length < 3 ) {
+            this.params.defaultInterests.splice(k);
           }
         }
         this.$store.commit('updateSearchValues', this.params);
         this.validateSearchQuery();
         if (this.validationStatus) {
-          axios({
-            method: "post",
-            url: apiurl + "events.json",
-            headers: { },
-            data: this.searchparams
-          })
-          .then(response => {
-            this.events = response.data.events;
-            this.$router.push('/evenementen');
-          })
-          .catch(error => {
-              this.errors = error.response.data;
-          });
-
-          let floatLat = parseFloat(this.searchparams.location.lat);
-          let floatLng = parseFloat(this.searchparams.location.lng);
-
-          let formattedStartDate = moment(String(this.searchparams.startdate)).format('YYYY-MM-DDTHH:MM:SS');
-          let formattedEndDate = moment(String(this.searchparams.enddate)).format('YYYY-MM-DDTHH:MM:SS');
-
-          let interests = this.searchparams.interests;
-
-          /* for (let i = 0; i < interests.length; i++) {
-            let interest = interests[i];
-            this.$jsonp('https://api.meetup.com/find/upcoming_events?key=766033144c453b4d295465e352538&sign=true&photo-host=public&lon=' + floatLng +
-              '&page=20&radius=' + this.searchparams.radiusValue +
-              '&lat=' + floatLat +
-              '&start_date_range=' + formattedStartDate +
-              '&end_date_range=' + formattedEndDate +
-              '&fields=*, group_category' +
-              '&text=' + interest
-            )
-            .then(json => {
-              for (let j = 0; j < json.data.events.length; j ++) {
-                this.meetupevents.push(json.data.events[j]);
-              }
-
-            })
-            .catch(err => {
-            })
-          } */
+          this.$router.push('/evenementen');
         }
       },
       addRow() {
-        this.rows.push({value: this.params.interests[this.currentInputIndex], index: this.currentInputIndex});
+        this.rows.push({value: this.params.userInterests[this.currentInputIndex], index: this.currentInputIndex});
 
         this.currentInputIndex++;
       },
@@ -238,7 +199,7 @@
           this.errors.enddate = "Vul een enddatum in";
           this.validationStatus = false;
         }
-        if (this.params.interests.length == 0) {
+        if (this.params.userInterests.length == 0 && this.params.defaultInterests.length == 0) {
           this.errors.interests = "Interesses mogen niet leeg zijn";
           this.validationStatus = false;
         }
@@ -254,7 +215,9 @@
             let defaultInterest = {};
             defaultInterest.name = interest.name;
             defaultInterest.selected = false;
-            this.defaultInterests.push(defaultInterest);
+            if (this.defaultInterests.length < 8) {
+              this.defaultInterests.push(defaultInterest);
+            }
           });
         })
         .catch(error => {
@@ -275,7 +238,7 @@
       addInterests(interestname){
         this.interests.forEach(interest => {
           if(interest.name == interestname) {
-            this.params.interests.push(interest.name);
+            this.params.defaultInterests.push(interest.name);
             this.addChildInterests(interest);
           }
         });
@@ -283,7 +246,7 @@
       addChildInterests(parent) {
         if(parent.children.length > 0) {
           parent.children.forEach(child => {
-            this.params.interests.push(child.name);
+            this.params.defaultInterests.push(child.name);
             this.addChildInterests(child);
           });
         }
@@ -291,8 +254,8 @@
       deleteInterests(interestname){
         this.interests.forEach(interest => {
           if(interest.name == interestname) {
-            let interestIndex = this.interests.indexOf(interest.name);
-            this.params.interests.splice(interestIndex, 1);
+            let interestIndex = this.defaultInterests.indexOf(interest.name);
+            this.params.defaultInterests.splice(interestIndex, 1);
             this.deleteChildInterests(interest);
           }
         });
@@ -301,10 +264,21 @@
         if(parent.children.length > 0) {
           parent.children.forEach(child => {
             let childIndex = this.interests.indexOf(child.name);
-            this.params.interests.splice(childIndex, 1);
+            this.params.defaultInterests.splice(childIndex, 1);
             this.deleteChildInterests(child);
           });
         }
+      },
+      refreshParams() {
+        this.$store.commit('clearSearchValues');
+      },
+      addInterest() {
+        this.params.userInterests.push(this.currentInterest);
+        this.currentInterest = null;
+      },
+      deleteInterest(event) {
+        let interestIndex = this.params.userInterests.indexOf(event.target.innerHTML);
+        this.params.userInterests.splice(interestIndex, 1);
       }
     }
   };

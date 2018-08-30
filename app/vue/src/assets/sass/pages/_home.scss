@@ -1,7 +1,7 @@
 #home {
     text-align: center;
     .hero-image {
-        //background: url("assets/images/art-creative-flying-17679.jpg");
+        background: url("../images/art-creative-flying-17679.jpg");
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center center;
@@ -24,31 +24,7 @@
         height: calc(230px - 60px);
     }
 
-    .dateTabs {
-        li {
-            float: left;
-            margin: 0 0.8rem;
-            a {
-                padding: 0.8rem 1.2rem;
-                border: 1px solid $primary-color;
-                border-radius: 5px;
-                display: inline-block;
-            }
 
-            &:first-child {
-                margin-left: 0;
-            }
-
-            &:last-child {
-                margin-right: 0;
-            }
-
-            &.is-active a {
-                background: $primary-color;
-                color: #fff;
-            }
-        }
-    }
 
     .default-interest-section {
         margin: 0 -1rem;
@@ -58,9 +34,59 @@
     }
 }
 
+.dateTabs {
+    li {
+        float: left;
+        margin: 0 0.8rem;
+        a {
+            padding: 0.8rem 1.2rem;
+            border: 1px solid $primary-color;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &.is-active a {
+            background: $primary-color;
+            color: #fff;
+        }
+    }
+}
+
 @media (min-width: 42.5rem) {
     #home {
-        min-height: calc(100vh - 72px);
+        .refresh-params-button {
+            color: #fff;
+            background: $primary-color;
+            padding: 7px 8px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            cursor: pointer;
+            z-index: 50;
+        }
+
+        form {
+            position: relative;
+        }
+
+        min-height: calc(100vh - 75px);
+        .container {
+            position: absolute;
+            left: 50%;
+            top: 30%;
+            transform: translate(-50%, -30%);
+        }
         h1 {
             font-size: 2.5rem;
             padding: 3rem;
@@ -71,16 +97,14 @@
         .hero-image {
             height: 100vh;
         }
+
         form {
             padding: 2rem;
             border-radius: 5px;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
             width: 960px;
             background: #fff;
         }
+
         .default-interest-section {
             display: flex;
             flex-wrap: wrap;

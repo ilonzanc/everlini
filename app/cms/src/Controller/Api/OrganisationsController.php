@@ -17,6 +17,8 @@ class OrganisationsController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['index', 'add', 'edit', 'view', 'delete', 'getOrganisationsByUser']);
 
+        //TODO: clean this up. Avoid repetitive code.
+
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
             withHeader('Access-Control-Allow-Headers',
@@ -55,6 +57,8 @@ class OrganisationsController extends AppController
 
     public function add() {
         $organisation = $this->Organisations->newEntity();
+        $message = null;
+        $error = null;
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $organisation = $this->Organisations->patchEntity($organisation, $this->request->getData());
@@ -68,10 +72,10 @@ class OrganisationsController extends AppController
             $organisationNumber = $existingOrganisation->count();
 
             if ($organisationNumber != null) {
-                $message = 'This organisation already exists. Choose a different name.';
+                $error = 'Deze organisatie bestaat al. Kies een andere naam.';
             } else {
                 if ($this->Organisations->save($organisation)) {
-                    $message = 'Saved the organisation';
+                    $message = 'Organisatie werd opgeslagen';
 
                     $this->loadModel('Admins');
 
@@ -108,10 +112,10 @@ class OrganisationsController extends AppController
                             ]);
 
                             if ($this->Admins->save($admin)) {
-                                $message = 'The admin has been saved.';
+                                $message = 'Je bent nu admin van deze organisatie!';
 
                             } else {
-                                $message = 'The admin could not be saved. Please, try again.';
+                                $error = 'Admin kon niet worden opgeslagen. Probeer het opnieuw.';
                             }
                         }
                     }
@@ -125,10 +129,11 @@ class OrganisationsController extends AppController
 
         }
         $this->set([
+            'organisation' => $organisation,
             'message' => $message,
-            'admin' => $admin,
+            'error' => $error,
             'organisationNumber' => $organisationNumber,
-            '_serialize' => ['message', 'admin', 'organisationNumber']
+            '_serialize' => ['message', 'organisationNumber', 'organisation', 'error']
         ]);
     }
 

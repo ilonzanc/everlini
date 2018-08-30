@@ -83,14 +83,7 @@ let routes = [
         component: ProfileEvents
     },
 
-    {
-        path: '/profiel/jouw-events/:id/bewerken',
-        component: UpdateEvent
-    },
-    {
-        path: '/profiel/jouw-events/:id/posts/:postid/bewerken',
-        component: UpdatePost
-    },
+
     {
         path: 'dashboard/organisatie-aanmaken',
         component: CreateOrganisation
@@ -116,13 +109,22 @@ let routes = [
         component: ProfileEventDetail
     },
     {
+        path: '/dashboard/:name/:id/events/:eventid/bewerken',
+        component: UpdateEvent
+    },
+    {
         path: '/dashboard/:name/:id/events/:eventid/nieuwe-blogpost',
         component: CreatePost
+    },
+    {
+        path: '/dashboard/:name/:id/events/:eventid/posts/:postid/bewerken',
+        component: UpdatePost
     },
 ]
 
 export default new VueRouter({
     routes,
+    //base: '/everlini/',
     mode: 'history',
     scrollBehavior (to, from, savedPosition) { return { x: 0, y: 0 } }
 });

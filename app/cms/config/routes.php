@@ -119,6 +119,13 @@ Router::prefix('api', function ($routes) {
         ['controller' => 'Admins', 'action' => 'getAdminsByOrganisationId', '?' => ['organisation' => '[0-9]+', 'pass' => ['organisation']]]
     );
 
+    //Attachments Routes
+
+    $routes->connect(
+        '/attachments/add',
+        ['controller' => 'Attachments', 'action' => 'add']
+    );
+
     //Events Routes
 
     $routes->connect(
@@ -231,7 +238,17 @@ Router::prefix('api', function ($routes) {
 
     //Profiles Routes
 
-    $routes->resources('Profiles');
+    //$routes->resources('Profiles');
+
+    /* $routes->connect(
+        '/profiles/:id',
+        ['controller' => 'Profiles', 'action' => 'view']
+    )->setPass(['id']); */
+
+    $routes->connect(
+        '/profiles/:id/edit',
+        ['controller' => 'Profiles', 'action' => 'edit']
+    )->setPass(['id']);
 
     $routes->connect(
         '/profiles/:username',

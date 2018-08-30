@@ -36,10 +36,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </head>
 <body id="default-layout">
     <header>
-        <a href="/"><h1 style="color: transparent">Everlini<?= $this->Html->image('everlini_wit.png') ?></div></h1></a>
+        <?php echo $this->Html->link(
+            '<h1 style="color: transparent">Everlini' . $this->Html->image('everlini_wit.png', ["alt" => "Everlini logo"]) . '</h1>',
+            ['controller' => 'Pages', 'action' => 'home'],
+            ['escape' => false]
+        );?>
         <?php if ($this->request->params['action'] == "index") : ?>
         <form>
-            <input type="text" placeholder="<?= 'Zoeken in ' . $this->fetch('title')  . '...' ?>">
         </form>
         <?php endif; ?>
         <div class="header__right">
@@ -71,7 +74,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <aside>
         <nav>
             <ul>
-                <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
                 <li><h3>Everlini</h3></li>
                 <li>
                     <?php echo $this->Html->link(

@@ -2,7 +2,7 @@
   <div id="dashboard" class="content">
     <div class="hero-image"></div>
     <div class="container">
-      <section v-if="this.$parent.session.profile" class="profile-card">
+      <section v-if="this.$parent.session" class="profile-card">
         <h1>
           Dashboard
         </h1>
@@ -22,7 +22,6 @@
         <section class="event-feed">
         </section>
       </section>
-
     </div>
   </div>
 </template>

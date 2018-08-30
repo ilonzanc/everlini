@@ -10,3 +10,36 @@
         }
     }
 }
+
+.toast-message {
+    position: absolute;
+    background: #fff;
+    top: 50%;
+    border: 1px solid $primary-color;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    padding: 1rem;
+    border-radius: 6px;
+    z-index: 160;
+    p {
+        margin: 1rem 0;
+        text-align: center;
+    }
+    .fa-times {
+        float: right;
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 42.5rem) {
+    .toast-message {
+        width: 450px;
+
+        .btn {
+            width: calc(50% - 1rem);
+            float: left;
+            margin: 0 0.5rem;
+        }
+    }
+}

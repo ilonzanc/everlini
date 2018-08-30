@@ -60,14 +60,22 @@ class EventsController extends AppController
 
             $newImageId = "";
 
-            $filename = $this->request->data['submittedfile']['name'];
-            $url = Router::url('/', true) . 'img/events/' . $filename;
+            //dev
+            $appRoot = Router::url('/', true);
+            $serverRoot = $_SERVER['DOCUMENT_ROOT'];
             $uploadpath = '/img/events/';
-            $uploadfile = $_SERVER['DOCUMENT_ROOT']. $uploadpath . $filename;
+
+            //prod
+            /* $appRoot = "http://ilonazancaner.be/everlini/admin/";
+            $serverRoot =  WWW_ROOT;
+            $uploadpath = 'img/events/'; */
+
+            $filename = $this->request->data['submittedfile']['name'];
+            $url = $appRoot . 'img/events/' . $filename;
+            $uploadfile = $serverRoot . $uploadpath . $filename;
             if(move_uploaded_file($this->request->data['submittedfile']['tmp_name'], $uploadfile)){
                 $image = $this->Attachments->newEntity();
                 if ($this->request->is('post')) {
-                    var_dump($image);
                     $image->name = $filename;
                     $image->path = $url;
                     if($this->Attachments->save($image)) {
@@ -83,7 +91,7 @@ class EventsController extends AppController
                 $this->Flash->error(__('Could not move image. Please, try again.'));
             }
 
-            $event->organisation_id =  $this->Auth->organisation('id');
+            $event->organisation_id =  $this->request->data['organisation_id'];
             $event->name = $this->request->data['name'];
             $event->description = $this->request->data['description'];
 
@@ -139,14 +147,21 @@ class EventsController extends AppController
 
             $newImageId = "";
 
-            $filename = $this->request->data['submittedfile']['name'];
-            $url = Router::url('/', true) . 'img/events/' . $filename;
+            //dev
+            $appRoot = Router::url('/', true);
+            $serverRoot = $_SERVER['DOCUMENT_ROOT'];
             $uploadpath = '/img/events/';
-            $uploadfile = $_SERVER['DOCUMENT_ROOT']. $uploadpath . $filename;
+
+            //prod
+            /* $appRoot = "http://ilonazancaner.be/everlini/admin/";
+            $serverRoot =  WWW_ROOT;
+            $uploadpath = 'img/events/'; */
+
+            $filename = $this->request->data['submittedfile']['name'];
+            $url = $appRoot . 'img/events/' . $filename;
+            $uploadfile = $serverRoot . $uploadpath . $filename;
             if(move_uploaded_file($this->request->data['submittedfile']['tmp_name'], $uploadfile)){
                 $image = $this->Attachments->newEntity();
-
-                    var_dump($image);
                     $image->name = $filename;
                     $image->path = $url;
                     if($this->Attachments->save($image)) {

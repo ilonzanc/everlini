@@ -18,6 +18,8 @@ class EventsController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['add', 'getEventsByOrganisationId', 'edit', 'view', 'delete']);
 
+        //TODO: clean this up. Avoid repetitive code.
+
         $this->response = $this->response->withHeader('Access-Control-Allow-Origin', '*')->
             withHeader('Access-Control-Allow-Methods', 'DELETE, GET, OPTIONS, PATCH, POST, PUT')->
             withHeader('Access-Control-Allow-Headers',
@@ -71,6 +73,7 @@ class EventsController extends AppController
             ->where(function($q) use ($interests) {
                 return $q->or_($interests);
             })
+            ->where('Events.deleted IS NULL')
             ->contain('Organisations');
 
         $additionalEvents = $this->Events->find('all')
@@ -99,6 +102,7 @@ class EventsController extends AppController
                     ->where(['Posts.deleted IS NULL']);
         })
         ->contain('Interests')
+        ->contain('Attachments')
         ->where(['Events.id' => $id]);
 
         $this->set([
@@ -113,7 +117,6 @@ class EventsController extends AppController
 
         if ($this->request->is('post')) {
             if (!isset($this->request->data['meetup_id'])){
-
                 $event = $this->Events->newEntity();
 
                 $event->organisation_id = $this->request->data['organisation_id'];
@@ -135,6 +138,8 @@ class EventsController extends AppController
                 $event->address = $this->request->data['location']['name'];
                 $event->lat = $this->request->data['location']['lat'];
                 $event->lng = $this->request->data['location']['lng'];
+
+                $event->image_id =  $this->request->data['image_id'];
 
                 if ($this->Events->save($event)) {
                     $message = 'The event has been saved.';
@@ -181,11 +186,10 @@ class EventsController extends AppController
 
                 $this->set([
                     'existInterest' => $existInterest,
-                    'data' => $data,
                     'message' => $message,
                     'event' => $event,
                     'errors' => $errors,
-                    '_serialize' => ['query', 'data', 'message', 'event', 'errors', 'existInterest']
+                    '_serialize' => ['query', 'message', 'event', 'errors', 'existInterest']
                 ]);
 
             } else {
@@ -272,8 +276,9 @@ class EventsController extends AppController
         }
 
         $this->set([
+            'event' => $event,
             'message' => $message,
-            '_serialize' => ['message']
+            '_serialize' => ['message', 'event']
         ]);
     }
 

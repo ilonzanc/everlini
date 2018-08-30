@@ -2,24 +2,29 @@
   <div id="event-detail" class="content">
     <div class="event-detail-header" style="background: url('')"></div>
     <div class="container">
-      <router-link to="/evenementen">Terug naar overzicht</router-link>
-      <h1>{{ event.name }}</h1>
-      <img v-if="currentMeetUpEvent.id" class="event-meetup-logo" src="../assets/images/meetup-logo-small.png">
-      {{event.startdate | moment("DD MMM") }} | {{event.startdate | moment("HH:mm")}}
-      <span v-if="event.enddate"> - {{event.enddate | moment("DD MMM")}} | {{event.enddate | moment("HH:mm")}}</span>
-      <p v-if="event.street">{{ event.street }} {{ event.housenr }}, {{ event.postal_code }} {{ event.city }}</p>
-      <p v-if="event.venue">{{ event.venue.address_1 }}, {{ event.venue.city }}</p>
-      <a href="#" class="btn small-btn save-btn" @click.prevent="saveEvent" v-if="$parent.session != null"><i :class="['fa fa-heart', { 'red': eventFavorited }]"></i>{{eventFavorited ? 'Opgeslagen!' : 'Opslaan'}}</a>
-      <p v-html="event.description"></p>
-      <section class="event-blog">
-        <h2>Blog</h2>
-        <article class="event-blog-post" v-for="post in event.posts" :key="post.id" v-if="post.published == true">
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.body }}</p>
-        </article>
-        <p v-if="!event.posts">Dit evenement heeft geen nieuwe posts.</p>
-      </section>
-
+      <router-link class="breadcrumbs" to="/evenementen">Terug naar overzicht</router-link>
+      <div v-if="eventdata != null" class="row">
+        <div class="column column-lg-8">
+          <div class="event-header-image" :style='"background-image: url(" + eventdata.attachment.path + ")"'></div>
+          <a href="#" class="btn small-btn save-btn" @click.prevent="saveEvent" v-if="$parent.session != null"><i :class="['fa fa-heart', { 'red': eventFavorited }]"></i>{{eventFavorited ? 'Opgeslagen!' : 'Opslaan'}}</a>
+          <h1>{{ eventdata.name }}</h1>
+          <img v-if="currentMeetUpEvent.id" class="event-meetup-logo" src="../assets/images/meetup-logo-small.png">
+          {{eventdata.startdate | moment("DD MMM") }} | {{eventdata.startdate | moment("HH:mm")}}
+          <span v-if="eventdata.enddate"> - {{eventdata.enddate | moment("DD MMM")}} | {{eventdata.enddate | moment("HH:mm")}}</span>
+          <p v-if="eventdata.street">{{ eventdata.street }} {{ eventdata.housenr }}, {{ eventdata.postal_code }} {{ eventdata.city }}</p>
+          <p v-if="eventdata.venue">{{ eventdata.venue.address_1 }}, {{ eventdata.venue.city }}</p>
+          <p v-html="eventdata.description"></p>
+          <section class="event-blog">
+            <h2>Blog</h2>
+            <article class="event-blog-post" v-for="post in eventdata.posts" :key="post.id" v-if="post.published == true">
+              <h3>{{ post.title }}</h3>
+              <p>{{ post.body }}</p>
+            </article>
+            <p v-if="eventdata.posts.length <= 0">Dit evenement heeft geen nieuwe posts.</p>
+          </section>
+        </div>
+        <div class="column column-lg-4"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -36,7 +41,7 @@
     data() {
       return {
         location: "",
-        event: "",
+        eventdata: null,
         eventFavorited: false
       }
     },
@@ -49,7 +54,7 @@
           headers: { },
         })
         .then(response => {
-          this.event = response.data.event[0];
+          this.eventdata = response.data.event[0];
           this.checkIfFavorited();
         })
         .catch(error => {
@@ -59,7 +64,7 @@
           this.currentMeetUpEvent.groupname + '/events/' + this.currentMeetUpEvent.id + '?key=766033144c453b4d295465e352538&sign=true&fields=*, group_category')
         .then(json => {
           this.event = json.data;
-          this.event.startdate = json.data.local_date + ' ' + json.data.local_time ;
+          this.eventdata.startdate = json.data.local_date + ' ' + json.data.local_time ;
           this.checkIfFavorited();
         }).catch(err => {
         })
@@ -68,16 +73,16 @@
     },
     methods: {
       saveEvent() {
-        delete this.event.created;
+        delete this.eventdata.created;
         if (this.currentMeetUpEvent.id) {
-          this.event.meetup_id = this.event.id;
+          this.eventdata.meetup_id = this.eventdata.id;
           axios({
             method: 'post',
             url: apiurl + "events/add.json",
             data: this.event
           })
           .then(response => {
-            this.event.id = response.data.id;
+            this.eventdata.id = response.data.id;
             this.saveFavorite();
           })
           .catch(error => {
@@ -94,7 +99,7 @@
             url: apiurl + "favorites/add.json",
             headers: { },
             data: {
-              event_id: this.event.id,
+              event_id: this.eventdata.id,
               user_id: this.$parent.session.id
             }
           })
@@ -109,7 +114,7 @@
             url: apiurl + "favorite/delete.json",
             headers: { },
             data: {
-              event_id: this.event.id,
+              event_id: this.eventdata.id,
               user_id: this.$parent.session.id,
               meetup_id: this.currentMeetUpEvent.id
             }
@@ -127,7 +132,7 @@
           method: "put",
           url: apiurl + "favorites.json",
           data: {
-            event_id: this.event.id,
+            event_id: this.eventdata.id,
             user_id: this.$parent.session.id,
             meetup_id: this.currentMeetUpEvent.id
           }

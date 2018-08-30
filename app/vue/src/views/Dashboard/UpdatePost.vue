@@ -1,7 +1,7 @@
 <template>
   <div id="update-post" class="content">
     <div class="container">
-      <router-link :to='"/dashboard/" + $route.params.name + "/" + $route.params.id + "/events/" + $route.params.eventid' class="breadcrumb"><i class="fa fa-caret-left"></i> terug naar dashboard</router-link>
+      <router-link :to='"/dashboard/" + $route.params.name + "/" + $route.params.id + "/events/" + $route.params.eventid' class="breadcrumbs">terug naar dashboard</router-link>
       <h1>Blogpost bewerken</h1>
       <form @submit.prevent="onSubmit">
         <label for="title">Titel</label>
@@ -62,7 +62,7 @@ export default {
         data: this.post,
       })
       .then((response) => {
-          this.$router.push('/profiel/jouw-events/' + this.$route.params.id);
+          this.$router.push('/dashboard/' + this.$route.params.name + '/' + this.$route.params.id  + '/events/' + response.data.post.event_id);
       })
       .catch((error) => {
         if (error.response) {

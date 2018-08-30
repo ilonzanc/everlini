@@ -20,11 +20,15 @@
       <div class="row">
       <section class="event-newsfeed">
         <h2>Newsfeed</h2>
-        <article v-for="post in posts" v-bind:key="post.id">
-          <span v-if="posts.length > 0">{{ post.created | moment("DD MMM") }}</span>
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.body }}</p>
-        </article>
+        <section v-if="posts.length > 0" class="blog-post-list">
+          <article v-for="post in posts" v-bind:key="post.id" v-if="post.published == true">
+
+            <h3>{{ post.title }}</h3>
+            <span>Gepost op {{ post.created | moment("DD MMM") }}</span>
+            <p>{{ post.body }}</p>
+          </article>
+        </section>
+        <p v-else>Er zijn geen blogposts van evenmenten beschikbaar</p>
       </section>
         <aside class="event-schedule">
           <h2>Aankomende events</h2>
